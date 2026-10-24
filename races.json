@@ -1,0 +1,2544 @@
+{
+  "season": "2026/27",
+  "timezone": "America/New_York",
+  "sources": {
+    "alpineCalendar": "https://www.fis-ski.com/alpine-skiing/documents",
+    "alpineCalendarPdfWomen": "https://assets.fis-ski.com/f/252177/x/fbd04e5924/2627women_17-07-2026.pdf",
+    "alpineCalendarPdfMen": "https://assets.fis-ski.com/f/252177/x/dbc6f072ae/2627men_13-01-2026.pdf",
+    "xcCalendar": "https://www.fis-ski.com/cross-country/documents",
+    "xcCalendarPdf": "https://assets.fis-ski.com/f/252177/x/d9032a8e11/draft_formats_wc_calendar_cc_2026-27.pdf",
+    "times": "FIS database iCal, season 2027, category WC, sectors AL and CC"
+  },
+  "races": [
+    {
+      "id": "alpine-131577",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Sölden",
+      "country": "AUT",
+      "date": "2026-10-24",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-10-24T08:30:00Z",
+        "2026-10-24T11:30:00Z"
+      ],
+      "watch": "US: Peacock (live). NBCSN delay Oct 25.",
+      "results": {
+        "podium": []
+      },
+      "note": "Opening"
+    },
+    {
+      "id": "alpine-131578",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Sölden",
+      "country": "AUT",
+      "date": "2026-10-25",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-10-25T09:00:00Z",
+        "2026-10-25T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). NBCSN delay Oct 25.",
+      "results": {
+        "podium": []
+      },
+      "note": "Opening"
+    },
+    {
+      "id": "alpine-131579",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Levi",
+      "country": "FIN",
+      "date": "2026-11-14",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        "2026-11-14T09:00:00Z",
+        "2026-11-14T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131580",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Levi",
+      "country": "FIN",
+      "date": "2026-11-15",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        "2026-11-15T09:00:00Z",
+        "2026-11-15T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131581",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Gurgl",
+      "country": "AUT",
+      "date": "2026-11-21",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-11-21T09:30:00Z",
+        "2026-11-21T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131582",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Gurgl",
+      "country": "AUT",
+      "date": "2026-11-22",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-11-22T09:30:00Z",
+        "2026-11-22T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52084",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "10 km Interval Start Classic",
+      "venue": "Ruka",
+      "country": "FIN",
+      "date": "2026-11-27",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52085",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "10 km Interval Start Classic",
+      "venue": "Ruka",
+      "country": "FIN",
+      "date": "2026-11-27",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131583",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Killington",
+      "country": "USA",
+      "date": "2026-11-28",
+      "tz": "America/New_York",
+      "starts": [
+        "2026-11-28T14:30:00Z",
+        "2026-11-28T17:30:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131697",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Copper Mountain",
+      "country": "USA",
+      "date": "2026-11-28",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-11-28T18:45:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52088",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.2 km Sprint Classic",
+      "venue": "Ruka",
+      "country": "FIN",
+      "date": "2026-11-28",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52089",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.2 km Sprint Classic",
+      "venue": "Ruka",
+      "country": "FIN",
+      "date": "2026-11-28",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131584",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Killington",
+      "country": "USA",
+      "date": "2026-11-29",
+      "tz": "America/New_York",
+      "starts": [
+        "2026-11-29T15:30:00Z",
+        "2026-11-29T18:30:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131698",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Copper Mountain",
+      "country": "USA",
+      "date": "2026-11-29",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-11-29T17:00:00Z",
+        "2026-11-29T20:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52090",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "20 km Mass Start Free",
+      "venue": "Ruka",
+      "country": "FIN",
+      "date": "2026-11-29",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52091",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "20 km Mass Start Free",
+      "venue": "Ruka",
+      "country": "FIN",
+      "date": "2026-11-29",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131702",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Beaver Creek",
+      "country": "USA",
+      "date": "2026-12-03",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-12-03T18:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131703",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Beaver Creek",
+      "country": "USA",
+      "date": "2026-12-04",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-12-04T18:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52092",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "10 km Interval Start Classic",
+      "venue": "Trondheim",
+      "country": "NOR",
+      "date": "2026-12-04",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52093",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "10 km Interval Start Classic",
+      "venue": "Trondheim",
+      "country": "NOR",
+      "date": "2026-12-04",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131597",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Tremblant",
+      "country": "CAN",
+      "date": "2026-12-05",
+      "tz": "America/Toronto",
+      "starts": [
+        "2026-12-05T16:00:00Z",
+        "2026-12-05T19:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131704",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Beaver Creek",
+      "country": "USA",
+      "date": "2026-12-05",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-12-05T17:30:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52096",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.4 km Sprint Free",
+      "venue": "Trondheim",
+      "country": "NOR",
+      "date": "2026-12-05",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52097",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.4 km Sprint Free",
+      "venue": "Trondheim",
+      "country": "NOR",
+      "date": "2026-12-05",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131598",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Tremblant",
+      "country": "CAN",
+      "date": "2026-12-06",
+      "tz": "America/Toronto",
+      "starts": [
+        "2026-12-06T15:30:00Z",
+        "2026-12-06T18:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131705",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Beaver Creek",
+      "country": "USA",
+      "date": "2026-12-06",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-12-06T17:00:00Z",
+        "2026-12-06T20:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52098",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "20 km Skiathlon Classic/Free",
+      "venue": "Trondheim",
+      "country": "NOR",
+      "date": "2026-12-06",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52099",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "20 km Skiathlon Classic/Free",
+      "venue": "Trondheim",
+      "country": "NOR",
+      "date": "2026-12-06",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131601",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Beaver Creek",
+      "country": "USA",
+      "date": "2026-12-11",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-12-11T18:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52108",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.4 km Team Sprint Free",
+      "venue": "Davos",
+      "country": "SUI",
+      "date": "2026-12-11",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52109",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.4 km Team Sprint Free",
+      "venue": "Davos",
+      "country": "SUI",
+      "date": "2026-12-11",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131706",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Val d'Isère",
+      "country": "FRA",
+      "date": "2026-12-12",
+      "tz": "Europe/Paris",
+      "starts": [
+        "2026-12-12T09:00:00Z",
+        "2026-12-12T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131602",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Beaver Creek",
+      "country": "USA",
+      "date": "2026-12-12",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-12-12T17:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52104",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.2 km Sprint Free",
+      "venue": "Davos",
+      "country": "SUI",
+      "date": "2026-12-12",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52105",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.2 km Sprint Free",
+      "venue": "Davos",
+      "country": "SUI",
+      "date": "2026-12-12",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131707",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Val d'Isère",
+      "country": "FRA",
+      "date": "2026-12-13",
+      "tz": "Europe/Paris",
+      "starts": [
+        "2026-12-13T09:00:00Z",
+        "2026-12-13T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131603",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "Beaver Creek",
+      "country": "USA",
+      "date": "2026-12-13",
+      "tz": "America/Denver",
+      "starts": [
+        "2026-12-13T18:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52100",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "5 km Heat Mass Start Free",
+      "venue": "Davos",
+      "country": "SUI",
+      "date": "2026-12-13",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52101",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "5 km Heat Mass Start Free",
+      "venue": "Davos",
+      "country": "SUI",
+      "date": "2026-12-13",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131604",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "St. Moritz",
+      "country": "SUI",
+      "date": "2026-12-18",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2026-12-18T09:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131711",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Val Gardena",
+      "country": "ITA",
+      "date": "2026-12-18",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2026-12-18T11:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131605",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "St. Moritz",
+      "country": "SUI",
+      "date": "2026-12-19",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2026-12-19T09:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131712",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Val Gardena",
+      "country": "ITA",
+      "date": "2026-12-19",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2026-12-19T11:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131606",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "St. Moritz",
+      "country": "SUI",
+      "date": "2026-12-20",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2026-12-20T08:30:00Z",
+        "2026-12-20T11:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131713",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Alta Badia",
+      "country": "ITA",
+      "date": "2026-12-20",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2026-12-20T09:30:00Z",
+        "2026-12-20T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131714",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Alta Badia",
+      "country": "ITA",
+      "date": "2026-12-21",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2026-12-21T16:45:00Z",
+        "2026-12-21T20:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Night"
+    },
+    {
+      "id": "alpine-131607",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Courchevel",
+      "country": "FRA",
+      "date": "2026-12-22",
+      "tz": "Europe/Paris",
+      "starts": [
+        "2026-12-22T16:45:00Z",
+        "2026-12-22T19:45:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Night"
+    },
+    {
+      "id": "alpine-131715",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Madonna di Campiglio",
+      "country": "ITA",
+      "date": "2026-12-23",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2026-12-23T16:45:00Z",
+        "2026-12-23T20:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Night"
+    },
+    {
+      "id": "alpine-131608",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Gosau",
+      "country": "AUT",
+      "date": "2026-12-28",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-12-28T09:00:00Z",
+        "2026-12-28T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131838",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Bormio",
+      "country": "ITA",
+      "date": "2026-12-28",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2026-12-28T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131609",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Gosau",
+      "country": "AUT",
+      "date": "2026-12-29",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-12-29T09:00:00Z",
+        "2026-12-29T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131839",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Bormio",
+      "country": "ITA",
+      "date": "2026-12-29",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2026-12-29T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52113",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.3 km Sprint Classic",
+      "venue": "Les Rousses",
+      "country": "FRA",
+      "date": "2027-01-01",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52112",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.3 km Sprint Classic",
+      "venue": "Les Rousses",
+      "country": "FRA",
+      "date": "2027-01-01",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "alpine-131716",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Kranjska Gora",
+      "country": "SLO",
+      "date": "2027-01-02",
+      "tz": "Europe/Ljubljana",
+      "starts": [
+        "2027-01-02T09:00:00Z",
+        "2027-01-02T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52114",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "20 km Mass Start Classic",
+      "venue": "Les Rousses",
+      "country": "FRA",
+      "date": "2027-01-02",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52115",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "20 km Mass Start Classic",
+      "venue": "Les Rousses",
+      "country": "FRA",
+      "date": "2027-01-02",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "alpine-131717",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Kranjska Gora",
+      "country": "SLO",
+      "date": "2027-01-03",
+      "tz": "Europe/Ljubljana",
+      "starts": [
+        "2027-01-03T09:00:00Z",
+        "2027-01-03T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52116",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "15 km Pursuit Free",
+      "venue": "Les Rousses",
+      "country": "FRA",
+      "date": "2027-01-03",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52117",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "15 km Pursuit Free",
+      "venue": "Les Rousses",
+      "country": "FRA",
+      "date": "2027-01-03",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "alpine-131654",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Flachau",
+      "country": "AUT",
+      "date": "2027-01-04",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-01-04T16:45:00Z",
+        "2027-01-04T19:45:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Night"
+    },
+    {
+      "id": "alpine-131655",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Flachau",
+      "country": "AUT",
+      "date": "2027-01-05",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-01-05T17:00:00Z",
+        "2027-01-05T20:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Night"
+    },
+    {
+      "id": "xc-52118",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "15 km Mass Start Classic",
+      "venue": "Oberstdorf",
+      "country": "GER",
+      "date": "2027-01-05",
+      "tz": "Europe/Berlin",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52119",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "15 km Mass Start Classic",
+      "venue": "Oberstdorf",
+      "country": "GER",
+      "date": "2027-01-05",
+      "tz": "Europe/Berlin",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52120",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "5 km Heat Mass Start Free",
+      "venue": "Oberstdorf",
+      "country": "GER",
+      "date": "2027-01-06",
+      "tz": "Europe/Berlin",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52121",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "5 km Heat Mass Start Free",
+      "venue": "Oberstdorf",
+      "country": "GER",
+      "date": "2027-01-06",
+      "tz": "Europe/Berlin",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52122",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "15 km Skiathlon Classic/Free",
+      "venue": "Val di Fiemme",
+      "country": "ITA",
+      "date": "2027-01-08",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52123",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "15 km Skiathlon Classic/Free",
+      "venue": "Val di Fiemme",
+      "country": "ITA",
+      "date": "2027-01-08",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "alpine-131718",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Adelboden",
+      "country": "SUI",
+      "date": "2027-01-09",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2027-01-09T09:30:00Z",
+        "2027-01-09T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131658",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Val di Fassa",
+      "country": "ITA",
+      "date": "2027-01-09",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2027-01-09T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52126",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.5 km Sprint Free",
+      "venue": "Val di Fiemme",
+      "country": "ITA",
+      "date": "2027-01-09",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52127",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.5 km Sprint Free",
+      "venue": "Val di Fiemme",
+      "country": "ITA",
+      "date": "2027-01-09",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "alpine-131719",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Adelboden",
+      "country": "SUI",
+      "date": "2027-01-10",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2027-01-10T09:30:00Z",
+        "2027-01-10T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131659",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "Val di Fassa",
+      "country": "ITA",
+      "date": "2027-01-10",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2027-01-10T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52128",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "10 km Mass Start Free",
+      "venue": "Val di Fiemme",
+      "country": "ITA",
+      "date": "2027-01-10",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "xc-52129",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "10 km Mass Start Free",
+      "venue": "Val di Fiemme",
+      "country": "ITA",
+      "date": "2027-01-10",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "Tour de Ski"
+    },
+    {
+      "id": "alpine-131664",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Cortina d'Ampezzo",
+      "country": "ITA",
+      "date": "2027-01-15",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2027-01-15T10:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131723",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Wengen",
+      "country": "SUI",
+      "date": "2027-01-15",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2027-01-15T11:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131665",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Cortina d'Ampezzo",
+      "country": "ITA",
+      "date": "2027-01-16",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2027-01-16T10:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131724",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Wengen",
+      "country": "SUI",
+      "date": "2027-01-16",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2027-01-16T11:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131725",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Wengen",
+      "country": "SUI",
+      "date": "2027-01-17",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2027-01-17T09:00:00Z",
+        "2027-01-17T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131666",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "Cortina d'Ampezzo",
+      "country": "ITA",
+      "date": "2027-01-17",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2027-01-17T10:15:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131667",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Kronplatz",
+      "country": "ITA",
+      "date": "2027-01-19",
+      "tz": "Europe/Rome",
+      "starts": [
+        "2027-01-19T09:30:00Z",
+        "2027-01-19T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131729",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Kitzbühel",
+      "country": "AUT",
+      "date": "2027-01-22",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-01-22T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52131",
+      "sport": "xc",
+      "gender": "mixed",
+      "discipline": "4×5 km Mixed Relay",
+      "venue": "Engadin",
+      "country": "SUI",
+      "date": "2027-01-22",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131668",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Jasná",
+      "country": "SVK",
+      "date": "2027-01-23",
+      "tz": "Europe/Bratislava",
+      "starts": [
+        "2027-01-23T09:00:00Z",
+        "2027-01-23T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131730",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Kitzbühel",
+      "country": "AUT",
+      "date": "2027-01-23",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-01-23T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52134",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.5 km Sprint Free",
+      "venue": "Engadin",
+      "country": "SUI",
+      "date": "2027-01-23",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52135",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.5 km Sprint Free",
+      "venue": "Engadin",
+      "country": "SUI",
+      "date": "2027-01-23",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131866",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Jasná",
+      "country": "SVK",
+      "date": "2027-01-24",
+      "tz": "Europe/Bratislava",
+      "starts": [
+        "2027-01-24T08:30:00Z",
+        "2027-01-24T11:15:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131731",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Kitzbühel",
+      "country": "AUT",
+      "date": "2027-01-24",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-01-24T09:30:00Z",
+        "2027-01-24T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52136",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "20 km Mass Start Free",
+      "venue": "Engadin",
+      "country": "SUI",
+      "date": "2027-01-24",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "St. Moritz–Surlej"
+    },
+    {
+      "id": "xc-52137",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "20 km Mass Start Free",
+      "venue": "Engadin",
+      "country": "SUI",
+      "date": "2027-01-24",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      },
+      "note": "St. Moritz–Surlej"
+    },
+    {
+      "id": "alpine-131732",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Schladming",
+      "country": "AUT",
+      "date": "2027-01-26",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-01-26T16:45:00Z",
+        "2027-01-26T19:45:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Night"
+    },
+    {
+      "id": "alpine-131733",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Schladming",
+      "country": "AUT",
+      "date": "2027-01-27",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-01-27T16:45:00Z",
+        "2027-01-27T19:45:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Night"
+    },
+    {
+      "id": "alpine-131670",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Kranjska Gora",
+      "country": "SLO",
+      "date": "2027-01-29",
+      "tz": "Europe/Ljubljana",
+      "starts": [
+        "2027-01-29T09:00:00Z",
+        "2027-01-29T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52138",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "10 km Interval Start Free",
+      "venue": "Toblach",
+      "country": "ITA",
+      "date": "2027-01-29",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52139",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "10 km Interval Start Free",
+      "venue": "Toblach",
+      "country": "ITA",
+      "date": "2027-01-29",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131734",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Chamonix",
+      "country": "FRA",
+      "date": "2027-01-30",
+      "tz": "Europe/Paris",
+      "starts": [
+        "2027-01-30T08:30:00Z",
+        "2027-01-30T11:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131671",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Kranjska Gora",
+      "country": "SLO",
+      "date": "2027-01-30",
+      "tz": "Europe/Ljubljana",
+      "starts": [
+        "2027-01-30T09:30:00Z",
+        "2027-01-30T12:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52142",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.3 km Sprint Free",
+      "venue": "Toblach",
+      "country": "ITA",
+      "date": "2027-01-30",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52143",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.3 km Sprint Free",
+      "venue": "Toblach",
+      "country": "ITA",
+      "date": "2027-01-30",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52144",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "20 km Mass Start Classic",
+      "venue": "Toblach",
+      "country": "ITA",
+      "date": "2027-01-31",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52145",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "20 km Mass Start Classic",
+      "venue": "Toblach",
+      "country": "ITA",
+      "date": "2027-01-31",
+      "tz": "Europe/Rome",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52149",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.3 km Sprint Classic",
+      "venue": "Lahti",
+      "country": "FIN",
+      "date": "2027-02-12",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52148",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.3 km Sprint Classic",
+      "venue": "Lahti",
+      "country": "FIN",
+      "date": "2027-02-12",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52150",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "20 km Skiathlon Classic/Free",
+      "venue": "Lahti",
+      "country": "FIN",
+      "date": "2027-02-13",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52151",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "20 km Skiathlon Classic/Free",
+      "venue": "Lahti",
+      "country": "FIN",
+      "date": "2027-02-13",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52152",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "10 km Interval Start Classic",
+      "venue": "Lahti",
+      "country": "FIN",
+      "date": "2027-02-14",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52153",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "10 km Interval Start Classic",
+      "venue": "Lahti",
+      "country": "FIN",
+      "date": "2027-02-14",
+      "tz": "Europe/Helsinki",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131737",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Garmisch-Partenkirchen",
+      "country": "GER",
+      "date": "2027-02-20",
+      "tz": "Europe/Berlin",
+      "starts": [
+        "2027-02-20T09:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131672",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "Lenzerheide",
+      "country": "SUI",
+      "date": "2027-02-20",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2027-02-20T11:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131738",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Garmisch-Partenkirchen",
+      "country": "GER",
+      "date": "2027-02-21",
+      "tz": "Europe/Berlin",
+      "starts": [
+        "2027-02-21T09:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131673",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "Lenzerheide",
+      "country": "SUI",
+      "date": "2027-02-21",
+      "tz": "Europe/Zurich",
+      "starts": [
+        "2027-02-21T11:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131676",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Garmisch-Partenkirchen",
+      "country": "GER",
+      "date": "2027-02-27",
+      "tz": "Europe/Berlin",
+      "starts": [
+        "2027-02-27T09:15:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131741",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Saalbach",
+      "country": "AUT",
+      "date": "2027-02-27",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-02-27T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131677",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Garmisch-Partenkirchen",
+      "country": "GER",
+      "date": "2027-02-28",
+      "tz": "Europe/Berlin",
+      "starts": [
+        "2027-02-28T09:15:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131742",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Saalbach",
+      "country": "AUT",
+      "date": "2027-02-28",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2027-02-28T10:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131678",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Soldeu",
+      "country": "AND",
+      "date": "2027-03-06",
+      "tz": "Europe/Andorra",
+      "starts": [
+        "2027-03-06T08:30:00Z",
+        "2027-03-06T11:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131746",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Kvitfjell",
+      "country": "NOR",
+      "date": "2027-03-06",
+      "tz": "Europe/Oslo",
+      "starts": [
+        "2027-03-06T10:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131679",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Soldeu",
+      "country": "AND",
+      "date": "2027-03-07",
+      "tz": "Europe/Andorra",
+      "starts": [
+        "2027-03-07T08:30:00Z",
+        "2027-03-07T11:30:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131747",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Kvitfjell",
+      "country": "NOR",
+      "date": "2027-03-07",
+      "tz": "Europe/Oslo",
+      "starts": [
+        "2027-03-07T10:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-narvik-20270312-dh",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Narvik",
+      "country": "NOR",
+      "date": "2027-03-12",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Venue TBC"
+    },
+    {
+      "id": "alpine-131748",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Åre",
+      "country": "SWE",
+      "date": "2027-03-13",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        "2027-03-13T08:30:00Z",
+        "2027-03-13T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-narvik-20270313-sg",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "Narvik",
+      "country": "NOR",
+      "date": "2027-03-13",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      },
+      "note": "Venue TBC"
+    },
+    {
+      "id": "xc-52154",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "50 km Mass Start Classic",
+      "venue": "Oslo",
+      "country": "NOR",
+      "date": "2027-03-13",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131749",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Åre",
+      "country": "SWE",
+      "date": "2027-03-14",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        "2027-03-14T08:30:00Z",
+        "2027-03-14T12:00:00Z"
+      ],
+      "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52155",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "50 km Mass Start Classic",
+      "venue": "Oslo",
+      "country": "NOR",
+      "date": "2027-03-14",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52159",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.1 km Sprint Classic",
+      "venue": "Drammen",
+      "country": "NOR",
+      "date": "2027-03-16",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52158",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.1 km Sprint Classic",
+      "venue": "Drammen",
+      "country": "NOR",
+      "date": "2027-03-16",
+      "tz": "Europe/Oslo",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52160",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "10 km Interval Start Free",
+      "venue": "Ulricehamn",
+      "country": "SWE",
+      "date": "2027-03-19",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52161",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "10 km Interval Start Free",
+      "venue": "Ulricehamn",
+      "country": "SWE",
+      "date": "2027-03-19",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131690",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Downhill",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-20",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-20T17:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    },
+    {
+      "id": "alpine-131689",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Downhill",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-20",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-20T18:30:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    },
+    {
+      "id": "xc-52164",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "1.3 km Sprint Free",
+      "venue": "Ulricehamn",
+      "country": "SWE",
+      "date": "2027-03-20",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52165",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "1.3 km Sprint Free",
+      "venue": "Ulricehamn",
+      "country": "SWE",
+      "date": "2027-03-20",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131691",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Super-G",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-21",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-21T17:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    },
+    {
+      "id": "alpine-131692",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Super-G",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-21",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-21T18:30:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    },
+    {
+      "id": "xc-52166",
+      "sport": "xc",
+      "gender": "women",
+      "discipline": "20 km Mass Start Classic",
+      "venue": "Ulricehamn",
+      "country": "SWE",
+      "date": "2027-03-21",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "xc-52167",
+      "sport": "xc",
+      "gender": "men",
+      "discipline": "20 km Mass Start Classic",
+      "venue": "Ulricehamn",
+      "country": "SWE",
+      "date": "2027-03-21",
+      "tz": "Europe/Stockholm",
+      "starts": [
+        null
+      ],
+      "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "alpine-131693",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Giant Slalom",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-23",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-23T15:30:00Z",
+        "2027-03-23T18:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    },
+    {
+      "id": "alpine-131694",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Giant Slalom",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-24",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-24T15:30:00Z",
+        "2027-03-24T18:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    },
+    {
+      "id": "alpine-131695",
+      "sport": "alpine",
+      "gender": "women",
+      "discipline": "Slalom",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-25",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-25T15:00:00Z",
+        "2027-03-25T18:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    },
+    {
+      "id": "alpine-131696",
+      "sport": "alpine",
+      "gender": "men",
+      "discipline": "Slalom",
+      "venue": "Sun Valley",
+      "country": "USA",
+      "date": "2027-03-25",
+      "tz": "America/Boise",
+      "starts": [
+        "2027-03-25T16:00:00Z",
+        "2027-03-25T19:00:00Z"
+      ],
+      "watch": "US: Peacock (live). Outside TV on demand.",
+      "results": {
+        "podium": []
+      },
+      "note": "Finals"
+    }
+  ]
+}
