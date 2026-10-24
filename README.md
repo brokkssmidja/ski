@@ -2,11 +2,15 @@
 
 Next FIS Alpine and Cross-Country World Cup race, in Eastern Time, for Lake Placid.
 
-Static site. Open `index.html` or serve the folder. Add it to a phone home screen from the browser share sheet.
+Static site. Open `index.html` or serve the folder. Android can install it from the browser: the manifest scope is `/ski/`, and the service worker caches the page for offline use.
+
+Alpine, Cross-country, Men, and Women are separate chips. They combine, and the choice is kept in `localStorage` (`ski-filters`). Upcoming races sit under Today, This weekend, then the date or the week. Slalom and giant slalom show run 1 and run 2 together, in Eastern Time. Add to calendar downloads an `.ics` file for that race. A start time that is still TBA is an all-day event.
+
+`contenders.js` is the list of Swedish, US, and Norwegian skiers to highlight. Edit the names there. Each block is one sport, gender, and discipline. Cross-country blocks use `sprint`, `distance`, or `relay` instead of every distance string.
 
 ## Pages
 
-The site is meant to be served at [https://brokkssmidja.github.io/ski/](https://brokkssmidja.github.io/ski/).
+The site is meant to be served at [https://brokkssmidja.github.io/ski/](https://brokkssmidja.github.io/ski/). Page assets are relative, so they resolve under `/ski/`. The manifest `scope` and `start_url` are `/ski/`.
 
 Publishing has to be turned on in the repository settings. From this repo that is:
 

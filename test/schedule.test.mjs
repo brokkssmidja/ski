@@ -1,13 +1,18 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
+import { contendersByCountry, CONTENDERS } from "../contenders.js";
 import {
   countdownTarget,
   etDate,
   formatET,
+  groupUpcoming,
+  icsFor,
+  matches,
   nextRace,
   pastRaces,
   phase,
+  startLines,
   tbaEnd,
   upcomingRaces,
   zonedTimeToUtc,
@@ -159,4 +164,170 @@ test("calendar shape: alpine has times except Narvik, cross-country is TBA", () 
     }
     assert.deepEqual(race.results, { podium: [] });
   }
+});
+
+test("sport and gender chips combine", () => {
+  const now = at("2026-10-24T06:00:00Z");
+  const womenAlpine = nextRace(races, now, { alpine: true, xc: false, men: false, women: true });
+  assert.equal(womenAlpine.sport, "alpine");
+  assert.equal(womenAlpine.gender, "women");
+  const menXc = nextRace(races, now, { alpine: false, xc: true, men: true, women: false });
+  assert.equal(menXc.sport, "xc");
+  assert.equal(menXc.gender, "men");
+  assert.equal(matches(find("Sölden", "women"), { alpine: true, xc: true, men: true, women: false }), false);
+  assert.equal(matches(find("Sölden", "women"), { alpine: false, xc: true, men: true, women: true }), false);
+  const relay = races.find((race) => race.gender === "mixed");
+  assert.equal(matches(relay, { alpine: false, xc: true, men: true, women: false }), true);
+  assert.equal(matches(relay, { alpine: false, xc: true, men: false, women: false }), false);
+});
+
+test("slalom and GS show run 1 and run 2 together", () => {
+  assert.deepEqual(startLines(find("Sölden", "women")), [
+    "Run 1 · 4:30 AM ET",
+    "Run 2 · 7:30 AM ET",
+  ]);
+  assert.deepEqual(startLines(find("Levi", "men")), [
+    "Run 1 · 4:00 AM ET",
+    "Run 2 · 7:00 AM ET",
+  ]);
+  assert.deepEqual(startLines(find("Sun Valley", "women", "Downhill")), ["2:30 PM ET"]);
+  assert.deepEqual(startLines(find("Ruka", "women", "10 km Interval Start Classic")), ["Time TBA"]);
+});
+
+test("upcoming groups: today, the days before the weekend, this weekend, then weeks", () => {
+  const now = at("2026-11-25T16:00:00Z");
+  assert.equal(etDate(now.toISOString()), "2026-11-25");
+  const sample = [
+    { id: "a", date: "2026-11-25", starts: ["2026-11-25T15:00:00Z"], gender: "women", discipline: "Slalom", sport: "alpine" },
+    { id: "a2", date: "2026-11-25", starts: ["2026-11-25T18:00:00Z"], gender: "men", discipline: "Slalom", sport: "alpine" },
+    { id: "b", date: "2026-11-26", starts: ["2026-11-26T15:00:00Z"], gender: "women", discipline: "Giant Slalom", sport: "alpine" },
+    { id: "c", date: "2026-11-28", starts: ["2026-11-28T15:00:00Z"], gender: "women", discipline: "Slalom", sport: "alpine" },
+    { id: "d", date: "2026-11-29", starts: [null], tz: "Europe/Helsinki", gender: "men", discipline: "Slalom", sport: "alpine" },
+    { id: "e", date: "2026-12-05", starts: ["2026-12-05T15:00:00Z"], gender: "women", discipline: "Downhill", sport: "alpine" },
+  ];
+  const groups = groupUpcoming(upcomingRaces(sample, now, all), now);
+  assert.deepEqual(groups.map((group) => group.title), [
+    "Today",
+    "Thursday, Nov 26",
+    "This weekend",
+    "Nov 30 – Dec 6",
+  ]);
+  assert.deepEqual(groups[0].races.map((race) => race.id), ["a2"]);
+  assert.deepEqual(groups[2].races.map((race) => race.id), ["c", "d"]);
+});
+
+test("opening saturday lists sunday under this weekend", () => {
+  const now = at("2026-10-24T12:00:00Z");
+  const groups = groupUpcoming(upcomingRaces(races, now, all), now);
+  assert.equal(groups[0].title, "This weekend");
+  assert.equal(groups[0].races[0].venue, "Sölden");
+  assert.equal(groups[0].races[0].gender, "men");
+  assert.equal(groups.some((group) => group.title === "Today"), false);
+});
+
+test("a friday with two races keeps the second one under today", () => {
+  const now = at("2026-11-27T16:00:00Z");
+  const groups = groupUpcoming(upcomingRaces(races, now, all), now);
+  assert.equal(groups[0].title, "Today");
+  assert.ok(groups[0].races.every((race) => race.date === "2026-11-27"));
+  const weekend = groups.find((group) => group.title === "This weekend");
+  assert.ok(weekend.races.some((race) => race.venue === "Killington"));
+  assert.ok(weekend.races.every((race) => race.date === "2026-11-28" || race.date === "2026-11-29"));
+});
+
+test("sunday does not label the following saturday as this weekend", () => {
+  const now = at("2026-11-29T16:00:00Z");
+  assert.equal(etDate(now.toISOString()), "2026-11-29");
+  const sample = [
+    { id: "sat", date: "2026-12-05", starts: ["2026-12-05T15:00:00Z"], gender: "women", discipline: "Slalom", sport: "alpine" },
+  ];
+  const groups = groupUpcoming(sample, now);
+  assert.deepEqual(groups.map((group) => group.title), ["Nov 30 – Dec 6"]);
+});
+
+test("ics uses the real instants, and TBA is all-day", () => {
+  const solden = find("Sölden", "women");
+  const ics = icsFor(solden, at("2026-10-20T12:00:00Z"));
+  for (const line of ics.split("\r\n").filter(Boolean)) {
+    assert.ok(Buffer.byteLength(line) <= 75, line);
+  }
+  assert.equal(ics.replace(/\r\n/g, "").includes("\n"), false);
+  const text = ics.replace(/\r\n[ \t]/g, "");
+  assert.match(text, /DTSTART:20261024T083000Z/);
+  assert.match(text, /DTEND:20261024T140000Z/);
+  assert.match(text, /Run 1/);
+  assert.match(text, /Run 2/);
+  assert.match(text, /Sölden/);
+  assert.match(text, /Peacock/);
+  assert.match(text, new RegExp(solden.id));
+
+  const ruka = find("Ruka", "women", "10 km Interval Start Classic");
+  const allDay = icsFor(ruka, at("2026-11-01T00:00:00Z")).replace(/\r\n[ \t]/g, "");
+  assert.match(allDay, /DTSTART;VALUE=DATE:20261127/);
+  assert.match(allDay, /DTEND;VALUE=DATE:20261128/);
+  assert.doesNotMatch(allDay, /DTSTART:\d/);
+  assert.match(allDay, /Time TBA/);
+});
+
+function watched(race) {
+  return contendersByCountry(race).flatMap((row) => row.names);
+}
+
+test("SE, US, and NO contenders follow discipline", () => {
+  for (const group of CONTENDERS) {
+    assert.ok(["alpine", "xc"].includes(group.sport));
+    assert.ok(["women", "men", "mixed"].includes(group.gender));
+    for (const athlete of group.athletes) {
+      assert.ok(["SWE", "USA", "NOR"].includes(athlete.country), athlete.name);
+    }
+  }
+
+  const gs = find("Sölden", "women", "Giant Slalom");
+  assert.ok(watched(gs).includes("Mikaela Shiffrin"));
+  assert.ok(watched(gs).includes("Sara Hector"));
+  assert.deepEqual(contendersByCountry(gs).map((row) => row.code), ["SE", "US", "NO"]);
+
+  const slalom = find("Levi", "women", "Slalom");
+  assert.ok(watched(slalom).includes("Mikaela Shiffrin"));
+  assert.equal(watched(slalom).includes("Sara Hector"), false);
+
+  const menSl = find("Levi", "men", "Slalom");
+  assert.ok(watched(menSl).includes("Henrik Kristoffersen"));
+  assert.ok(watched(menSl).includes("Atle Lie McGrath"));
+
+  const sprint = find("Ruka", "men", "1.2 km Sprint Classic");
+  assert.ok(watched(sprint).includes("Johannes Høsflot Klæbo"));
+
+  const distance = find("Ruka", "women", "10 km Interval Start Classic");
+  assert.ok(watched(distance).includes("Jessie Diggins"));
+
+  const womenSprint = find("Ruka", "women", "1.2 km Sprint Classic");
+  const swedes = contendersByCountry(womenSprint).find((row) => row.code === "SE");
+  assert.ok(swedes.names.includes("Jonna Sundling"));
+  assert.ok(swedes.names.includes("Maja Dahlqvist"));
+  assert.ok(swedes.names.includes("Linn Svahn"));
+});
+
+test("pages paths stay under /ski/", () => {
+  const root = new URL("../", import.meta.url);
+  const html = readFileSync(new URL("index.html", root), "utf8");
+  const css = readFileSync(new URL("styles.css", root), "utf8");
+  const manifest = JSON.parse(readFileSync(new URL("manifest.json", root), "utf8"));
+  const worker = readFileSync(new URL("sw.js", root), "utf8");
+  const pages = readFileSync(new URL(".github/workflows/pages.yml", root), "utf8");
+  assert.match(html, /href="styles\.css"/);
+  assert.match(html, /src="app\.js"/);
+  assert.match(html, /href="manifest\.json"/);
+  assert.doesNotMatch(html, /(?:src|href)="\/(?!\/)/);
+  assert.match(css, /prefers-color-scheme:\s*dark/);
+  assert.equal(manifest.scope, "/ski/");
+  assert.equal(manifest.start_url, "/ski/");
+  assert.equal(manifest.id, "/ski/");
+  assert.ok(manifest.icons.some((icon) => icon.sizes === "192x192"));
+  assert.ok(manifest.icons.some((icon) => icon.sizes === "512x512"));
+  for (const icon of manifest.icons) assert.equal(icon.src.includes("/"), false);
+  assert.match(worker, /addEventListener\("fetch"/);
+  assert.match(worker, /contenders\.js/);
+  assert.match(pages, /actions\/deploy-pages@v4/);
+  assert.match(pages, /path: \./);
 });

@@ -1,12 +1,16 @@
+import { contendersByCountry } from "./contenders.js";
 import {
   countdown,
   countdownTarget,
-  formatET,
-  formatMonth,
+  etDate,
   formatRaceDate,
+  groupUpcoming,
+  icsFilename,
+  icsFor,
   nextRace,
   pastRaces,
   phase,
+  startLines,
   upcomingRaces,
 } from "./schedule.js";
 
@@ -31,10 +35,7 @@ const pastEl = document.querySelector("#past");
 const pastToggle = document.querySelector("#past-toggle");
 const preview = document.querySelector("#preview");
 
-const filters = {
-  sport: stored("ski-sport", ["all", "alpine", "xc"], "all"),
-  gender: stored("ski-gender", ["all", "men", "women"], "all"),
-};
+let filters = loadFilters();
 let showPast = stored("ski-past", ["0", "1"], "0") === "1";
 let races = [];
 let clock = new Date();
@@ -53,21 +54,41 @@ function save(key, value) {
   try { localStorage.setItem(key, value); } catch { /* private mode */ }
 }
 
+function loadFilters() {
+  const fallback = { alpine: true, xc: true, men: true, women: true };
+  try {
+    const raw = localStorage.getItem("ski-filters");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object") {
+        return {
+          alpine: parsed.alpine !== false,
+          xc: parsed.xc !== false,
+          men: parsed.men !== false,
+          women: parsed.women !== false,
+        };
+      }
+    }
+    const sport = localStorage.getItem("ski-sport");
+    const gender = localStorage.getItem("ski-gender");
+    if (sport || gender) {
+      return {
+        alpine: sport !== "xc",
+        xc: sport !== "alpine",
+        men: gender !== "women",
+        women: gender !== "men",
+      };
+    }
+  } catch {
+    /* private mode or unreadable JSON */
+  }
+  return fallback;
+}
+
 function flag(code) {
   const iso = ISO2[code];
   if (!iso) return "";
   return [...iso].map((c) => String.fromCodePoint(127397 + c.charCodeAt(0))).join("");
-}
-
-function knownStarts(race) {
-  return (race.starts || []).filter(Boolean);
-}
-
-function clockLabel(race) {
-  const times = knownStarts(race);
-  if (!times.length) return "Time TBA";
-  if (times.length === 1) return formatET(times[0]);
-  return `${formatET(times[0]).replace(" ET", "")} / ${formatET(times[1])}`;
 }
 
 function fisUrl(race) {
@@ -95,11 +116,55 @@ function countdownText(race, now) {
 
 function paintChips() {
   for (const button of sportBox.querySelectorAll("button")) {
-    button.setAttribute("aria-pressed", String(button.dataset.sport === filters.sport));
+    button.setAttribute("aria-pressed", String(!!filters[button.dataset.filter]));
   }
   for (const button of genderBox.querySelectorAll("button")) {
-    button.setAttribute("aria-pressed", String(button.dataset.gender === filters.gender));
+    button.setAttribute("aria-pressed", String(!!filters[button.dataset.filter]));
   }
+}
+
+function timesNode(race, tag) {
+  const lines = startLines(race);
+  const node = el(tag, lines.length > 1 ? "times runs" : "times");
+  lines.forEach((line, index) => {
+    if (index) node.append(el("span", "sep", "·"));
+    node.append(el("span", "run", line));
+  });
+  return node;
+}
+
+function contenderNode(race) {
+  const rows = contendersByCountry(race);
+  if (!rows.length) return null;
+  const wrap = el("div", "contenders");
+  for (const row of rows) {
+    const pair = el("span", "pair");
+    const badge = el("span", `badge ${row.code.toLowerCase()}`, row.code);
+    badge.title = COUNTRY[row.country] || row.code;
+    pair.append(badge, el("span", "names", row.names.join(", ")));
+    wrap.append(pair);
+  }
+  return wrap;
+}
+
+function calendarButton(race) {
+  const button = el("button", "cal", "Add to calendar");
+  button.type = "button";
+  button.dataset.ics = race.id;
+  button.setAttribute("aria-label", `Add ${race.discipline} in ${race.venue} to calendar`);
+  return button;
+}
+
+function downloadIcs(race) {
+  const blob = new Blob([icsFor(race, clock)], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = icsFilename(race);
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 
 function renderHero(race, now) {
@@ -109,25 +174,19 @@ function renderHero(race, now) {
     return;
   }
   const status = phase(race, now);
-  const card = el("article", status === "live" ? "hero live" : "hero");
+  const classes = ["hero"];
+  if (status === "live") classes.push("live");
+  if (contendersByCountry(race).length) classes.push("featured");
+  const card = el("article", classes.join(" "));
   const bits = [SPORT[race.sport], GENDER[race.gender]];
   if (status === "live") bits.unshift("Live");
   card.append(el("p", "kicker", bits.join(" · ")));
   card.append(el("h2", "", race.discipline));
   card.append(el("p", "venue", `${flag(race.country)} ${race.venue}, ${COUNTRY[race.country] || race.country}`));
   card.append(el("p", "when", formatRaceDate(race.date)));
-  const times = knownStarts(race);
-  if (!times.length) {
-    card.append(el("p", "times", "Time TBA"));
-  } else if (times.length === 1) {
-    card.append(el("p", "times", formatET(times[0])));
-  } else {
-    const line = el("p", "times");
-    line.append(`Run 1 · ${formatET(times[0])}`);
-    line.append(document.createElement("br"));
-    line.append(`Run 2 · ${formatET(times[1])}`);
-    card.append(line);
-  }
+  card.append(timesNode(race, "p"));
+  const watching = contenderNode(race);
+  if (watching) card.append(watching);
   card.append(el("p", "countdown", countdownText(race, now)));
   if (race.note) {
     const tags = el("div", "tags");
@@ -138,42 +197,49 @@ function renderHero(race, now) {
   const link = fisUrl(race);
   if (link) {
     watch.append(" ");
-    const a = el("a", "fis", "FIS");
-    a.href = link;
-    a.target = "_blank";
-    a.rel = "noopener";
-    watch.append(a);
+    const anchor = el("a", "fis", "FIS");
+    anchor.href = link;
+    anchor.target = "_blank";
+    anchor.rel = "noopener";
+    watch.append(anchor);
   }
   card.append(watch);
+  card.append(calendarButton(race));
   heroEl.append(card);
+}
+
+function raceRow(race) {
+  const featured = contendersByCountry(race).length ? " featured" : "";
+  const row = el("article", `race${featured}`);
+  const day = el("div");
+  const [, , d] = race.date.split("-");
+  day.append(el("div", "day", String(Number(d))));
+  const weekday = formatRaceDate(race.date).split(",")[0].slice(0, 3);
+  day.append(el("div", "dow", weekday));
+  const body = el("div");
+  const what = SHORT[race.discipline] || race.discipline;
+  body.append(el("div", "what", `${what} · ${GENDER[race.gender]}`));
+  body.append(el("div", "meta", `${flag(race.country)} ${race.venue}${race.note ? " · " + race.note : ""}`));
+  const clockLine = el("div", "clock");
+  startLines(race).forEach((line, index) => {
+    if (index) clockLine.append(el("span", "sep", " · "));
+    clockLine.append(line);
+  });
+  body.append(clockLine);
+  const watching = contenderNode(race);
+  if (watching) body.append(watching);
+  body.append(calendarButton(race));
+  row.append(day, body);
+  return row;
 }
 
 function renderUpcoming(list) {
   upcomingEl.replaceChildren();
-  if (!list.length) return;
-  let month = "";
-  let box = null;
-  for (const race of list) {
-    const label = formatMonth(race.date);
-    if (label !== month) {
-      month = label;
-      box = el("section", "month");
-      box.append(el("h3", "", label));
-      upcomingEl.append(box);
-    }
-    const row = el("article", "race");
-    const day = el("div");
-    const [, , d] = race.date.split("-");
-    day.append(el("div", "day", String(Number(d))));
-    const weekday = formatRaceDate(race.date).split(",")[0].slice(0, 3);
-    day.append(el("div", "dow", weekday));
-    const body = el("div");
-    const what = SHORT[race.discipline] || race.discipline;
-    body.append(el("div", "what", `${what} · ${GENDER[race.gender]}`));
-    body.append(el("div", "meta", `${flag(race.country)} ${race.venue}${race.note ? " · " + race.note : ""}`));
-    body.append(el("div", "clock", clockLabel(race)));
-    row.append(day, body);
-    box.append(row);
+  for (const group of groupUpcoming(list, clock)) {
+    const box = el("section", "group");
+    box.append(el("h3", "", group.title));
+    for (const race of group.races) box.append(raceRow(race));
+    upcomingEl.append(box);
   }
 }
 
@@ -188,9 +254,12 @@ function renderPast(list) {
     return;
   }
   for (const race of list) {
-    const card = el("article", "past-card");
+    const featured = contendersByCountry(race).length ? " featured" : "";
+    const card = el("article", `past-card${featured}`);
     card.append(el("h3", "", `${race.discipline} · ${GENDER[race.gender]}`));
     card.append(el("p", "", `${flag(race.country)} ${race.venue} · ${formatRaceDate(race.date)}`));
+    const watching = contenderNode(race);
+    if (watching) card.append(watching);
     const podium = race.results?.podium || [];
     if (!podium.length) {
       card.append(el("p", "", "Podium not posted yet"));
@@ -205,6 +274,7 @@ function renderPast(list) {
       }
       card.append(ol);
     }
+    card.append(calendarButton(race));
     pastEl.append(card);
   }
 }
@@ -212,12 +282,12 @@ function renderPast(list) {
 function viewSignature() {
   const hero = nextRace(races, clock, filters);
   return [
-    filters.sport,
-    filters.gender,
+    JSON.stringify(filters),
     showPast,
     hero?.id || "",
     hero ? phase(hero, clock) : "none",
     pastRaces(races, clock, filters).length,
+    etDate(clock.toISOString()),
   ].join("|");
 }
 
@@ -240,6 +310,13 @@ function tick() {
   if (node && hero) node.textContent = countdownText(hero, clock);
 }
 
+function toggleFilter(key) {
+  if (!Object.hasOwn(filters, key)) return;
+  filters = { ...filters, [key]: !filters[key] };
+  save("ski-filters", JSON.stringify(filters));
+  render();
+}
+
 function currentTime() {
   const raw = new URLSearchParams(location.search).get("asof");
   if (!raw) return new Date();
@@ -250,20 +327,18 @@ function currentTime() {
   return parsed;
 }
 
-sportBox.addEventListener("click", (event) => {
-  const sport = event.target?.dataset?.sport;
-  if (!sport) return;
-  filters.sport = sport;
-  save("ski-sport", sport);
-  render();
+document.querySelector("main").addEventListener("click", (event) => {
+  const filter = event.target.closest?.("[data-filter]");
+  if (filter && (sportBox.contains(filter) || genderBox.contains(filter))) {
+    toggleFilter(filter.dataset.filter);
+    return;
+  }
+  const button = event.target.closest?.("[data-ics]");
+  if (!button) return;
+  const race = races.find((item) => item.id === button.dataset.ics);
+  if (race) downloadIcs(race);
 });
-genderBox.addEventListener("click", (event) => {
-  const gender = event.target?.dataset?.gender;
-  if (!gender) return;
-  filters.gender = gender;
-  save("ski-gender", gender);
-  render();
-});
+
 pastToggle.addEventListener("click", () => {
   showPast = !showPast;
   save("ski-past", showPast ? "1" : "0");
@@ -281,5 +356,5 @@ setInterval(() => {
 }, 1000);
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js").catch(() => {});
+  navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
 }
