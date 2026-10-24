@@ -1,7 +1,9 @@
 import { contendersByCountry } from "./contenders.js";
 import {
   etDate,
+  fisResultsUrl,
   formatRaceDate,
+  googleCalendarUrl,
   groupUpcoming,
   icsFilename,
   icsFor,
@@ -14,6 +16,7 @@ import {
   startLines,
   statusLine,
   upcomingRaces,
+  watchSegments,
 } from "./schedule.js";
 
 const COUNTRY = {
@@ -95,10 +98,7 @@ function flag(code) {
 }
 
 function fisUrl(race) {
-  const match = /^(alpine|xc)-(\d+)$/.exec(race.id);
-  if (!match) return null;
-  const sector = match[1] === "alpine" ? "AL" : "CC";
-  return `https://www.fis-ski.com/DB/general/results.html?sectorcode=${sector}&raceid=${match[2]}`;
+  return fisResultsUrl(race);
 }
 
 function el(tag, className, text) {
@@ -146,12 +146,44 @@ function contenderNode(race) {
   return wrap;
 }
 
-function calendarButton(race) {
-  const button = el("button", "cal", "Add to calendar");
-  button.type = "button";
-  button.dataset.ics = race.id;
-  button.setAttribute("aria-label", `Add ${race.discipline} in ${race.venue} to calendar`);
-  return button;
+function externalIcon() {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "ext-icon");
+  svg.setAttribute("viewBox", "0 0 16 16");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+  const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  arrow.setAttribute("fill", "currentColor");
+  arrow.setAttribute("d", "M6.2 8.2a.75.75 0 0 0 1.1 1.1l5.2-5.2v1.7a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.7L6.2 8.2z");
+  const box = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  box.setAttribute("fill", "currentColor");
+  box.setAttribute("d", "M3.5 6.8c0-.7.6-1.3 1.3-1.3H7a.75.75 0 0 0 0-1.5H4.8A2.75 2.75 0 0 0 2 6.8v4.5A2.75 2.75 0 0 0 4.8 14h4.5A2.75 2.75 0 0 0 12 11.3V9a.75.75 0 0 0-1.5 0v2.3c0 .7-.6 1.2-1.2 1.2H4.8c-.7 0-1.3-.5-1.3-1.2V6.8z");
+  svg.append(arrow, box);
+  return svg;
+}
+
+function leaveApp(anchor, ariaLabel) {
+  anchor.target = "_blank";
+  anchor.rel = "noopener noreferrer";
+  anchor.setAttribute("aria-label", ariaLabel);
+}
+
+function calendarActions(race) {
+  const wrap = el("div", "cals");
+  const google = el("a", "gcal");
+  const label = el("span", "ext-label", "Add to Google Calendar");
+  google.append(label, externalIcon());
+  google.href = googleCalendarUrl(race);
+  leaveApp(
+    google,
+    `Add ${race.discipline} in ${race.venue} to Google Calendar. Opens Google Calendar in a new tab.`,
+  );
+  const ics = el("button", "ics", "Download .ics");
+  ics.type = "button";
+  ics.dataset.ics = race.id;
+  ics.setAttribute("aria-label", `Download an .ics file for ${race.discipline} in ${race.venue}`);
+  wrap.append(google, ics);
+  return wrap;
 }
 
 function podiumNode(race) {
@@ -168,35 +200,83 @@ function podiumNode(race) {
   return list;
 }
 
+function fisAction(className, href, action, ariaLabel) {
+  const anchor = el("a", className);
+  anchor.href = href;
+  leaveApp(anchor, ariaLabel);
+  const label = el("span", "ext-label");
+  label.append(action);
+  label.append(el("span", "ext-where", " (FIS website)"));
+  anchor.append(label, externalIcon());
+  return anchor;
+}
+
+function raceWhere(race) {
+  return `${GENDER[race.gender]} ${race.discipline} in ${race.venue}`;
+}
+
 function resultsLink(race) {
   const href = fisUrl(race);
   if (!href) return null;
-  const anchor = el("a", "results-link", "Results");
-  anchor.href = href;
-  anchor.target = "_blank";
-  anchor.rel = "noopener noreferrer";
-  anchor.setAttribute("aria-label", "FIS results for this race");
-  return anchor;
+  return fisAction(
+    "results-link",
+    href,
+    "Results",
+    `Results for ${raceWhere(race)}. Opens the FIS website in a new tab.`,
+  );
 }
 
 function liveLink(race, now) {
   const timing = liveTiming(race, now);
   if (!timing) return null;
-  const anchor = el("a", timing.pulsing ? "live-link on" : "live-link");
-  anchor.href = timing.href;
-  anchor.target = "_blank";
-  anchor.rel = "noopener noreferrer";
-  anchor.setAttribute(
-    "aria-label",
-    timing.pulsing ? "LIVE, FIS timing for this race" : "FIS live timing for this race",
+  const anchor = fisAction(
+    timing.pulsing ? "live-link on" : "live-link",
+    timing.href,
+    "Live",
+    timing.pulsing
+      ? `Live now, ${raceWhere(race)}. Opens the FIS website in a new tab.`
+      : `Live timing for ${raceWhere(race)}. Opens the FIS website in a new tab.`,
   );
   if (timing.pulsing) {
     const dot = el("span", "dot");
     dot.setAttribute("aria-hidden", "true");
-    anchor.append(dot);
+    anchor.prepend(dot);
   }
-  anchor.append(timing.pulsing ? "LIVE" : "Live");
   return anchor;
+}
+
+function streamLink(part) {
+  const anchor = el("a", "ext stream");
+  anchor.href = part.href;
+  leaveApp(anchor, `Opens ${part.site} in a new tab.`);
+  anchor.append("(");
+  anchor.append(el("span", "ext-name", part.label));
+  anchor.append(externalIcon());
+  anchor.append(")");
+  return anchor;
+}
+
+function fisTextLink(href) {
+  const anchor = el("a", "ext fis");
+  anchor.href = href;
+  leaveApp(anchor, "Opens the FIS website in a new tab.");
+  const label = el("span", "ext-label");
+  label.append(el("span", "ext-where", "(FIS website)"));
+  anchor.append(label, externalIcon());
+  return anchor;
+}
+
+function watchNode(race) {
+  const watch = el("p", "watch");
+  for (const part of watchSegments(race.watch)) {
+    watch.append(part.type === "link" ? streamLink(part) : part.text);
+  }
+  const link = fisUrl(race);
+  if (link) {
+    if (race.watch) watch.append(" ");
+    watch.append(fisTextLink(link));
+  }
+  return watch;
 }
 
 function downloadIcs(race) {
@@ -242,18 +322,8 @@ function renderHero(race, now) {
     for (const note of race.note.split(" · ")) tags.append(el("span", "tag", note));
     card.append(tags);
   }
-  const watch = el("p", "watch", race.watch);
-  const link = fisUrl(race);
-  if (link) {
-    watch.append(" ");
-    const anchor = el("a", "fis", "FIS");
-    anchor.href = link;
-    anchor.target = "_blank";
-    anchor.rel = "noopener";
-    watch.append(anchor);
-  }
-  card.append(watch);
-  card.append(calendarButton(race));
+  card.append(watchNode(race));
+  card.append(calendarActions(race));
   heroEl.append(card);
 }
 
@@ -287,7 +357,7 @@ function raceRow(race, now) {
     const live = liveLink(race, now);
     if (live) body.append(live);
   }
-  body.append(calendarButton(race));
+  body.append(calendarActions(race));
   row.append(day, body);
   return row;
 }
@@ -348,7 +418,7 @@ function renderPast(list) {
     }
     const results = resultsLink(race);
     if (results) card.append(results);
-    card.append(calendarButton(race));
+    card.append(calendarActions(race));
     pastEl.append(card);
   }
 }

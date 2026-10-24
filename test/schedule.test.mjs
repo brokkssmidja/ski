@@ -7,6 +7,7 @@ import {
   etDate,
   formatET,
   groupUpcoming,
+  googleCalendarUrl,
   icsFor,
   isFinished,
   liveHref,
@@ -19,6 +20,7 @@ import {
   startLines,
   tbaEnd,
   upcomingRaces,
+  watchSegments,
   zonedTimeToUtc,
 } from "../schedule.js";
 
@@ -268,7 +270,7 @@ test("ics uses the real instants, and TBA is all-day", () => {
   assert.equal(ics.replace(/\r\n/g, "").includes("\n"), false);
   const text = ics.replace(/\r\n[ \t]/g, "");
   assert.match(text, /DTSTART:20261024T083000Z/);
-  assert.match(text, /DTEND:20261024T140000Z/);
+  assert.match(text, /DTEND:20261024T124500Z/);
   assert.match(text, /Run 1/);
   assert.match(text, /Run 2/);
   assert.match(text, /Sölden/);
@@ -281,6 +283,53 @@ test("ics uses the real instants, and TBA is all-day", () => {
   assert.match(allDay, /DTEND;VALUE=DATE:20261128/);
   assert.doesNotMatch(allDay, /DTSTART:\d/);
   assert.match(allDay, /Time TBA/);
+});
+
+test("google calendar uses UTC stamps and Eastern Time in the details", () => {
+  const solden = find("Sölden", "women");
+  const women = new URL(googleCalendarUrl(solden));
+  assert.equal(women.origin + women.pathname, "https://calendar.google.com/calendar/render");
+  assert.equal(women.searchParams.get("action"), "TEMPLATE");
+  assert.equal(women.searchParams.get("dates"), "20261024T083000Z/20261024T124500Z");
+  assert.equal(formatET(solden.starts[0]), "4:30 AM ET");
+  assert.equal(formatET("2026-10-24T12:45:00Z"), "8:45 AM ET");
+  assert.match(women.searchParams.get("text"), /Women's Giant Slalom — Sölden/);
+  assert.match(women.searchParams.get("details"), /Run 1 · 4:30 AM ET/);
+  assert.match(women.searchParams.get("details"), /Run 2 · 7:30 AM ET/);
+  assert.match(women.searchParams.get("details"), /Peacock/);
+  assert.match(women.searchParams.get("details"), /raceid=131577/);
+  assert.equal(women.searchParams.get("location"), "Sölden, Austria");
+
+  const men = find("Sölden", "men");
+  const menUrl = new URL(googleCalendarUrl(men));
+  assert.equal(formatET(men.starts[0]), "5:00 AM ET");
+  assert.equal(formatET(men.starts[1]), "8:00 AM ET");
+  assert.equal(menUrl.searchParams.get("dates"), "20261025T090000Z/20261025T131500Z");
+  assert.equal(formatET("2026-10-25T13:15:00Z"), "9:15 AM ET");
+
+  const killington = find("Killington", "women", "Giant Slalom");
+  assert.equal(formatET(killington.starts[0]), "9:30 AM ET");
+  assert.equal(formatET(killington.starts[1]), "12:30 PM ET");
+  const killingtonUrl = new URL(googleCalendarUrl(killington));
+  assert.equal(killingtonUrl.searchParams.get("dates"), "20261128T143000Z/20261128T184500Z");
+  assert.equal(formatET("2026-11-28T18:45:00Z"), "1:45 PM ET");
+  assert.match(killingtonUrl.searchParams.get("details"), /Outside TV/);
+  assert.equal(killingtonUrl.searchParams.get("location"), "Killington, United States");
+
+  const downhill = find("Sun Valley", "women", "Downhill");
+  assert.equal(downhill.starts[0], "2027-03-20T18:30:00Z");
+  assert.equal(formatET(downhill.starts[0]), "2:30 PM ET");
+  const downhillUrl = new URL(googleCalendarUrl(downhill));
+  assert.equal(downhillUrl.searchParams.get("dates"), "20270320T183000Z/20270320T203000Z");
+  assert.equal(formatET("2027-03-20T20:30:00Z"), "4:30 PM ET");
+
+  const ruka = find("Ruka", "women", "10 km Interval Start Classic");
+  const tba = new URL(googleCalendarUrl(ruka));
+  assert.equal(tba.searchParams.get("dates"), "20261127/20261128");
+  assert.match(tba.searchParams.get("details"), /Time TBA/);
+  assert.match(tba.searchParams.get("details"), /YouTube/);
+  assert.match(tba.searchParams.get("details"), /raceid=52084/);
+  assert.equal(tba.searchParams.get("location"), "Ruka, Finland");
 });
 
 function watched(race) {
@@ -383,6 +432,35 @@ test("live timing uses the FIS codex and the race window", () => {
     } else {
       assert.equal(race.codex, undefined, race.id);
     }
+  }
+});
+
+test("watch lines name streaming sites as compact external links", () => {
+  const labels = (text) => watchSegments(text).filter((part) => part.type === "link").map((part) => part.label);
+  const solden = watchSegments("US: Peacock (live). NBCSN delay Oct 25.");
+  assert.deepEqual(labels("US: Peacock (live). NBCSN delay Oct 25."), ["NBC Peacock"]);
+  assert.equal(solden[0].text, "US: ");
+  assert.equal(solden[1].site, "NBC Peacock");
+  assert.equal(solden[1].href, "https://www.peacocktv.com/sports");
+  assert.equal(solden[2].text, " (live). NBCSN delay Oct 25.");
+
+  const replay = "US: Peacock (live). YouTube after 24h.";
+  assert.deepEqual(labels(replay), ["NBC Peacock", "YouTube"]);
+  assert.equal(watchSegments(replay).at(-1).text, " after 24h.");
+
+  const channel = watchSegments("US: YouTube & Ski & Snowboard World Cup (live).");
+  assert.deepEqual(labels("US: YouTube & Ski & Snowboard World Cup (live)."), ["YouTube"]);
+  assert.equal(channel[1].href, "https://www.youtube.com/@skiandsnowboardworldcup");
+  assert.equal(channel[2].text, " (live).");
+
+  const home = watchSegments("US: Peacock (live). Outside TV on demand.");
+  assert.deepEqual(labels("US: Peacock (live). Outside TV on demand."), ["NBC Peacock", "Outside TV"]);
+  assert.equal(home[3].href, "https://watch.outsideonline.com/");
+
+  for (const race of races) {
+    const links = watchSegments(race.watch).filter((part) => part.type === "link");
+    assert.ok(links.length >= 1, race.id);
+    for (const link of links) assert.match(link.href, /^https:\/\//);
   }
 });
 

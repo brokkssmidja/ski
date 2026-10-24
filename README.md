@@ -4,7 +4,7 @@ Next FIS Alpine and Cross-Country World Cup race, in Eastern Time, for Lake Plac
 
 Static site. Open `index.html` or serve the folder. Android can install it from the browser: the manifest scope is `/ski/`, and the service worker caches the page for offline use.
 
-Alpine, Cross-country, Men, and Women are separate chips. They combine, and the choice is kept in `localStorage` (`ski-filters`). Upcoming races sit under Today, This weekend, then the date or the week. Slalom and giant slalom show run 1 and run 2 together, in Eastern Time. Add to calendar downloads an `.ics` file for that race. A start time that is still TBA is an all-day event.
+Alpine, Cross-country, Men, and Women are separate chips. They combine, and the choice is kept in `localStorage` (`ski-filters`). Upcoming races sit under Today, This weekend, then the date or the week. Slalom and giant slalom show run 1 and run 2 together, in Eastern Time. Add to Google Calendar opens a prefilled event in a new tab. Download .ics is the smaller option for Apple Calendar. A start time that is still TBA is an all-day event. A giant slalom or slalom runs until 1h15m after run 2, a downhill or super-G for 2 hours, and a timed cross-country race for 1h30m.
 
 `contenders.js` is the list of Swedish, US, and Norwegian skiers to highlight. Edit the names there. Each block is one sport, gender, and discipline. Cross-country blocks use `sprint`, `distance`, or `relay` instead of every distance string.
 
