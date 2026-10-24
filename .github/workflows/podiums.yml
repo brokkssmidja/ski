@@ -1,0 +1,43 @@
+name: Update podiums
+
+on:
+  schedule:
+    - cron: "30 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  podiums:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/update_podiums.py
+      - id: commit
+        run: |
+          if git diff --quiet -- races.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add races.json
+          git commit -m "Update World Cup podiums from FIS"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - if: steps.commit.outputs.changed == 'true'
+        uses: actions/configure-pages@v5
+      - if: steps.commit.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - if: steps.commit.outputs.changed == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
