@@ -29,14 +29,12 @@
     <p id="preview" class="preview" hidden></p>
     <div class="filters">
       <div class="chips" id="sport" role="group" aria-label="Sport">
-        <button type="button" data-sport="all" aria-pressed="true">All</button>
-        <button type="button" data-sport="alpine">Alpine</button>
-        <button type="button" data-sport="xc">Cross-country</button>
+        <button type="button" data-filter="alpine" aria-pressed="true">Alpine</button>
+        <button type="button" data-filter="xc" aria-pressed="true">Cross-country</button>
       </div>
       <div class="chips" id="gender" role="group" aria-label="Gender">
-        <button type="button" data-gender="all" aria-pressed="true">All</button>
-        <button type="button" data-gender="men">Men</button>
-        <button type="button" data-gender="women">Women</button>
+        <button type="button" data-filter="men" aria-pressed="true">Men</button>
+        <button type="button" data-filter="women" aria-pressed="true">Women</button>
       </div>
     </div>
     <section id="hero" aria-live="polite"><p class="empty">Loading the next race…</p></section>
@@ -48,7 +46,7 @@
     <noscript><p class="empty">JavaScript draws the next race and hides the ones already run.</p></noscript>
   </main>
   <footer>
-    <p>Clocks are Eastern Time, for Lake Placid. Dates and start times are the FIS World Cup calendars and database. Time TBA means FIS has not published a start time.</p>
+    <p>Clocks are Eastern Time, for Lake Placid. Dates and start times are the FIS World Cup calendars and database. Time TBA means FIS has not published a start time. Add to calendar saves that race as an .ics file.</p>
   </footer>
   <script type="module" src="app.js"></script>
 </body>
