@@ -7,6 +7,8 @@ import {
   groupUpcoming,
   icsFilename,
   icsFor,
+  liveTiming,
+  matches,
   nextRace,
   pastRaces,
   phase,
@@ -30,6 +32,7 @@ const SHORT = { "Giant Slalom": "GS", Slalom: "SL", Downhill: "DH", "Super-G": "
 const sportBox = document.querySelector("#sport");
 const genderBox = document.querySelector("#gender");
 const heroEl = document.querySelector("#hero");
+const liveStrip = document.querySelector("#live-strip");
 const upcomingEl = document.querySelector("#upcoming");
 const pastEl = document.querySelector("#past");
 const pastToggle = document.querySelector("#past-toggle");
@@ -155,6 +158,26 @@ function calendarButton(race) {
   return button;
 }
 
+function liveLink(race, now) {
+  const timing = liveTiming(race, now);
+  if (!timing) return null;
+  const anchor = el("a", timing.pulsing ? "live-link on" : "live-link");
+  anchor.href = timing.href;
+  anchor.target = "_blank";
+  anchor.rel = "noopener noreferrer";
+  anchor.setAttribute(
+    "aria-label",
+    timing.pulsing ? "LIVE, FIS timing for this race" : "FIS live timing for this race",
+  );
+  if (timing.pulsing) {
+    const dot = el("span", "dot");
+    dot.setAttribute("aria-hidden", "true");
+    anchor.append(dot);
+  }
+  anchor.append(timing.pulsing ? "LIVE" : "Live");
+  return anchor;
+}
+
 function downloadIcs(race) {
   const blob = new Blob([icsFor(race, clock)], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -188,6 +211,8 @@ function renderHero(race, now) {
   const watching = contenderNode(race);
   if (watching) card.append(watching);
   card.append(el("p", "countdown", countdownText(race, now)));
+  const live = liveLink(race, now);
+  if (live) card.append(live);
   if (race.note) {
     const tags = el("div", "tags");
     for (const note of race.note.split(" · ")) tags.append(el("span", "tag", note));
@@ -208,7 +233,7 @@ function renderHero(race, now) {
   heroEl.append(card);
 }
 
-function raceRow(race) {
+function raceRow(race, now) {
   const featured = contendersByCountry(race).length ? " featured" : "";
   const row = el("article", `race${featured}`);
   const day = el("div");
@@ -228,9 +253,24 @@ function raceRow(race) {
   body.append(clockLine);
   const watching = contenderNode(race);
   if (watching) body.append(watching);
+  const live = liveLink(race, now);
+  if (live) body.append(live);
   body.append(calendarButton(race));
   row.append(day, body);
   return row;
+}
+
+function renderLiveStrip(hero, now) {
+  liveStrip.replaceChildren();
+  for (const race of races) {
+    if (!matches(race, filters) || race === hero) continue;
+    if (phase(race, now) !== "past" || !liveTiming(race, now)) continue;
+    const card = el("article", "live-card");
+    const who = `${GENDER[race.gender]} ${race.discipline}`;
+    card.append(el("p", "", `${who} · ${race.venue}`));
+    card.append(liveLink(race, now));
+    liveStrip.append(card);
+  }
 }
 
 function renderUpcoming(list) {
@@ -238,7 +278,7 @@ function renderUpcoming(list) {
   for (const group of groupUpcoming(list, clock)) {
     const box = el("section", "group");
     box.append(el("h3", "", group.title));
-    for (const race of group.races) box.append(raceRow(race));
+    for (const race of group.races) box.append(raceRow(race, clock));
     upcomingEl.append(box);
   }
 }
@@ -274,6 +314,8 @@ function renderPast(list) {
       }
       card.append(ol);
     }
+    const live = liveLink(race, clock);
+    if (live) card.append(live);
     card.append(calendarButton(race));
     pastEl.append(card);
   }
@@ -288,6 +330,11 @@ function viewSignature() {
     hero ? phase(hero, clock) : "none",
     pastRaces(races, clock, filters).length,
     etDate(clock.toISOString()),
+    races.map((race) => {
+      const timing = liveTiming(race, clock);
+      if (!timing) return "";
+      return timing.pulsing ? `${race.id}*` : race.id;
+    }).filter(Boolean).join(","),
   ].join("|");
 }
 
@@ -295,6 +342,7 @@ function render() {
   paintChips();
   const hero = nextRace(races, clock, filters);
   renderHero(hero, clock);
+  renderLiveStrip(hero, clock);
   renderUpcoming(upcomingRaces(races, clock, filters));
   renderPast(pastRaces(races, clock, filters));
   signature = viewSignature();

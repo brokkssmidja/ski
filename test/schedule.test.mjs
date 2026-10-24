@@ -8,6 +8,8 @@ import {
   formatET,
   groupUpcoming,
   icsFor,
+  liveHref,
+  liveTiming,
   matches,
   nextRace,
   pastRaces,
@@ -306,6 +308,50 @@ test("SE, US, and NO contenders follow discipline", () => {
   assert.ok(swedes.names.includes("Jonna Sundling"));
   assert.ok(swedes.names.includes("Maja Dahlqvist"));
   assert.ok(swedes.names.includes("Linn Svahn"));
+});
+
+test("live timing uses the FIS codex and the race window", () => {
+  const solden = find("Sölden", "women");
+  assert.equal(solden.codex, 5001);
+  assert.equal(liveHref(solden), "https://live.fis-ski.com/lv-al5001.htm");
+  assert.equal(liveHref(find("Sölden", "men")), "https://live.fis-ski.com/lv-al0001.htm");
+
+  const ruka = find("Ruka", "women", "10 km Interval Start Classic");
+  assert.equal(ruka.codex, 578);
+  assert.equal(liveHref(ruka), "https://live.fis-ski.com/cc-0578/results-pda.htm");
+
+  const narvik = races.find((race) => race.id === "alpine-narvik-20270312-dh");
+  assert.equal(narvik.codex, undefined);
+  assert.equal(liveHref(narvik), "https://www.fis-ski.com/DB/alpine-skiing/live.html");
+
+  assert.equal(liveTiming(solden, at("2026-10-24T07:29:59Z")), null);
+  assert.deepEqual(liveTiming(solden, at("2026-10-24T07:30:00Z")), {
+    href: "https://live.fis-ski.com/lv-al5001.htm",
+    pulsing: false,
+  });
+  assert.equal(liveTiming(solden, at("2026-10-24T08:30:00Z")).pulsing, true);
+  assert.equal(liveTiming(solden, at("2026-10-24T10:00:00Z")).pulsing, true);
+  assert.equal(liveTiming(solden, at("2026-10-24T15:29:59Z")).pulsing, true);
+  assert.equal(liveTiming(solden, at("2026-10-24T15:30:00Z")), null);
+
+  assert.equal(liveTiming(ruka, at("2026-11-26T21:59:59Z")), null);
+  assert.equal(liveTiming(ruka, at("2026-11-26T22:00:00Z")).pulsing, true);
+  assert.equal(liveTiming(ruka, at("2026-11-27T12:00:00Z")).href, liveHref(ruka));
+  assert.equal(liveTiming(ruka, at("2026-11-27T22:00:00Z")), null);
+  assert.equal(liveTiming(narvik, at("2027-03-12T12:00:00Z")), null);
+
+  const seen = new Set();
+  for (const race of races) {
+    if (/^(alpine|xc)-\d+$/.test(race.id)) {
+      assert.equal(Number.isInteger(race.codex), true, race.id);
+      assert.ok(race.codex >= 0 && race.codex <= 9999, race.id);
+      const key = `${race.sport}:${race.codex}`;
+      assert.equal(seen.has(key), false, key);
+      seen.add(key);
+    } else {
+      assert.equal(race.codex, undefined, race.id);
+    }
+  }
 });
 
 test("pages paths stay under /ski/", () => {

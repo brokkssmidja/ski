@@ -52,6 +52,53 @@ export function instants(race) {
   return (race.starts || []).filter(Boolean).map((s) => new Date(s));
 }
 
+const LIVE_LEAD_MS = 60 * 60 * 1000;
+const LIVE_TAIL_MS = 4 * 60 * 60 * 1000;
+
+/** Official live index for a sport. live.fis-ski.com has no discipline home of its own. */
+const LIVE_HOME = {
+  alpine: "https://www.fis-ski.com/DB/alpine-skiing/live.html",
+  xc: "https://www.fis-ski.com/DB/cross-country/live.html",
+};
+
+/**
+ * Alpine timing is https://live.fis-ski.com/lv-alNNNN.htm.
+ * Cross-country timing is https://live.fis-ski.com/cc-NNNN/results-pda.htm.
+ * NNNN is the FIS competition codex, zero-padded. Without one, use that sport's live index.
+ */
+export function liveHref(race) {
+  const codex = race.codex;
+  const pad = Number.isInteger(codex) && codex >= 0 && codex <= 9999
+    ? String(codex).padStart(4, "0")
+    : "";
+  if (pad && race.sport === "alpine") return `https://live.fis-ski.com/lv-al${pad}.htm`;
+  if (pad && race.sport === "xc") return `https://live.fis-ski.com/cc-${pad}/results-pda.htm`;
+  return LIVE_HOME[race.sport] || "https://www.fis-ski.com/DB/alpine-skiing/live.html";
+}
+
+/**
+ * When the Live button is on screen.
+ * Timed races: from 1h before the first start until 4h after the last.
+ * Cross-country with no start time: the whole local race day.
+ * `pulsing` is true once the race is underway (or all day, when the start is TBA).
+ */
+export function liveTiming(race, now) {
+  const href = liveHref(race);
+  const t = now.getTime();
+  const times = instants(race);
+  if (!times.length) {
+    if (race.sport !== "xc") return null;
+    const open = zonedTimeToUtc(race.date, "00:00", race.tz).getTime();
+    const close = tbaEnd(race).getTime();
+    if (t < open || t >= close) return null;
+    return { href, pulsing: true };
+  }
+  const first = times[0].getTime();
+  const last = times[times.length - 1].getTime();
+  if (t < first - LIVE_LEAD_MS || t >= last + LIVE_TAIL_MS) return null;
+  return { href, pulsing: t >= first };
+}
+
 export function phase(race, now) {
   const times = instants(race);
   const t = now.getTime();

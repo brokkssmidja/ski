@@ -7,11 +7,13 @@
     "alpineCalendarPdfMen": "https://assets.fis-ski.com/f/252177/x/dbc6f072ae/2627men_13-01-2026.pdf",
     "xcCalendar": "https://www.fis-ski.com/cross-country/documents",
     "xcCalendarPdf": "https://assets.fis-ski.com/f/252177/x/d9032a8e11/draft_formats_wc_calendar_cc_2026-27.pdf",
-    "times": "FIS database iCal, season 2027, category WC, sectors AL and CC"
+    "times": "FIS database iCal, season 2027, category WC, sectors AL and CC",
+    "live": "FIS live timing. Alpine: https://live.fis-ski.com/lv-al{codex}.htm. Cross-country: https://live.fis-ski.com/cc-{codex}/results-pda.htm. Codex is competitionCodex on the FIS results page."
   },
   "races": [
     {
       "id": "alpine-131577",
+      "codex": 5001,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -31,6 +33,7 @@
     },
     {
       "id": "alpine-131578",
+      "codex": 1,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -50,6 +53,7 @@
     },
     {
       "id": "alpine-131579",
+      "codex": 5002,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -68,6 +72,7 @@
     },
     {
       "id": "alpine-131580",
+      "codex": 2,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -86,6 +91,7 @@
     },
     {
       "id": "alpine-131581",
+      "codex": 5003,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -104,6 +110,7 @@
     },
     {
       "id": "alpine-131582",
+      "codex": 3,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -122,6 +129,7 @@
     },
     {
       "id": "xc-52084",
+      "codex": 578,
       "sport": "xc",
       "gender": "women",
       "discipline": "10 km Interval Start Classic",
@@ -139,6 +147,7 @@
     },
     {
       "id": "xc-52085",
+      "codex": 1,
       "sport": "xc",
       "gender": "men",
       "discipline": "10 km Interval Start Classic",
@@ -156,6 +165,7 @@
     },
     {
       "id": "alpine-131583",
+      "codex": 5004,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -174,6 +184,7 @@
     },
     {
       "id": "alpine-131697",
+      "codex": 4,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -191,6 +202,7 @@
     },
     {
       "id": "xc-52088",
+      "codex": 4,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.2 km Sprint Classic",
@@ -208,6 +220,7 @@
     },
     {
       "id": "xc-52089",
+      "codex": 5,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.2 km Sprint Classic",
@@ -225,6 +238,7 @@
     },
     {
       "id": "alpine-131584",
+      "codex": 5005,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -243,6 +257,7 @@
     },
     {
       "id": "alpine-131698",
+      "codex": 5,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -261,6 +276,7 @@
     },
     {
       "id": "xc-52090",
+      "codex": 6,
       "sport": "xc",
       "gender": "women",
       "discipline": "20 km Mass Start Free",
@@ -278,6 +294,7 @@
     },
     {
       "id": "xc-52091",
+      "codex": 7,
       "sport": "xc",
       "gender": "men",
       "discipline": "20 km Mass Start Free",
@@ -295,6 +312,7 @@
     },
     {
       "id": "alpine-131702",
+      "codex": 8,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -312,6 +330,7 @@
     },
     {
       "id": "alpine-131703",
+      "codex": 9,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -329,6 +348,7 @@
     },
     {
       "id": "xc-52092",
+      "codex": 579,
       "sport": "xc",
       "gender": "women",
       "discipline": "10 km Interval Start Classic",
@@ -346,6 +366,7 @@
     },
     {
       "id": "xc-52093",
+      "codex": 8,
       "sport": "xc",
       "gender": "men",
       "discipline": "10 km Interval Start Classic",
@@ -363,6 +384,7 @@
     },
     {
       "id": "alpine-131597",
+      "codex": 5006,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -381,6 +403,7 @@
     },
     {
       "id": "alpine-131704",
+      "codex": 10,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -398,6 +421,7 @@
     },
     {
       "id": "xc-52096",
+      "codex": 11,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.4 km Sprint Free",
@@ -415,6 +439,7 @@
     },
     {
       "id": "xc-52097",
+      "codex": 12,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.4 km Sprint Free",
@@ -432,6 +457,7 @@
     },
     {
       "id": "alpine-131598",
+      "codex": 5007,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -450,6 +476,7 @@
     },
     {
       "id": "alpine-131705",
+      "codex": 11,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -468,6 +495,7 @@
     },
     {
       "id": "xc-52098",
+      "codex": 13,
       "sport": "xc",
       "gender": "women",
       "discipline": "20 km Skiathlon Classic/Free",
@@ -485,6 +513,7 @@
     },
     {
       "id": "xc-52099",
+      "codex": 14,
       "sport": "xc",
       "gender": "men",
       "discipline": "20 km Skiathlon Classic/Free",
@@ -502,6 +531,7 @@
     },
     {
       "id": "alpine-131601",
+      "codex": 5010,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -519,6 +549,7 @@
     },
     {
       "id": "xc-52108",
+      "codex": 22,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.4 km Team Sprint Free",
@@ -536,6 +567,7 @@
     },
     {
       "id": "xc-52109",
+      "codex": 23,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.4 km Team Sprint Free",
@@ -553,6 +585,7 @@
     },
     {
       "id": "alpine-131706",
+      "codex": 12,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -571,6 +604,7 @@
     },
     {
       "id": "alpine-131602",
+      "codex": 5011,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -588,6 +622,7 @@
     },
     {
       "id": "xc-52104",
+      "codex": 18,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.2 km Sprint Free",
@@ -605,6 +640,7 @@
     },
     {
       "id": "xc-52105",
+      "codex": 19,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.2 km Sprint Free",
@@ -622,6 +658,7 @@
     },
     {
       "id": "alpine-131707",
+      "codex": 13,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -640,6 +677,7 @@
     },
     {
       "id": "alpine-131603",
+      "codex": 5012,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -657,6 +695,7 @@
     },
     {
       "id": "xc-52100",
+      "codex": 580,
       "sport": "xc",
       "gender": "women",
       "discipline": "5 km Heat Mass Start Free",
@@ -674,6 +713,7 @@
     },
     {
       "id": "xc-52101",
+      "codex": 15,
       "sport": "xc",
       "gender": "men",
       "discipline": "5 km Heat Mass Start Free",
@@ -691,6 +731,7 @@
     },
     {
       "id": "alpine-131604",
+      "codex": 5013,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -708,6 +749,7 @@
     },
     {
       "id": "alpine-131711",
+      "codex": 17,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -725,6 +767,7 @@
     },
     {
       "id": "alpine-131605",
+      "codex": 5014,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -742,6 +785,7 @@
     },
     {
       "id": "alpine-131712",
+      "codex": 18,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -759,6 +803,7 @@
     },
     {
       "id": "alpine-131606",
+      "codex": 5015,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -777,6 +822,7 @@
     },
     {
       "id": "alpine-131713",
+      "codex": 19,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -795,6 +841,7 @@
     },
     {
       "id": "alpine-131714",
+      "codex": 20,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -814,6 +861,7 @@
     },
     {
       "id": "alpine-131607",
+      "codex": 5016,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -833,6 +881,7 @@
     },
     {
       "id": "alpine-131715",
+      "codex": 21,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -852,6 +901,7 @@
     },
     {
       "id": "alpine-131608",
+      "codex": 5017,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -870,6 +920,7 @@
     },
     {
       "id": "alpine-131838",
+      "codex": 24,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -887,6 +938,7 @@
     },
     {
       "id": "alpine-131609",
+      "codex": 5018,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -905,6 +957,7 @@
     },
     {
       "id": "alpine-131839",
+      "codex": 25,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -922,6 +975,7 @@
     },
     {
       "id": "xc-52113",
+      "codex": 26,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.3 km Sprint Classic",
@@ -940,6 +994,7 @@
     },
     {
       "id": "xc-52112",
+      "codex": 25,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.3 km Sprint Classic",
@@ -958,6 +1013,7 @@
     },
     {
       "id": "alpine-131716",
+      "codex": 26,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -976,6 +1032,7 @@
     },
     {
       "id": "xc-52114",
+      "codex": 27,
       "sport": "xc",
       "gender": "women",
       "discipline": "20 km Mass Start Classic",
@@ -994,6 +1051,7 @@
     },
     {
       "id": "xc-52115",
+      "codex": 28,
       "sport": "xc",
       "gender": "men",
       "discipline": "20 km Mass Start Classic",
@@ -1012,6 +1070,7 @@
     },
     {
       "id": "alpine-131717",
+      "codex": 27,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -1030,6 +1089,7 @@
     },
     {
       "id": "xc-52116",
+      "codex": 29,
       "sport": "xc",
       "gender": "women",
       "discipline": "15 km Pursuit Free",
@@ -1048,6 +1108,7 @@
     },
     {
       "id": "xc-52117",
+      "codex": 30,
       "sport": "xc",
       "gender": "men",
       "discipline": "15 km Pursuit Free",
@@ -1066,6 +1127,7 @@
     },
     {
       "id": "alpine-131654",
+      "codex": 5019,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -1085,6 +1147,7 @@
     },
     {
       "id": "alpine-131655",
+      "codex": 5020,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -1104,6 +1167,7 @@
     },
     {
       "id": "xc-52118",
+      "codex": 582,
       "sport": "xc",
       "gender": "women",
       "discipline": "15 km Mass Start Classic",
@@ -1122,6 +1186,7 @@
     },
     {
       "id": "xc-52119",
+      "codex": 31,
       "sport": "xc",
       "gender": "men",
       "discipline": "15 km Mass Start Classic",
@@ -1140,6 +1205,7 @@
     },
     {
       "id": "xc-52120",
+      "codex": 32,
       "sport": "xc",
       "gender": "women",
       "discipline": "5 km Heat Mass Start Free",
@@ -1158,6 +1224,7 @@
     },
     {
       "id": "xc-52121",
+      "codex": 33,
       "sport": "xc",
       "gender": "men",
       "discipline": "5 km Heat Mass Start Free",
@@ -1176,6 +1243,7 @@
     },
     {
       "id": "xc-52122",
+      "codex": 583,
       "sport": "xc",
       "gender": "women",
       "discipline": "15 km Skiathlon Classic/Free",
@@ -1194,6 +1262,7 @@
     },
     {
       "id": "xc-52123",
+      "codex": 34,
       "sport": "xc",
       "gender": "men",
       "discipline": "15 km Skiathlon Classic/Free",
@@ -1212,6 +1281,7 @@
     },
     {
       "id": "alpine-131718",
+      "codex": 28,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -1230,6 +1300,7 @@
     },
     {
       "id": "alpine-131658",
+      "codex": 5023,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -1247,6 +1318,7 @@
     },
     {
       "id": "xc-52126",
+      "codex": 37,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.5 km Sprint Free",
@@ -1265,6 +1337,7 @@
     },
     {
       "id": "xc-52127",
+      "codex": 38,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.5 km Sprint Free",
@@ -1283,6 +1356,7 @@
     },
     {
       "id": "alpine-131719",
+      "codex": 29,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -1301,6 +1375,7 @@
     },
     {
       "id": "alpine-131659",
+      "codex": 5024,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -1318,6 +1393,7 @@
     },
     {
       "id": "xc-52128",
+      "codex": 39,
       "sport": "xc",
       "gender": "women",
       "discipline": "10 km Mass Start Free",
@@ -1336,6 +1412,7 @@
     },
     {
       "id": "xc-52129",
+      "codex": 40,
       "sport": "xc",
       "gender": "men",
       "discipline": "10 km Mass Start Free",
@@ -1354,6 +1431,7 @@
     },
     {
       "id": "alpine-131664",
+      "codex": 5027,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -1371,6 +1449,7 @@
     },
     {
       "id": "alpine-131723",
+      "codex": 33,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -1388,6 +1467,7 @@
     },
     {
       "id": "alpine-131665",
+      "codex": 5028,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -1405,6 +1485,7 @@
     },
     {
       "id": "alpine-131724",
+      "codex": 34,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -1422,6 +1503,7 @@
     },
     {
       "id": "alpine-131725",
+      "codex": 35,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -1440,6 +1522,7 @@
     },
     {
       "id": "alpine-131666",
+      "codex": 5029,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -1457,6 +1540,7 @@
     },
     {
       "id": "alpine-131667",
+      "codex": 5030,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -1475,6 +1559,7 @@
     },
     {
       "id": "alpine-131729",
+      "codex": 39,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -1492,6 +1577,7 @@
     },
     {
       "id": "xc-52131",
+      "codex": 41,
       "sport": "xc",
       "gender": "mixed",
       "discipline": "4×5 km Mixed Relay",
@@ -1509,6 +1595,7 @@
     },
     {
       "id": "alpine-131668",
+      "codex": 5031,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -1527,6 +1614,7 @@
     },
     {
       "id": "alpine-131730",
+      "codex": 40,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -1544,6 +1632,7 @@
     },
     {
       "id": "xc-52134",
+      "codex": 44,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.5 km Sprint Free",
@@ -1561,6 +1650,7 @@
     },
     {
       "id": "xc-52135",
+      "codex": 45,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.5 km Sprint Free",
@@ -1578,6 +1668,7 @@
     },
     {
       "id": "alpine-131866",
+      "codex": 5032,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -1596,6 +1687,7 @@
     },
     {
       "id": "alpine-131731",
+      "codex": 41,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -1614,6 +1706,7 @@
     },
     {
       "id": "xc-52136",
+      "codex": 46,
       "sport": "xc",
       "gender": "women",
       "discipline": "20 km Mass Start Free",
@@ -1632,6 +1725,7 @@
     },
     {
       "id": "xc-52137",
+      "codex": 47,
       "sport": "xc",
       "gender": "men",
       "discipline": "20 km Mass Start Free",
@@ -1650,6 +1744,7 @@
     },
     {
       "id": "alpine-131732",
+      "codex": 42,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -1669,6 +1764,7 @@
     },
     {
       "id": "alpine-131733",
+      "codex": 43,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -1688,6 +1784,7 @@
     },
     {
       "id": "alpine-131670",
+      "codex": 5033,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -1706,6 +1803,7 @@
     },
     {
       "id": "xc-52138",
+      "codex": 584,
       "sport": "xc",
       "gender": "women",
       "discipline": "10 km Interval Start Free",
@@ -1723,6 +1821,7 @@
     },
     {
       "id": "xc-52139",
+      "codex": 48,
       "sport": "xc",
       "gender": "men",
       "discipline": "10 km Interval Start Free",
@@ -1740,6 +1839,7 @@
     },
     {
       "id": "alpine-131734",
+      "codex": 44,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -1758,6 +1858,7 @@
     },
     {
       "id": "alpine-131671",
+      "codex": 5034,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -1776,6 +1877,7 @@
     },
     {
       "id": "xc-52142",
+      "codex": 51,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.3 km Sprint Free",
@@ -1793,6 +1895,7 @@
     },
     {
       "id": "xc-52143",
+      "codex": 52,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.3 km Sprint Free",
@@ -1810,6 +1913,7 @@
     },
     {
       "id": "xc-52144",
+      "codex": 53,
       "sport": "xc",
       "gender": "women",
       "discipline": "20 km Mass Start Classic",
@@ -1827,6 +1931,7 @@
     },
     {
       "id": "xc-52145",
+      "codex": 54,
       "sport": "xc",
       "gender": "men",
       "discipline": "20 km Mass Start Classic",
@@ -1844,6 +1949,7 @@
     },
     {
       "id": "xc-52149",
+      "codex": 57,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.3 km Sprint Classic",
@@ -1861,6 +1967,7 @@
     },
     {
       "id": "xc-52148",
+      "codex": 56,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.3 km Sprint Classic",
@@ -1878,6 +1985,7 @@
     },
     {
       "id": "xc-52150",
+      "codex": 58,
       "sport": "xc",
       "gender": "women",
       "discipline": "20 km Skiathlon Classic/Free",
@@ -1895,6 +2003,7 @@
     },
     {
       "id": "xc-52151",
+      "codex": 59,
       "sport": "xc",
       "gender": "men",
       "discipline": "20 km Skiathlon Classic/Free",
@@ -1912,6 +2021,7 @@
     },
     {
       "id": "xc-52152",
+      "codex": 60,
       "sport": "xc",
       "gender": "women",
       "discipline": "10 km Interval Start Classic",
@@ -1929,6 +2039,7 @@
     },
     {
       "id": "xc-52153",
+      "codex": 61,
       "sport": "xc",
       "gender": "men",
       "discipline": "10 km Interval Start Classic",
@@ -1946,6 +2057,7 @@
     },
     {
       "id": "alpine-131737",
+      "codex": 58,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -1963,6 +2075,7 @@
     },
     {
       "id": "alpine-131672",
+      "codex": 5045,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -1980,6 +2093,7 @@
     },
     {
       "id": "alpine-131738",
+      "codex": 59,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -1997,6 +2111,7 @@
     },
     {
       "id": "alpine-131673",
+      "codex": 5046,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -2014,6 +2129,7 @@
     },
     {
       "id": "alpine-131676",
+      "codex": 5050,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -2031,6 +2147,7 @@
     },
     {
       "id": "alpine-131741",
+      "codex": 62,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -2048,6 +2165,7 @@
     },
     {
       "id": "alpine-131677",
+      "codex": 5051,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -2065,6 +2183,7 @@
     },
     {
       "id": "alpine-131742",
+      "codex": 63,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -2082,6 +2201,7 @@
     },
     {
       "id": "alpine-131678",
+      "codex": 5052,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -2100,6 +2220,7 @@
     },
     {
       "id": "alpine-131746",
+      "codex": 67,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -2117,6 +2238,7 @@
     },
     {
       "id": "alpine-131679",
+      "codex": 5053,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -2135,6 +2257,7 @@
     },
     {
       "id": "alpine-131747",
+      "codex": 68,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -2170,6 +2293,7 @@
     },
     {
       "id": "alpine-131748",
+      "codex": 69,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -2206,6 +2330,7 @@
     },
     {
       "id": "xc-52154",
+      "codex": 586,
       "sport": "xc",
       "gender": "men",
       "discipline": "50 km Mass Start Classic",
@@ -2223,6 +2348,7 @@
     },
     {
       "id": "alpine-131749",
+      "codex": 70,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",
@@ -2241,6 +2367,7 @@
     },
     {
       "id": "xc-52155",
+      "codex": 62,
       "sport": "xc",
       "gender": "women",
       "discipline": "50 km Mass Start Classic",
@@ -2258,6 +2385,7 @@
     },
     {
       "id": "xc-52159",
+      "codex": 65,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.1 km Sprint Classic",
@@ -2275,6 +2403,7 @@
     },
     {
       "id": "xc-52158",
+      "codex": 64,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.1 km Sprint Classic",
@@ -2292,6 +2421,7 @@
     },
     {
       "id": "xc-52160",
+      "codex": 588,
       "sport": "xc",
       "gender": "women",
       "discipline": "10 km Interval Start Free",
@@ -2309,6 +2439,7 @@
     },
     {
       "id": "xc-52161",
+      "codex": 66,
       "sport": "xc",
       "gender": "men",
       "discipline": "10 km Interval Start Free",
@@ -2326,6 +2457,7 @@
     },
     {
       "id": "alpine-131690",
+      "codex": 73,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Downhill",
@@ -2344,6 +2476,7 @@
     },
     {
       "id": "alpine-131689",
+      "codex": 5061,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Downhill",
@@ -2362,6 +2495,7 @@
     },
     {
       "id": "xc-52164",
+      "codex": 69,
       "sport": "xc",
       "gender": "women",
       "discipline": "1.3 km Sprint Free",
@@ -2379,6 +2513,7 @@
     },
     {
       "id": "xc-52165",
+      "codex": 70,
       "sport": "xc",
       "gender": "men",
       "discipline": "1.3 km Sprint Free",
@@ -2396,6 +2531,7 @@
     },
     {
       "id": "alpine-131691",
+      "codex": 5062,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Super-G",
@@ -2414,6 +2550,7 @@
     },
     {
       "id": "alpine-131692",
+      "codex": 74,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Super-G",
@@ -2432,6 +2569,7 @@
     },
     {
       "id": "xc-52166",
+      "codex": 71,
       "sport": "xc",
       "gender": "women",
       "discipline": "20 km Mass Start Classic",
@@ -2449,6 +2587,7 @@
     },
     {
       "id": "xc-52167",
+      "codex": 72,
       "sport": "xc",
       "gender": "men",
       "discipline": "20 km Mass Start Classic",
@@ -2466,6 +2605,7 @@
     },
     {
       "id": "alpine-131693",
+      "codex": 5063,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Giant Slalom",
@@ -2485,6 +2625,7 @@
     },
     {
       "id": "alpine-131694",
+      "codex": 75,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Giant Slalom",
@@ -2504,6 +2645,7 @@
     },
     {
       "id": "alpine-131695",
+      "codex": 5064,
       "sport": "alpine",
       "gender": "women",
       "discipline": "Slalom",
@@ -2523,6 +2665,7 @@
     },
     {
       "id": "alpine-131696",
+      "codex": 76,
       "sport": "alpine",
       "gender": "men",
       "discipline": "Slalom",

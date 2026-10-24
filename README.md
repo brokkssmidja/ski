@@ -8,6 +8,8 @@ Alpine, Cross-country, Men, and Women are separate chips. They combine, and the 
 
 `contenders.js` is the list of Swedish, US, and Norwegian skiers to highlight. Edit the names there. Each block is one sport, gender, and discipline. Cross-country blocks use `sprint`, `distance`, or `relay` instead of every distance string.
 
+Live opens FIS live timing in a new tab. It shows from one hour before the first start until four hours after the last, and it pulses once the race has started. A cross-country race with no start time shows it for the whole local day. Alpine links are `https://live.fis-ski.com/lv-alNNNN.htm` and cross-country links are `https://live.fis-ski.com/cc-NNNN/results-pda.htm`, where `NNNN` is the zero-padded `codex` on that race (the FIS competition codex). A race without a codex, such as Narvik before it is in the database, uses the FIS live index for that sport. `live.fis-ski.com` itself has no discipline home.
+
 ## Pages
 
 The site is meant to be served at [https://brokkssmidja.github.io/ski/](https://brokkssmidja.github.io/ski/). Page assets are relative, so they resolve under `/ski/`. The manifest `scope` and `start_url` are `/ski/`.
