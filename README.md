@@ -8,6 +8,8 @@ Alpine, Cross-country, Men, and Women are separate chips. They combine, and the 
 
 `contenders.js` is the list of Swedish, US, and Norwegian skiers to highlight. Edit the names there. Each block is one sport, gender, and discipline. Cross-country blocks use `sprint`, `distance`, or `relay` instead of every distance string.
 
+Live opens FIS live timing in a new tab. It shows from one hour before the first start until the race is over, and it pulses while a run is in progress. Between runs the hero says `Run 1 done · Run 2 at …`. A two-run race is treated as over 1h15m after run 2, a downhill or super-G 2h after the start, and a timed cross-country race 1h30m after the start. A podium in `races.json` finishes the race immediately, replaces Live with Results (the FIS results page), and lists the podium with the winner first. The finished race stays in the hero for three hours after the estimated end, then moves under Today. A cross-country race with no start time shows Live for the whole local day. Alpine links are `https://live.fis-ski.com/lv-alNNNN.htm` and cross-country links are `https://live.fis-ski.com/cc-NNNN/results-pda.htm`, where `NNNN` is the zero-padded `codex` on that race (the FIS competition codex). A race without a codex, such as Narvik before it is in the database, uses the FIS live index for that sport. `live.fis-ski.com` itself has no discipline home.
+
 ## Pages
 
 The site is meant to be served at [https://brokkssmidja.github.io/ski/](https://brokkssmidja.github.io/ski/). Page assets are relative, so they resolve under `/ski/`. The manifest `scope` and `start_url` are `/ski/`.
@@ -41,6 +43,6 @@ Sprint qualification and the sprint final are one race, matching the calendar. T
 - Other alpine races: YouTube replay after 24 hours.
 - Cross-country (all of it is outside the US this season): live on the Ski & Snowboard World Cup YouTube channel and FAST channel.
 
-`.github/workflows/podiums.yml` runs daily at 23:30 UTC. It writes a podium only when the FIS results page says official results, valid for FIS points, and the 1–2–3 cards match the results table. It does not replace a podium that is already filled, and it does not touch any other field.
+`.github/workflows/podiums.yml` checks FIS every 15 minutes and, once a day at 23:30 UTC, sweeps any race that has already started. The frequent run only requests races inside the results window (from the start until a few hours after the estimated finish, or the race date when the start is TBA). It writes a podium only when the page says official results, valid for FIS points, and the 1–2–3 cards match the results table. It does not replace a podium that is already filled, and it does not touch any other field.
 
 Rebuild the file from the live FIS feeds with `python3 scripts/build_races.py`. Check the schedule logic with `node --test test/schedule.test.mjs`. Add `?asof=2026-11-20T15:00:00Z` to preview another moment.

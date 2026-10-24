@@ -302,6 +302,37 @@ def narvik() -> list[dict]:
     return races
 
 
+def remembered() -> tuple[dict[str, int], dict[str, list]]:
+    """Keep codex and podiums already stored. A rebuild does not refetch them."""
+    if not OUT.exists():
+        return {}, {}
+    try:
+        old = json.loads(OUT.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}, {}
+    codex: dict[str, int] = {}
+    podiums: dict[str, list] = {}
+    for race in old.get("races", []):
+        number = race.get("codex")
+        if isinstance(number, int) and 0 <= number <= 9999:
+            codex[race["id"]] = number
+        podium = race.get("results", {}).get("podium")
+        if isinstance(podium, list) and podium:
+            podiums[race["id"]] = podium
+    return codex, podiums
+
+
+def with_memory(race: dict, codex: dict[str, int], podiums: dict[str, list]) -> dict:
+    out: dict = {}
+    for key, value in race.items():
+        out[key] = value
+        if key == "id" and race["id"] in codex:
+            out["codex"] = codex[race["id"]]
+    if race["id"] in podiums:
+        out["results"] = {"podium": podiums[race["id"]]}
+    return out
+
+
 def sort_key(race: dict) -> tuple:
     gender_order = {"women": 0, "men": 1, "mixed": 2}
     first = next((s for s in race["starts"] if s), "9999")
@@ -311,7 +342,8 @@ def sort_key(race: dict) -> tuple:
 def main() -> None:
     alpine = [parse_alpine(ev) for ev in events(fetch(ICAL["alpine"]))]
     xc = parse_xc_rows(events(fetch(ICAL["xc"])))
-    races = alpine + xc + narvik()
+    codex, podiums = remembered()
+    races = [with_memory(race, codex, podiums) for race in alpine + xc + narvik()]
     races.sort(key=sort_key)
     ids = [r["id"] for r in races]
     if len(ids) != len(set(ids)):
@@ -354,6 +386,11 @@ def main() -> None:
             "xcCalendar": "https://www.fis-ski.com/cross-country/documents",
             "xcCalendarPdf": "https://assets.fis-ski.com/f/252177/x/d9032a8e11/draft_formats_wc_calendar_cc_2026-27.pdf",
             "times": "FIS database iCal, season 2027, category WC, sectors AL and CC",
+            "live": (
+                "FIS live timing. Alpine: https://live.fis-ski.com/lv-al{codex}.htm. "
+                "Cross-country: https://live.fis-ski.com/cc-{codex}/results-pda.htm. "
+                "Codex is competitionCodex on the FIS results page."
+            ),
         },
         "races": races,
     }
