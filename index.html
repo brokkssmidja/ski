@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>World Cup · Lake Placid</title>
-  <meta name="description" content="The next FIS Alpine and Cross-Country World Cup race, in Eastern Time.">
+  <meta name="description" content="The next FIS Alpine and Cross-Country World Cup race, in your time zone.">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e7eef2">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1418">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,7 +23,7 @@
       </svg>
       World Cup
     </h1>
-    <p class="sub">Alpine and cross-country · 2026/27 · Eastern Time</p>
+    <p class="sub">Alpine and cross-country · 2026/27 · <span class="tz-name">local time</span></p>
   </header>
   <main>
     <p id="preview" class="preview" hidden></p>
@@ -47,7 +47,7 @@
     <noscript><p class="empty">JavaScript draws the next race and hides the ones already run.</p></noscript>
   </main>
   <footer>
-    <p>Clocks are Eastern Time, for Lake Placid. Dates and start times are the FIS World Cup calendars and database. Time TBA means FIS has not published a start time. Add to Google Calendar opens that race in Google Calendar, in a new tab. Download .ics stays on this page for Apple Calendar. Live (FIS website) and Results (FIS website) open the FIS website in a new tab. Live shows from an hour before the start until the race is over, and all day for a cross-country race with no start time. Finished races show the podium and stay under Today. Peacock, YouTube, and Outside TV open those sites in a new tab.</p>
+    <p>Clocks follow this device's time zone (<span class="tz-name">local time</span>). Date headings use that zone, so a race can fall on a different calendar date than the FIS date. Dates and start times come from the FIS World Cup calendars and database and are stored in UTC. Time TBA means FIS has not published a start time. Add to Google Calendar opens that race in Google Calendar, in a new tab, at the same UTC start. Download .ics stays on this page for Apple Calendar and uses the same UTC start. Live (FIS website) and Results (FIS website) open the FIS website in a new tab. Live shows from an hour before the start until the race is over, and all day on the venue's calendar day for a cross-country race with no start time. Finished races show the podium and stay under Today. Peacock, YouTube, and Outside TV open those sites in a new tab.</p>
   </footer>
   <script type="module" src="app.js"></script>
 </body>

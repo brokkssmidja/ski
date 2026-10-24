@@ -8,6 +8,8 @@ Start times come from the FIS database iCal
 (https://www.fis-ski.com/DB/services/public/icalendar-feed-fis-events.html).
 Clock times in that feed are venue-local. They are converted to UTC with
 the venue IANA zone, so the 25 Oct 2026 Europe DST fallback is applied.
+Each race stores those UTC instants. `tz` is the venue zone (TBA days and
+the conversion), not the zone the page displays.
 """
 
 from __future__ import annotations
@@ -378,7 +380,6 @@ def main() -> None:
     tba = [r for r in races if any(s is None for s in r["starts"])]
     payload = {
         "season": "2026/27",
-        "timezone": "America/New_York",
         "sources": {
             "alpineCalendar": "https://www.fis-ski.com/alpine-skiing/documents",
             "alpineCalendarPdfWomen": "https://assets.fis-ski.com/f/252177/x/fbd04e5924/2627women_17-07-2026.pdf",

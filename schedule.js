@@ -1,7 +1,72 @@
-/** Race timing for the Lake Placid (America/New_York) schedule. */
+/** Race instants are UTC. Clocks and date headings use the viewer's time zone. */
 
-export const ET = "America/New_York";
 const GENDER_ORDER = { women: 0, men: 1, mixed: 2 };
+
+/** IANA zone of this device. */
+export function viewerTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+}
+
+const OFFSET_LABEL = /^(?:GMT|UTC)[+-]/;
+
+function dateParts(instant, timeZone, options, locale = "en-US") {
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone }).formatToParts(
+    instant instanceof Date ? instant : new Date(instant),
+  );
+}
+
+function partValue(parts, type) {
+  return (parts.find((p) => p.type === type)?.value || "").replace(/[\u202f\u00a0]/g, " ");
+}
+
+/**
+ * Short zone label such as EST, EDT, CET, or CEST.
+ * en-US supplies US abbreviations. en-GB supplies European ones when en-US
+ * would only give an offset. A GMT offset remains when neither locale has a short name.
+ */
+export function zoneLabel(instant, timeZone = viewerTimeZone()) {
+  for (const locale of ["en-US", "en-GB"]) {
+    const name = partValue(
+      dateParts(instant, timeZone, { timeZoneName: "short" }, locale),
+      "timeZoneName",
+    );
+    if (name && !OFFSET_LABEL.test(name)) return name;
+  }
+  return partValue(
+    dateParts(instant, timeZone, { timeZoneName: "shortOffset" }),
+    "timeZoneName",
+  ) || timeZone;
+}
+
+/** Header label: the short name plus the IANA id from the device zone. */
+export function zoneHeading(instant = new Date(), timeZone = viewerTimeZone()) {
+  const short = zoneLabel(instant, timeZone);
+  return short === timeZone ? timeZone : `${short} · ${timeZone}`;
+}
+
+function formatTimeOfDay(instant, timeZone) {
+  const parts = dateParts(instant, timeZone, {
+    hour: "numeric",
+    minute: "2-digit",
+    hourCycle: "h12",
+  });
+  return `${partValue(parts, "hour")}:${partValue(parts, "minute")} ${partValue(parts, "dayPeriod").toUpperCase()}`;
+}
+
+/** Clock time in `timeZone`, with a short zone label. */
+export function formatClock(instant, timeZone = viewerTimeZone()) {
+  return `${formatTimeOfDay(instant, timeZone)} ${zoneLabel(instant, timeZone)}`;
+}
+
+/** Calendar day of an instant in `timeZone`, as YYYY-MM-DD. */
+export function localDate(instant, timeZone = viewerTimeZone()) {
+  const parts = dateParts(instant, timeZone, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }, "en-CA");
+  return `${partValue(parts, "year")}-${partValue(parts, "month")}-${partValue(parts, "day")}`;
+}
 
 export function zonedTimeToUtc(date, time, timeZone) {
   const [y, m, d] = date.split("-").map(Number);
@@ -161,7 +226,7 @@ export function estimatedFinish(race) {
 /**
  * A podium finishes the race as soon as it is in the data and the start has passed.
  * Otherwise a two-run race ends 1h15m after run 2, a single alpine run ends 2h after the start,
- * and a timed cross-country race ends 1h30m after the start. A TBA race ends at local midnight.
+ * and a timed cross-country race ends 1h30m after the start. A TBA race ends at midnight in the venue zone.
  */
 export function isFinished(race, now) {
   const times = instants(race);
@@ -186,7 +251,7 @@ export function stillCurrent(race, now) {
 /**
  * When the Live button is on screen.
  * Timed races: from 1h before the first start until the race is finished (at most 4h after the last start).
- * Cross-country with no start time: the whole local race day, until a podium is posted.
+ * Cross-country with no start time: the whole venue-local race day, until a podium is posted.
  * `pulsing` is true while a run is in progress. The gap between runs does not pulse.
  */
 export function liveTiming(race, now) {
@@ -263,45 +328,23 @@ export function nextRace(races, now, filters) {
   return open[0] || null;
 }
 
-export function upcomingRaces(races, now, filters) {
+export function upcomingRaces(races, now, filters, timeZone = viewerTimeZone()) {
   const hero = nextRace(races, now, filters);
-  const today = etDate(now.toISOString());
+  const today = localDate(now, timeZone);
   return races
     .filter((r) => {
       if (!matches(r, filters) || r === hero) return false;
-      if (isFinished(r, now)) return raceDay(r) === today;
+      if (isFinished(r, now)) return raceDay(r, timeZone) === today;
       return stillCurrent(r, now);
     })
     .sort(bySchedule);
 }
 
-export function pastRaces(races, now, filters) {
-  const today = etDate(now.toISOString());
+export function pastRaces(races, now, filters, timeZone = viewerTimeZone()) {
+  const today = localDate(now, timeZone);
   return races
-    .filter((r) => matches(r, filters) && isFinished(r, now) && raceDay(r) < today)
+    .filter((r) => matches(r, filters) && isFinished(r, now) && raceDay(r, timeZone) < today)
     .sort((a, b) => bySchedule(b, a));
-}
-
-export function formatET(iso) {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: ET,
-    hour: "numeric",
-    minute: "2-digit",
-    hourCycle: "h12",
-  }).formatToParts(new Date(iso));
-  const get = (type) => parts.find((p) => p.type === type)?.value || "";
-  return `${get("hour")}:${get("minute")} ${get("dayPeriod").toUpperCase()} ET`;
-}
-
-export function etDate(iso) {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: ET,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(new Date(iso));
-  const get = (type) => parts.find((p) => p.type === type).value;
-  return `${get("year")}-${get("month")}-${get("day")}`;
 }
 
 export function formatRaceDate(date) {
@@ -337,7 +380,7 @@ export function countdown(target, now) {
 }
 
 /** Hero line: countdown, between-runs, underway, or finished. */
-export function statusLine(race, now) {
+export function statusLine(race, now, timeZone = viewerTimeZone()) {
   if (isFinished(race, now)) return "Finished";
   const times = instants(race);
   if (!times.length) return "Time TBA";
@@ -346,7 +389,7 @@ export function statusLine(race, now) {
   if (isTechnical(race) && times.length >= 2) {
     const gap = times[0].getTime() + RUN_MS;
     if (t >= gap && t < times[1].getTime()) {
-      return `Run 1 done · Run 2 at ${formatET(times[1])}`;
+      return `Run 1 done · Run 2 at ${formatClock(times[1], timeZone)}`;
     }
   }
   return "Underway";
@@ -364,14 +407,38 @@ export function isTechnical(race) {
   return race.discipline === "Slalom" || race.discipline === "Giant Slalom";
 }
 
-/** Eastern Time lines for a race. Slalom and GS keep run 1 and run 2 together. */
-export function startLines(race) {
+/** One entry per start. Slalom and GS keep run 1 and run 2 together. */
+export function startClocks(race, timeZone = viewerTimeZone()) {
   const times = instants(race);
-  if (!times.length) return ["Time TBA"];
-  if (isTechnical(race) && times.length >= 2) {
-    return [`Run 1 · ${formatET(times[0])}`, `Run 2 · ${formatET(times[1])}`];
-  }
-  return times.map((time) => formatET(time));
+  if (!times.length) return [{ label: "Time TBA", time: "", zone: "" }];
+  const technical = isTechnical(race) && times.length >= 2;
+  return times.map((instant, index) => ({
+    label: technical ? `Run ${index + 1}` : "",
+    time: formatTimeOfDay(instant, timeZone),
+    zone: zoneLabel(instant, timeZone),
+  }));
+}
+
+/** Plain start lines in the viewer's zone, each with a short zone label. */
+export function startLines(race, timeZone = viewerTimeZone()) {
+  return startClocks(race, timeZone).map((part) => {
+    if (!part.time) return part.label;
+    const clock = `${part.time} ${part.zone}`;
+    return part.label ? `${part.label} · ${clock}` : clock;
+  });
+}
+
+/** Date heading for a race in the viewer's zone. A timed start can change the calendar day. */
+export function raceCalendar(race, timeZone = viewerTimeZone()) {
+  const iso = raceDay(race, timeZone);
+  const label = formatRaceDate(iso);
+  const weekday = label.split(",")[0];
+  return {
+    iso,
+    label,
+    day: String(Number(iso.slice(8, 10))),
+    dow: weekday.slice(0, 3),
+  };
 }
 
 function utcNoon(iso) {
@@ -411,7 +478,7 @@ function mondayOnOrBefore(iso) {
   return addDays(iso, -delta);
 }
 
-/** Saturday and Sunday still ahead of an Eastern Time calendar day. Sunday returns none. */
+/** Saturday and Sunday still ahead of a calendar day in the viewer's zone. Sunday returns none. */
 export function thisWeekend(today) {
   const dow = weekday(today);
   if (dow === 0) return [];
@@ -420,10 +487,10 @@ export function thisWeekend(today) {
   return [sat, addDays(sat, 1)];
 }
 
-/** Eastern Time calendar day of the first start, or the FIS date when the start is TBA. */
-export function raceDay(race) {
+/** Viewer's calendar day of the first start, or the FIS date when the start is TBA. */
+export function raceDay(race, timeZone = viewerTimeZone()) {
   const times = instants(race);
-  if (times.length) return etDate(times[0].toISOString());
+  if (times.length) return localDate(times[0], timeZone);
   return race.date;
 }
 
@@ -431,8 +498,8 @@ export function raceDay(race) {
  * Group an already-filtered upcoming list.
  * Today, then any weekdays before the weekend, then This weekend, then Monday–Sunday ranges.
  */
-export function groupUpcoming(races, now) {
-  const today = etDate(now.toISOString());
+export function groupUpcoming(races, now, timeZone = viewerTimeZone()) {
+  const today = localDate(now, timeZone);
   const weekend = new Set(thisWeekend(today));
   const firstWeekend = [...weekend].sort()[0];
   const groups = [];
@@ -449,7 +516,7 @@ export function groupUpcoming(races, now) {
   }
 
   for (const race of races) {
-    const day = raceDay(race);
+    const day = raceDay(race, timeZone);
     if (day === today) bucket("today", "Today").races.push(race);
     else if (weekend.has(day)) bucket("weekend", "This weekend").races.push(race);
     else if (firstWeekend && day > today && day < firstWeekend) {
@@ -519,9 +586,9 @@ function eventPlace(race) {
   return COUNTRY[race.country] ? `${race.venue}, ${COUNTRY[race.country]}` : race.venue;
 }
 
-function eventDetails(race) {
+function eventDetails(race, timeZone = viewerTimeZone()) {
   return [
-    ...startLines(race),
+    ...startLines(race, timeZone),
     race.watch,
     race.note,
     fisResultsUrl(race),
@@ -544,19 +611,19 @@ export function calendarDates(race) {
  * A giant slalom or slalom runs until 1h15m after run 2, a downhill or super-G for 2h,
  * and a timed cross-country race for 1h30m. TBA is all-day.
  */
-export function googleCalendarUrl(race) {
+export function googleCalendarUrl(race, timeZone = viewerTimeZone()) {
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: eventTitle(race),
     dates: calendarDates(race),
-    details: eventDetails(race),
+    details: eventDetails(race, timeZone),
     location: eventPlace(race),
   });
   return `https://calendar.google.com/calendar/render?${params}`;
 }
 
 /** One VEVENT. Same span as the Google Calendar link. TBA is all-day. */
-export function icsFor(race, now = new Date()) {
+export function icsFor(race, now = new Date(), timeZone = viewerTimeZone()) {
   const times = instants(race);
   const lines = [
     "BEGIN:VCALENDAR",
@@ -579,7 +646,7 @@ export function icsFor(race, now = new Date()) {
   lines.push(
     `SUMMARY:${icsEscape(eventTitle(race))}`,
     `LOCATION:${icsEscape(eventPlace(race))}`,
-    `DESCRIPTION:${icsEscape(eventDetails(race))}`,
+    `DESCRIPTION:${icsEscape(eventDetails(race, timeZone))}`,
     "END:VEVENT",
     "END:VCALENDAR",
   );
