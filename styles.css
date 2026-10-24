@@ -90,7 +90,18 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
   border: 1px solid var(--line); border-radius: 999px; padding: 3px 8px; color: var(--muted);
 }
-.fis { color: var(--accent); font-size: 0.85rem; }
+.watch .ext, .fis {
+  color: var(--accent);
+  font-weight: 650;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+.ext-icon {
+  width: 0.85em; height: 0.85em; margin-left: 0.16em;
+  vertical-align: -0.12em; display: inline-block; flex: none;
+}
+.ext-label { white-space: nowrap; }
+.ext-where { font-weight: 650; letter-spacing: 0; text-transform: none; }
 .group { margin-top: 18px; padding: 8px 14px 4px; }
 .group h3 { margin: 8px 0 0; font-size: 0.95rem; }
 .contenders {
@@ -113,12 +124,13 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .race.featured { border-radius: 12px; margin-inline: -8px; padding-inline: 8px; }
 .cals { display: flex; flex-direction: column; align-items: stretch; margin-top: 10px; gap: 2px; }
 .gcal {
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center; gap: 0.15rem;
   min-height: 44px; padding: 8px 14px; border-radius: 999px;
   background: var(--ink); color: var(--bg);
   font: inherit; font-size: 0.92rem; font-weight: 700; text-align: center;
   text-decoration: none;
 }
+.gcal .ext-icon { width: 0.95em; height: 0.95em; }
 .hero .gcal, .past-card .gcal { min-height: 48px; }
 .ics {
   align-self: center;
@@ -128,22 +140,24 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 }
 .live-link {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 10px; min-height: 44px; padding: 8px 18px; border-radius: 999px;
+  margin-top: 10px; min-height: 44px; padding: 8px 14px; border-radius: 999px;
   background: #b42318; color: #fff; font-size: 0.95rem; font-weight: 800;
-  letter-spacing: 0.14em; text-decoration: none; text-transform: uppercase;
+  letter-spacing: 0; text-decoration: none; text-transform: none; line-height: 1.15;
 }
 .hero .live-link, .past-card .live-link, .live-card .live-link,
 .hero .results-link, .past-card .results-link {
   display: flex; width: 100%; min-height: 48px; margin-top: 14px;
 }
 .results-link {
-  display: inline-flex; align-items: center; justify-content: center;
-  margin-top: 10px; min-height: 44px; padding: 8px 18px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.2rem;
+  margin-top: 10px; min-height: 44px; padding: 8px 14px; border-radius: 999px;
   background: var(--ink); color: var(--bg); font-size: 0.95rem; font-weight: 800;
-  letter-spacing: 0.08em; text-decoration: none; text-transform: uppercase;
+  letter-spacing: 0; text-decoration: none; text-transform: none; line-height: 1.15;
 }
+.live-link .ext-where, .results-link .ext-where { font-size: 0.78em; font-weight: 700; }
 .race .results-link, .race .live-link, .race .gcal {
   display: flex; width: 100%; max-width: 100%; justify-content: center;
+  font-size: 0.84rem; padding-inline: 10px;
 }
 .finished { margin-top: 8px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.82rem; }
 .live-card {

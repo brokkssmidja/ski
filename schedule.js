@@ -86,6 +86,64 @@ export function liveHref(race) {
   return LIVE_HOME[race.sport] || "https://www.fis-ski.com/DB/alpine-skiing/live.html";
 }
 
+/** Longest name first, so "YouTube & Ski…" is not split into the shorter YouTube link. */
+const STREAMS = [
+  {
+    token: "YouTube & Ski & Snowboard World Cup",
+    label: "YouTube",
+    site: "YouTube",
+    href: "https://www.youtube.com/@skiandsnowboardworldcup",
+  },
+  {
+    token: "Outside TV",
+    label: "Outside TV",
+    site: "Outside TV",
+    href: "https://watch.outsideonline.com/",
+  },
+  {
+    token: "Peacock",
+    label: "NBC Peacock",
+    site: "NBC Peacock",
+    href: "https://www.peacocktv.com/sports",
+  },
+  {
+    token: "YouTube",
+    label: "YouTube",
+    site: "YouTube",
+    href: "https://www.youtube.com/@skiandsnowboardworldcup",
+  },
+];
+
+/** Split a watch line into text and the streaming sites it names. */
+export function watchSegments(text) {
+  const source = text || "";
+  const parts = [];
+  let index = 0;
+  while (index < source.length) {
+    let best = null;
+    for (const stream of STREAMS) {
+      const at = source.indexOf(stream.token, index);
+      if (at === -1) continue;
+      if (!best || at < best.at || (at === best.at && stream.token.length > best.stream.token.length)) {
+        best = { stream, at };
+      }
+    }
+    if (!best) {
+      parts.push({ type: "text", text: source.slice(index) });
+      break;
+    }
+    if (best.at > index) parts.push({ type: "text", text: source.slice(index, best.at) });
+    parts.push({
+      type: "link",
+      label: best.stream.label,
+      site: best.stream.site,
+      href: best.stream.href,
+    });
+    index = best.at + best.stream.token.length;
+  }
+  return parts;
+}
+
 export function hasPodium(race) {
   return Array.isArray(race.results?.podium) && race.results.podium.length > 0;
 }

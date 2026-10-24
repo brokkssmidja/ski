@@ -20,6 +20,7 @@ import {
   startLines,
   tbaEnd,
   upcomingRaces,
+  watchSegments,
   zonedTimeToUtc,
 } from "../schedule.js";
 
@@ -431,6 +432,35 @@ test("live timing uses the FIS codex and the race window", () => {
     } else {
       assert.equal(race.codex, undefined, race.id);
     }
+  }
+});
+
+test("watch lines name streaming sites as compact external links", () => {
+  const labels = (text) => watchSegments(text).filter((part) => part.type === "link").map((part) => part.label);
+  const solden = watchSegments("US: Peacock (live). NBCSN delay Oct 25.");
+  assert.deepEqual(labels("US: Peacock (live). NBCSN delay Oct 25."), ["NBC Peacock"]);
+  assert.equal(solden[0].text, "US: ");
+  assert.equal(solden[1].site, "NBC Peacock");
+  assert.equal(solden[1].href, "https://www.peacocktv.com/sports");
+  assert.equal(solden[2].text, " (live). NBCSN delay Oct 25.");
+
+  const replay = "US: Peacock (live). YouTube after 24h.";
+  assert.deepEqual(labels(replay), ["NBC Peacock", "YouTube"]);
+  assert.equal(watchSegments(replay).at(-1).text, " after 24h.");
+
+  const channel = watchSegments("US: YouTube & Ski & Snowboard World Cup (live).");
+  assert.deepEqual(labels("US: YouTube & Ski & Snowboard World Cup (live)."), ["YouTube"]);
+  assert.equal(channel[1].href, "https://www.youtube.com/@skiandsnowboardworldcup");
+  assert.equal(channel[2].text, " (live).");
+
+  const home = watchSegments("US: Peacock (live). Outside TV on demand.");
+  assert.deepEqual(labels("US: Peacock (live). Outside TV on demand."), ["NBC Peacock", "Outside TV"]);
+  assert.equal(home[3].href, "https://watch.outsideonline.com/");
+
+  for (const race of races) {
+    const links = watchSegments(race.watch).filter((part) => part.type === "link");
+    assert.ok(links.length >= 1, race.id);
+    for (const link of links) assert.match(link.href, /^https:\/\//);
   }
 });
 
