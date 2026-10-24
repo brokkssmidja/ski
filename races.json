@@ -1,6 +1,5 @@
 {
   "season": "2026/27",
-  "timezone": "America/New_York",
   "sources": {
     "alpineCalendar": "https://www.fis-ski.com/alpine-skiing/documents",
     "alpineCalendarPdfWomen": "https://assets.fis-ski.com/f/252177/x/fbd04e5924/2627women_17-07-2026.pdf",

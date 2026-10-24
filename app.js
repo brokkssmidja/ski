@@ -1,22 +1,25 @@
 import { contendersByCountry } from "./contenders.js";
 import {
-  etDate,
   fisResultsUrl,
-  formatRaceDate,
+  formatClock,
   googleCalendarUrl,
   groupUpcoming,
   icsFilename,
   icsFor,
   isFinished,
   liveTiming,
+  localDate,
   matches,
   nextRace,
   pastRaces,
   phase,
-  startLines,
+  raceCalendar,
+  startClocks,
   statusLine,
   upcomingRaces,
+  viewerTimeZone,
   watchSegments,
+  zoneHeading,
 } from "./schedule.js";
 
 const COUNTRY = {
@@ -122,13 +125,33 @@ function paintChips() {
   }
 }
 
-function timesNode(race, tag) {
-  const lines = startLines(race);
-  const node = el(tag, lines.length > 1 ? "times runs" : "times");
-  lines.forEach((line, index) => {
-    if (index) node.append(el("span", "sep", "·"));
-    node.append(el("span", "run", line));
+function zoneSpan(name) {
+  const zone = el("span", "zone", name);
+  zone.title = viewerTimeZone();
+  return zone;
+}
+
+function appendClocks(node, race, separator) {
+  const clocks = startClocks(race);
+  clocks.forEach((part, index) => {
+    if (index) node.append(el("span", "sep", separator));
+    const run = el("span", "run");
+    if (!part.time) {
+      run.textContent = part.label;
+    } else {
+      if (part.label) run.append(`${part.label} · `);
+      run.append(`${part.time} `);
+      run.append(zoneSpan(part.zone));
+    }
+    node.append(run);
   });
+  return clocks;
+}
+
+function timesNode(race, tag) {
+  const node = el(tag, "times");
+  const clocks = appendClocks(node, race, " · ");
+  if (clocks.length > 1) node.classList.add("runs");
   return node;
 }
 
@@ -308,7 +331,7 @@ function renderHero(race, now) {
   card.append(el("p", "kicker", bits.join(" · ")));
   card.append(el("h2", "", race.discipline));
   card.append(el("p", "venue", `${flag(race.country)} ${race.venue}, ${COUNTRY[race.country] || race.country}`));
-  card.append(el("p", "when", formatRaceDate(race.date)));
+  card.append(el("p", "when", raceCalendar(race).label));
   card.append(timesNode(race, "p"));
   const watching = contenderNode(race);
   if (watching) card.append(watching);
@@ -331,19 +354,15 @@ function raceRow(race, now) {
   const featured = contendersByCountry(race).length ? " featured" : "";
   const row = el("article", `race${featured}`);
   const day = el("div");
-  const [, , d] = race.date.split("-");
-  day.append(el("div", "day", String(Number(d))));
-  const weekday = formatRaceDate(race.date).split(",")[0].slice(0, 3);
-  day.append(el("div", "dow", weekday));
+  const calendar = raceCalendar(race);
+  day.append(el("div", "day", calendar.day));
+  day.append(el("div", "dow", calendar.dow));
   const body = el("div");
   const what = SHORT[race.discipline] || race.discipline;
   body.append(el("div", "what", `${what} · ${GENDER[race.gender]}`));
   body.append(el("div", "meta", `${flag(race.country)} ${race.venue}${race.note ? " · " + race.note : ""}`));
   const clockLine = el("div", "clock");
-  startLines(race).forEach((line, index) => {
-    if (index) clockLine.append(el("span", "sep", " · "));
-    clockLine.append(line);
-  });
+  appendClocks(clockLine, race, " · ");
   body.append(clockLine);
   const watching = contenderNode(race);
   if (watching) body.append(watching);
@@ -399,7 +418,7 @@ function renderPast(list) {
     const featured = contendersByCountry(race).length ? " featured" : "";
     const card = el("article", `past-card${featured}`);
     card.append(el("h3", "", `${race.discipline} · ${GENDER[race.gender]}`));
-    card.append(el("p", "", `${flag(race.country)} ${race.venue} · ${formatRaceDate(race.date)}`));
+    card.append(el("p", "", `${flag(race.country)} ${race.venue} · ${raceCalendar(race).label}`));
     const watching = contenderNode(race);
     if (watching) card.append(watching);
     const podium = race.results?.podium || [];
@@ -431,7 +450,8 @@ function viewSignature() {
     hero?.id || "",
     hero ? phase(hero, clock) : "none",
     pastRaces(races, clock, filters).length,
-    etDate(clock.toISOString()),
+    zoneHeading(clock),
+    localDate(clock),
     races.map((race) => {
       const timing = liveTiming(race, clock);
       const mark = isFinished(race, clock) ? "f" : "";
@@ -441,7 +461,13 @@ function viewSignature() {
   ].join("|");
 }
 
+function paintZone() {
+  const label = zoneHeading(clock);
+  for (const node of document.querySelectorAll(".tz-name")) node.textContent = label;
+}
+
 function render() {
+  paintZone();
   paintChips();
   const hero = nextRace(races, clock, filters);
   renderHero(hero, clock);
@@ -478,7 +504,8 @@ function currentTime() {
   const parsed = new Date(raw);
   if (Number.isNaN(parsed.getTime())) return new Date();
   preview.hidden = false;
-  preview.textContent = `Previewing the schedule as of ${parsed.toISOString().replace(".000", "")}.`;
+  const stamp = parsed.toISOString().replace(".000", "");
+  preview.textContent = `Previewing the schedule as of ${stamp} (${formatClock(parsed)}).`;
   return parsed;
 }
 

@@ -74,6 +74,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .venue { margin: 0; font-size: 1.15rem; }
 .when, .times { margin: 8px 0 0; }
 .times { font-size: 1.02rem; }
+.zone { font-weight: 700; letter-spacing: 0.03em; color: var(--ink); }
 .times.runs { display: flex; flex-wrap: wrap; column-gap: 14px; row-gap: 2px; }
 .times .sep, .clock .sep { color: var(--muted); }
 .countdown {
