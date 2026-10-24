@@ -2,6 +2,9 @@ name: Update podiums
 
 on:
   schedule:
+    # Every 15 minutes on race day. The script skips the network unless a race is in its results window.
+    - cron: "*/15 * * * *"
+    # Once a day, pick up a podium that was posted after that window.
     - cron: "30 23 * * *"
   workflow_dispatch:
 
@@ -18,7 +21,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python scripts/update_podiums.py
+      - name: Fetch podiums
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "*/15 * * * *" ]; then
+            python scripts/update_podiums.py
+          else
+            python scripts/update_podiums.py --sweep
+          fi
       - id: commit
         run: |
           if git diff --quiet -- races.json; then

@@ -27,7 +27,23 @@
       ],
       "watch": "US: Peacock (live). NBCSN delay Oct 25.",
       "results": {
-        "podium": []
+        "podium": [
+          {
+            "place": 1,
+            "name": "MOLTZAN Paula",
+            "country": "USA"
+          },
+          {
+            "place": 2,
+            "name": "COLTURI Lara",
+            "country": "ALB"
+          },
+          {
+            "place": 3,
+            "name": "AICHER Emma",
+            "country": "GER"
+          }
+        ]
       },
       "note": "Opening"
     },

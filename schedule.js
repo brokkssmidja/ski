@@ -54,6 +54,10 @@ export function instants(race) {
 
 const LIVE_LEAD_MS = 60 * 60 * 1000;
 const LIVE_TAIL_MS = 4 * 60 * 60 * 1000;
+const RUN_MS = 75 * 60 * 1000;
+const SINGLE_RUN_MS = 2 * 60 * 60 * 1000;
+const XC_RUN_MS = 90 * 60 * 1000;
+const HERO_HOLD_MS = 3 * 60 * 60 * 1000;
 
 /** Official live index for a sport. live.fis-ski.com has no discipline home of its own. */
 const LIVE_HOME = {
@@ -76,13 +80,53 @@ export function liveHref(race) {
   return LIVE_HOME[race.sport] || "https://www.fis-ski.com/DB/alpine-skiing/live.html";
 }
 
+export function hasPodium(race) {
+  return Array.isArray(race.results?.podium) && race.results.podium.length > 0;
+}
+
+/** When a race is expected to be over, before a podium is posted. */
+export function estimatedFinish(race) {
+  const times = instants(race);
+  if (!times.length) return null;
+  const last = times[times.length - 1].getTime();
+  if (race.sport === "xc") return new Date(last + XC_RUN_MS);
+  if (isTechnical(race) && times.length >= 2) return new Date(last + RUN_MS);
+  return new Date(last + SINGLE_RUN_MS);
+}
+
+/**
+ * A podium finishes the race as soon as it is in the data and the start has passed.
+ * Otherwise a two-run race ends 1h15m after run 2, a single alpine run ends 2h after the start,
+ * and a timed cross-country race ends 1h30m after the start. A TBA race ends at local midnight.
+ */
+export function isFinished(race, now) {
+  const times = instants(race);
+  const t = now.getTime();
+  if (times.length) {
+    if (t >= times[0].getTime() && hasPodium(race)) return true;
+    const end = estimatedFinish(race);
+    return !!end && t >= end.getTime();
+  }
+  const open = zonedTimeToUtc(race.date, "00:00", race.tz).getTime();
+  if (hasPodium(race) && t >= open) return true;
+  return t >= tbaEnd(race).getTime();
+}
+
+/** Finished races stay in the hero for 3h after the estimated end, then the next race takes over. */
+export function stillCurrent(race, now) {
+  const end = estimatedFinish(race);
+  const until = end ? end.getTime() + HERO_HOLD_MS : tbaEnd(race).getTime();
+  return now.getTime() < until;
+}
+
 /**
  * When the Live button is on screen.
- * Timed races: from 1h before the first start until 4h after the last.
- * Cross-country with no start time: the whole local race day.
- * `pulsing` is true once the race is underway (or all day, when the start is TBA).
+ * Timed races: from 1h before the first start until the race is finished (at most 4h after the last start).
+ * Cross-country with no start time: the whole local race day, until a podium is posted.
+ * `pulsing` is true while a run is in progress. The gap between runs does not pulse.
  */
 export function liveTiming(race, now) {
+  if (isFinished(race, now)) return null;
   const href = liveHref(race);
   const t = now.getTime();
   const times = instants(race);
@@ -96,20 +140,19 @@ export function liveTiming(race, now) {
   const first = times[0].getTime();
   const last = times[times.length - 1].getTime();
   if (t < first - LIVE_LEAD_MS || t >= last + LIVE_TAIL_MS) return null;
-  return { href, pulsing: t >= first };
+  let pulsing = t >= first;
+  if (isTechnical(race) && times.length >= 2) {
+    const gap = first + RUN_MS;
+    if (t >= gap && t < times[1].getTime()) pulsing = false;
+  }
+  return { href, pulsing };
 }
 
 export function phase(race, now) {
+  if (isFinished(race, now)) return "past";
   const times = instants(race);
-  const t = now.getTime();
-  if (times.length) {
-    const first = times[0].getTime();
-    const last = times[times.length - 1].getTime();
-    if (t < first) return "upcoming";
-    if (t < last + LIVE_MS) return "live";
-    return "past";
-  }
-  return t < tbaEnd(race).getTime() ? "upcoming" : "past";
+  if (!times.length || now.getTime() < times[0].getTime()) return "upcoming";
+  return "live";
 }
 
 /** Known starts sort by the first gun. A time-TBA race sorts at the end of its local day. */
@@ -151,21 +194,27 @@ function bySchedule(a, b) {
 }
 
 export function nextRace(races, now, filters) {
-  const open = races.filter((r) => matches(r, filters) && phase(r, now) !== "past");
+  const open = races.filter((r) => matches(r, filters) && stillCurrent(r, now));
   open.sort(bySchedule);
   return open[0] || null;
 }
 
 export function upcomingRaces(races, now, filters) {
   const hero = nextRace(races, now, filters);
+  const today = etDate(now.toISOString());
   return races
-    .filter((r) => matches(r, filters) && phase(r, now) !== "past" && r !== hero)
+    .filter((r) => {
+      if (!matches(r, filters) || r === hero) return false;
+      if (isFinished(r, now)) return raceDay(r) === today;
+      return stillCurrent(r, now);
+    })
     .sort(bySchedule);
 }
 
 export function pastRaces(races, now, filters) {
+  const today = etDate(now.toISOString());
   return races
-    .filter((r) => matches(r, filters) && phase(r, now) === "past")
+    .filter((r) => matches(r, filters) && isFinished(r, now) && raceDay(r) < today)
     .sort((a, b) => bySchedule(b, a));
 }
 
@@ -221,6 +270,22 @@ export function countdown(target, now) {
   if (days > 0) return `${days}d ${hours}h ${mins}m`;
   if (hours > 0) return `${hours}h ${mins}m ${secs}s`;
   return `${mins}m ${String(secs).padStart(2, "0")}s`;
+}
+
+/** Hero line: countdown, between-runs, underway, or finished. */
+export function statusLine(race, now) {
+  if (isFinished(race, now)) return "Finished";
+  const times = instants(race);
+  if (!times.length) return "Time TBA";
+  const t = now.getTime();
+  if (t < times[0].getTime()) return `Starts in ${countdown(times[0], now)}`;
+  if (isTechnical(race) && times.length >= 2) {
+    const gap = times[0].getTime() + RUN_MS;
+    if (t >= gap && t < times[1].getTime()) {
+      return `Run 1 done · Run 2 at ${formatET(times[1])}`;
+    }
+  }
+  return "Underway";
 }
 
 /** What the hero countdown is counting toward. */

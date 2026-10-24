@@ -8,9 +8,11 @@ import {
   formatET,
   groupUpcoming,
   icsFor,
+  isFinished,
   liveHref,
   liveTiming,
   matches,
+  statusLine,
   nextRace,
   pastRaces,
   phase,
@@ -85,20 +87,25 @@ test("stored FIS times spot-check in Eastern Time", () => {
   assert.equal(etDate(find("Åre", "men", "Slalom").starts[0]), "2027-03-14");
 });
 
-test("opening weekend: live between runs, then the men's race", () => {
-  const now = at("2026-10-24T10:00:00Z");
+test("opening weekend: the women's race stays up after it finishes, then Sunday leads", () => {
+  const now = at("2026-10-24T12:43:00Z");
   const hero = nextRace(races, now, all);
   assert.equal(hero.venue, "Sölden");
   assert.equal(hero.gender, "women");
-  assert.equal(phase(hero, now), "live");
-  assert.equal(countdownTarget(hero, now).toISOString(), "2026-10-24T11:30:00.000Z");
+  assert.equal(statusLine(hero, now), "Finished");
   assert.equal(pastRaces(races, now, all).length, 0);
 
-  const later = at("2026-10-24T15:00:00Z");
+  const held = at("2026-10-24T15:44:00Z");
+  assert.equal(nextRace(races, held, all).gender, "women");
+
+  const later = at("2026-10-24T15:45:00Z");
   const next = nextRace(races, later, all);
   assert.equal(next.gender, "men");
   assert.equal(next.venue, "Sölden");
-  assert.equal(phase(find("Sölden", "women"), later), "past");
+  const today = groupUpcoming(upcomingRaces(races, later, all), later).find((group) => group.title === "Today");
+  assert.equal(today.races[0].gender, "women");
+  assert.equal(today.races[0].venue, "Sölden");
+  assert.equal(pastRaces(races, later, all).some((race) => race.venue === "Sölden"), false);
 });
 
 test("simulated November: Gurgl is next, and a known start beats a same-day TBA", () => {
@@ -160,10 +167,15 @@ test("calendar shape: alpine has times except Narvik, cross-country is TBA", () 
     tba.filter((r) => r.sport === "alpine").map((r) => r.id).sort(),
     ["alpine-narvik-20270312-dh", "alpine-narvik-20270313-sg"],
   );
+  const soldenPodium = find("Sölden", "women").results.podium;
+  assert.equal(soldenPodium[0].name, "MOLTZAN Paula");
+  assert.equal(soldenPodium[0].country, "USA");
+  assert.deepEqual(soldenPodium.map((row) => row.place), [1, 2, 3]);
   for (const race of races) {
     for (const key of ["id", "sport", "gender", "discipline", "venue", "country", "starts", "watch", "results"]) {
       assert.ok(key in race, race.id + " " + key);
     }
+    if (race.id === "alpine-131577") continue;
     assert.deepEqual(race.results, { podium: [] });
   }
 });
@@ -329,10 +341,30 @@ test("live timing uses the FIS codex and the race window", () => {
     href: "https://live.fis-ski.com/lv-al5001.htm",
     pulsing: false,
   });
-  assert.equal(liveTiming(solden, at("2026-10-24T08:30:00Z")).pulsing, true);
-  assert.equal(liveTiming(solden, at("2026-10-24T10:00:00Z")).pulsing, true);
-  assert.equal(liveTiming(solden, at("2026-10-24T15:29:59Z")).pulsing, true);
-  assert.equal(liveTiming(solden, at("2026-10-24T15:30:00Z")), null);
+  assert.equal(liveTiming(solden, at("2026-10-24T08:30:00Z")), null);
+  assert.equal(isFinished(solden, at("2026-10-24T12:43:00Z")), true);
+
+  const open = { ...solden, results: { podium: [] } };
+  assert.equal(statusLine(open, at("2026-10-24T09:00:00Z")), "Underway");
+  assert.equal(statusLine(open, at("2026-10-24T10:00:00Z")), "Run 1 done · Run 2 at 7:30 AM ET");
+  assert.equal(liveTiming(open, at("2026-10-24T10:00:00Z")).pulsing, false);
+  assert.equal(statusLine(open, at("2026-10-24T12:00:00Z")), "Underway");
+  assert.equal(liveTiming(open, at("2026-10-24T12:00:00Z")).pulsing, true);
+  assert.equal(statusLine(open, at("2026-10-24T12:44:59Z")), "Underway");
+  assert.equal(statusLine(open, at("2026-10-24T12:45:00Z")), "Finished");
+  assert.equal(liveTiming(open, at("2026-10-24T12:45:00Z")), null);
+
+  const downhill = find("Sun Valley", "women", "Downhill");
+  const gun = new Date(downhill.starts[0]).getTime();
+  assert.equal(statusLine(downhill, new Date(gun + 60 * 60 * 1000)), "Underway");
+  assert.equal(statusLine(downhill, new Date(gun + 2 * 60 * 60 * 1000)), "Finished");
+  const xc = {
+    ...find("Ruka", "women", "10 km Interval Start Classic"),
+    starts: ["2026-11-27T09:00:00Z"],
+    results: { podium: [] },
+  };
+  assert.equal(statusLine(xc, at("2026-11-27T10:29:00Z")), "Underway");
+  assert.equal(statusLine(xc, at("2026-11-27T10:30:00Z")), "Finished");
 
   assert.equal(liveTiming(ruka, at("2026-11-26T21:59:59Z")), null);
   assert.equal(liveTiming(ruka, at("2026-11-26T22:00:00Z")).pulsing, true);
@@ -376,4 +408,7 @@ test("pages paths stay under /ski/", () => {
   assert.match(worker, /contenders\.js/);
   assert.match(pages, /actions\/deploy-pages@v4/);
   assert.match(pages, /path: \./);
+  const podiums = readFileSync(new URL(".github/workflows/podiums.yml", root), "utf8");
+  assert.match(podiums, /cron: "\*\/15 \* \* \* \*"/);
+  assert.match(podiums, /cron: "30 23 \* \* \*"/);
 });

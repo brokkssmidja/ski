@@ -80,6 +80,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   margin: 14px 0 0; font-size: 1.65rem; font-weight: 700; letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
 }
+.countdown.long { font-size: 1.2rem; letter-spacing: -0.02em; }
 .watch {
   margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--line);
   color: var(--muted); font-size: 0.92rem;
@@ -122,9 +123,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   background: #b42318; color: #fff; font-size: 0.95rem; font-weight: 800;
   letter-spacing: 0.14em; text-decoration: none; text-transform: uppercase;
 }
-.hero .live-link, .past-card .live-link, .live-card .live-link {
+.hero .live-link, .past-card .live-link, .live-card .live-link,
+.hero .results-link, .past-card .results-link {
   display: flex; width: 100%; min-height: 48px; margin-top: 14px;
 }
+.results-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 10px; min-height: 44px; padding: 8px 18px; border-radius: 999px;
+  background: var(--ink); color: var(--bg); font-size: 0.95rem; font-weight: 800;
+  letter-spacing: 0.08em; text-decoration: none; text-transform: uppercase;
+}
+.finished { margin-top: 8px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.82rem; }
 .live-card {
   margin-top: 14px; padding: 14px 16px 16px;
   background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--live);

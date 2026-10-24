@@ -58,7 +58,9 @@ def parse_podium(html: str):
     rows = []
     for part in chunk.split('class="table-row"')[1:4]:
         rank = re.search(r'justify-right pr-1 bold">\s*(\d+)', part)
-        name = re.search(r'justify-left bold">\s*(.*?)\s*</div>', part, re.S)
+        name = re.search(r'athlete-name">\s*(.*?)\s*</div>', part, re.S)
+        if not name:
+            name = re.search(r'justify-left bold">\s*([^<]*?)\s*</div>', part, re.S)
         country = re.search(r'country__name-short">([A-Z]{3})', part)
         if not (rank and name and country):
             return None
@@ -87,14 +89,34 @@ def race_url(race: dict) -> str | None:
     )
 
 
-def ready(race: dict, now: datetime) -> bool:
+def parse_start(stamp: str) -> datetime:
+    return datetime.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+
+
+def finish_delay(race: dict, starts: list[str]) -> timedelta:
+    if race.get("sport") == "xc":
+        return timedelta(minutes=90)
+    if race.get("discipline") in ("Slalom", "Giant Slalom") and len(starts) >= 2:
+        return timedelta(minutes=75)
+    return timedelta(hours=2)
+
+
+def ready(race: dict, now: datetime, sweep: bool = False) -> bool:
     if race.get("results", {}).get("podium"):
         return False
     times = [s for s in race.get("starts") or [] if s]
     if times:
-        first = datetime.strptime(times[0], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-        return now >= first
-    return race["date"] <= (now.date() + timedelta(days=1)).isoformat()
+        first = parse_start(times[0])
+        if now < first:
+            return False
+        if sweep:
+            return True
+        last = parse_start(times[-1])
+        return now <= last + finish_delay(race, times) + timedelta(hours=6)
+    if sweep:
+        return race["date"] <= (now.date() + timedelta(days=1)).isoformat()
+    yesterday = (now.date() - timedelta(days=1)).isoformat()
+    return race["date"] in (now.date().isoformat(), yesterday)
 
 
 def fetch(url: str) -> str:
@@ -117,13 +139,14 @@ def main() -> int:
 
     payload = json.loads(RACES.read_text(encoding="utf-8"))
     now = datetime.now(timezone.utc)
+    sweep = "--sweep" in sys.argv
     changed = 0
     checked = 0
     for race in payload["races"]:
         if changed >= 25 or checked >= 40:
             break
         url = race_url(race)
-        if not url or not ready(race, now):
+        if not url or not ready(race, now, sweep):
             continue
         checked += 1
         try:

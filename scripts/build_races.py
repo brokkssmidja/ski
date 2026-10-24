@@ -302,30 +302,34 @@ def narvik() -> list[dict]:
     return races
 
 
-def remembered_codex() -> dict[str, int]:
-    """Keep codex values already stored. A rebuild does not refetch results pages."""
+def remembered() -> tuple[dict[str, int], dict[str, list]]:
+    """Keep codex and podiums already stored. A rebuild does not refetch them."""
     if not OUT.exists():
-        return {}
+        return {}, {}
     try:
         old = json.loads(OUT.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return {}
-    kept: dict[str, int] = {}
+        return {}, {}
+    codex: dict[str, int] = {}
+    podiums: dict[str, list] = {}
     for race in old.get("races", []):
-        codex = race.get("codex")
-        if isinstance(codex, int) and 0 <= codex <= 9999:
-            kept[race["id"]] = codex
-    return kept
+        number = race.get("codex")
+        if isinstance(number, int) and 0 <= number <= 9999:
+            codex[race["id"]] = number
+        podium = race.get("results", {}).get("podium")
+        if isinstance(podium, list) and podium:
+            podiums[race["id"]] = podium
+    return codex, podiums
 
 
-def with_codex(race: dict, kept: dict[str, int]) -> dict:
-    if race["id"] not in kept:
-        return race
+def with_memory(race: dict, codex: dict[str, int], podiums: dict[str, list]) -> dict:
     out: dict = {}
     for key, value in race.items():
         out[key] = value
-        if key == "id":
-            out["codex"] = kept[race["id"]]
+        if key == "id" and race["id"] in codex:
+            out["codex"] = codex[race["id"]]
+    if race["id"] in podiums:
+        out["results"] = {"podium": podiums[race["id"]]}
     return out
 
 
@@ -338,8 +342,8 @@ def sort_key(race: dict) -> tuple:
 def main() -> None:
     alpine = [parse_alpine(ev) for ev in events(fetch(ICAL["alpine"]))]
     xc = parse_xc_rows(events(fetch(ICAL["xc"])))
-    kept = remembered_codex()
-    races = [with_codex(race, kept) for race in alpine + xc + narvik()]
+    codex, podiums = remembered()
+    races = [with_memory(race, codex, podiums) for race in alpine + xc + narvik()]
     races.sort(key=sort_key)
     ids = [r["id"] for r in races]
     if len(ids) != len(set(ids)):

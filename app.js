@@ -1,28 +1,28 @@
 import { contendersByCountry } from "./contenders.js";
 import {
-  countdown,
-  countdownTarget,
   etDate,
   formatRaceDate,
   groupUpcoming,
   icsFilename,
   icsFor,
+  isFinished,
   liveTiming,
   matches,
   nextRace,
   pastRaces,
   phase,
   startLines,
+  statusLine,
   upcomingRaces,
 } from "./schedule.js";
 
 const COUNTRY = {
-  AND: "Andorra", AUT: "Austria", CAN: "Canada", FIN: "Finland", FRA: "France",
+  ALB: "Albania", AND: "Andorra", AUT: "Austria", CAN: "Canada", FIN: "Finland", FRA: "France",
   GER: "Germany", ITA: "Italy", NOR: "Norway", SLO: "Slovenia", SUI: "Switzerland",
   SVK: "Slovakia", SWE: "Sweden", USA: "United States",
 };
 const ISO2 = {
-  AND: "AD", AUT: "AT", CAN: "CA", FIN: "FI", FRA: "FR", GER: "DE", ITA: "IT",
+  ALB: "AL", AND: "AD", AUT: "AT", CAN: "CA", FIN: "FI", FRA: "FR", GER: "DE", ITA: "IT",
   NOR: "NO", SLO: "SI", SUI: "CH", SVK: "SK", SWE: "SE", USA: "US",
 };
 const GENDER = { women: "Women", men: "Men", mixed: "Mixed" };
@@ -108,13 +108,9 @@ function el(tag, className, text) {
   return node;
 }
 
-function countdownText(race, now) {
-  const status = phase(race, now);
-  const target = countdownTarget(race, now);
-  if (status === "live" && target) return `Run 2 in ${countdown(target, now)}`;
-  if (status === "live") return "Underway";
-  if (target) return `Starts in ${countdown(target, now)}`;
-  return "Time TBA";
+function statusNode(race, now) {
+  const text = statusLine(race, now);
+  return el("p", text.length > 18 ? "countdown long" : "countdown", text);
 }
 
 function paintChips() {
@@ -158,6 +154,31 @@ function calendarButton(race) {
   return button;
 }
 
+function podiumNode(race) {
+  const rows = [...(race.results?.podium || [])].sort((a, b) => a.place - b.place);
+  if (!rows.length) return null;
+  const list = el("ol", "podium");
+  for (const row of rows) {
+    const li = el("li");
+    li.append(el("b", "", String(row.place)));
+    li.append(el("span", "", row.name));
+    li.append(el("span", "", `${flag(row.country)} ${row.country}`));
+    list.append(li);
+  }
+  return list;
+}
+
+function resultsLink(race) {
+  const href = fisUrl(race);
+  if (!href) return null;
+  const anchor = el("a", "results-link", "Results");
+  anchor.href = href;
+  anchor.target = "_blank";
+  anchor.rel = "noopener noreferrer";
+  anchor.setAttribute("aria-label", "FIS results for this race");
+  return anchor;
+}
+
 function liveLink(race, now) {
   const timing = liveTiming(race, now);
   if (!timing) return null;
@@ -197,6 +218,7 @@ function renderHero(race, now) {
     return;
   }
   const status = phase(race, now);
+  const finished = isFinished(race, now);
   const classes = ["hero"];
   if (status === "live") classes.push("live");
   if (contendersByCountry(race).length) classes.push("featured");
@@ -210,9 +232,11 @@ function renderHero(race, now) {
   card.append(timesNode(race, "p"));
   const watching = contenderNode(race);
   if (watching) card.append(watching);
-  card.append(el("p", "countdown", countdownText(race, now)));
-  const live = liveLink(race, now);
-  if (live) card.append(live);
+  card.append(statusNode(race, now));
+  const podium = finished ? podiumNode(race) : null;
+  if (podium) card.append(podium);
+  const action = finished ? resultsLink(race) : liveLink(race, now);
+  if (action) card.append(action);
   if (race.note) {
     const tags = el("div", "tags");
     for (const note of race.note.split(" · ")) tags.append(el("span", "tag", note));
@@ -253,8 +277,16 @@ function raceRow(race, now) {
   body.append(clockLine);
   const watching = contenderNode(race);
   if (watching) body.append(watching);
-  const live = liveLink(race, now);
-  if (live) body.append(live);
+  if (isFinished(race, now)) {
+    body.append(el("div", "finished", "Finished"));
+    const podium = podiumNode(race);
+    if (podium) body.append(podium);
+    const results = resultsLink(race);
+    if (results) body.append(results);
+  } else {
+    const live = liveLink(race, now);
+    if (live) body.append(live);
+  }
   body.append(calendarButton(race));
   row.append(day, body);
   return row;
@@ -314,8 +346,8 @@ function renderPast(list) {
       }
       card.append(ol);
     }
-    const live = liveLink(race, clock);
-    if (live) card.append(live);
+    const results = resultsLink(race);
+    if (results) card.append(results);
     card.append(calendarButton(race));
     pastEl.append(card);
   }
@@ -332,8 +364,9 @@ function viewSignature() {
     etDate(clock.toISOString()),
     races.map((race) => {
       const timing = liveTiming(race, clock);
-      if (!timing) return "";
-      return timing.pulsing ? `${race.id}*` : race.id;
+      const mark = isFinished(race, clock) ? "f" : "";
+      if (!timing) return mark && `${race.id}${mark}`;
+      return `${race.id}${mark}${timing.pulsing ? "*" : ""}`;
     }).filter(Boolean).join(","),
   ].join("|");
 }
@@ -355,7 +388,11 @@ function tick() {
     return;
   }
   const node = heroEl.querySelector(".countdown");
-  if (node && hero) node.textContent = countdownText(hero, clock);
+  if (node && hero) {
+    const text = statusLine(hero, clock);
+    node.textContent = text;
+    node.className = text.length > 18 ? "countdown long" : "countdown";
+  }
 }
 
 function toggleFilter(key) {
