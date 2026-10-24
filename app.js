@@ -1,7 +1,9 @@
 import { contendersByCountry } from "./contenders.js";
 import {
   etDate,
+  fisResultsUrl,
   formatRaceDate,
+  googleCalendarUrl,
   groupUpcoming,
   icsFilename,
   icsFor,
@@ -95,10 +97,7 @@ function flag(code) {
 }
 
 function fisUrl(race) {
-  const match = /^(alpine|xc)-(\d+)$/.exec(race.id);
-  if (!match) return null;
-  const sector = match[1] === "alpine" ? "AL" : "CC";
-  return `https://www.fis-ski.com/DB/general/results.html?sectorcode=${sector}&raceid=${match[2]}`;
+  return fisResultsUrl(race);
 }
 
 function el(tag, className, text) {
@@ -146,12 +145,19 @@ function contenderNode(race) {
   return wrap;
 }
 
-function calendarButton(race) {
-  const button = el("button", "cal", "Add to calendar");
-  button.type = "button";
-  button.dataset.ics = race.id;
-  button.setAttribute("aria-label", `Add ${race.discipline} in ${race.venue} to calendar`);
-  return button;
+function calendarActions(race) {
+  const wrap = el("div", "cals");
+  const google = el("a", "gcal", "Add to Google Calendar");
+  google.href = googleCalendarUrl(race);
+  google.target = "_blank";
+  google.rel = "noopener noreferrer";
+  google.setAttribute("aria-label", `Add ${race.discipline} in ${race.venue} to Google Calendar`);
+  const ics = el("button", "ics", "Download .ics");
+  ics.type = "button";
+  ics.dataset.ics = race.id;
+  ics.setAttribute("aria-label", `Download an .ics file for ${race.discipline} in ${race.venue}`);
+  wrap.append(google, ics);
+  return wrap;
 }
 
 function podiumNode(race) {
@@ -253,7 +259,7 @@ function renderHero(race, now) {
     watch.append(anchor);
   }
   card.append(watch);
-  card.append(calendarButton(race));
+  card.append(calendarActions(race));
   heroEl.append(card);
 }
 
@@ -287,7 +293,7 @@ function raceRow(race, now) {
     const live = liveLink(race, now);
     if (live) body.append(live);
   }
-  body.append(calendarButton(race));
+  body.append(calendarActions(race));
   row.append(day, body);
   return row;
 }
@@ -348,7 +354,7 @@ function renderPast(list) {
     }
     const results = resultsLink(race);
     if (results) card.append(results);
-    card.append(calendarButton(race));
+    card.append(calendarActions(race));
     pastEl.append(card);
   }
 }

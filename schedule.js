@@ -1,7 +1,6 @@
 /** Race timing for the Lake Placid (America/New_York) schedule. */
 
 export const ET = "America/New_York";
-const LIVE_MS = 2.5 * 60 * 60 * 1000;
 const GENDER_ORDER = { women: 0, men: 1, mixed: 2 };
 
 export function zonedTimeToUtc(date, time, timeZone) {
@@ -70,6 +69,13 @@ const LIVE_HOME = {
  * Cross-country timing is https://live.fis-ski.com/cc-NNNN/results-pda.htm.
  * NNNN is the FIS competition codex, zero-padded. Without one, use that sport's live index.
  */
+export function fisResultsUrl(race) {
+  const match = /^(alpine|xc)-(\d+)$/.exec(race.id || "");
+  if (!match) return null;
+  const sector = match[1] === "alpine" ? "AL" : "CC";
+  return `https://www.fis-ski.com/DB/general/results.html?sectorcode=${sector}&raceid=${match[2]}`;
+}
+
 export function liveHref(race) {
   const codex = race.codex;
   const pad = Number.isInteger(codex) && codex >= 0 && codex <= 9999
@@ -446,18 +452,54 @@ export function icsFilename(race) {
   return `${slug}.ics`;
 }
 
-/** One VEVENT. Timed races run from the first start until 2.5h after the last. TBA is all-day. */
-export function icsFor(race, now = new Date()) {
-  const times = instants(race);
+function eventTitle(race) {
   const who = race.gender === "men" ? "Men's" : race.gender === "women" ? "Women's" : "Mixed";
-  const summary = `${who} ${race.discipline} — ${race.venue}`;
-  const description = [
+  return `${who} ${race.discipline} — ${race.venue}`;
+}
+
+function eventPlace(race) {
+  return COUNTRY[race.country] ? `${race.venue}, ${COUNTRY[race.country]}` : race.venue;
+}
+
+function eventDetails(race) {
+  return [
     ...startLines(race),
     race.watch,
     race.note,
+    fisResultsUrl(race),
     "https://brokkssmidja.github.io/ski/",
   ].filter(Boolean).join("\n");
-  const place = COUNTRY[race.country] ? `${race.venue}, ${COUNTRY[race.country]}` : race.venue;
+}
+
+/** UTC range for a timed race, or an exclusive all-day range when the start is TBA. */
+export function calendarDates(race) {
+  const times = instants(race);
+  if (!times.length) {
+    const end = addDays(race.date, 1).replace(/-/g, "");
+    return `${race.date.replace(/-/g, "")}/${end}`;
+  }
+  return `${icsStamp(times[0])}/${icsStamp(estimatedFinish(race))}`;
+}
+
+/**
+ * Google Calendar template. Timed races use UTC stamps.
+ * A giant slalom or slalom runs until 1h15m after run 2, a downhill or super-G for 2h,
+ * and a timed cross-country race for 1h30m. TBA is all-day.
+ */
+export function googleCalendarUrl(race) {
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: eventTitle(race),
+    dates: calendarDates(race),
+    details: eventDetails(race),
+    location: eventPlace(race),
+  });
+  return `https://calendar.google.com/calendar/render?${params}`;
+}
+
+/** One VEVENT. Same span as the Google Calendar link. TBA is all-day. */
+export function icsFor(race, now = new Date()) {
+  const times = instants(race);
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -473,14 +515,13 @@ export function icsFor(race, now = new Date()) {
     lines.push(`DTSTART;VALUE=DATE:${race.date.replace(/-/g, "")}`);
     lines.push(`DTEND;VALUE=DATE:${end}`);
   } else {
-    const last = times[times.length - 1];
     lines.push(`DTSTART:${icsStamp(times[0])}`);
-    lines.push(`DTEND:${icsStamp(new Date(last.getTime() + LIVE_MS))}`);
+    lines.push(`DTEND:${icsStamp(estimatedFinish(race))}`);
   }
   lines.push(
-    `SUMMARY:${icsEscape(summary)}`,
-    `LOCATION:${icsEscape(place)}`,
-    `DESCRIPTION:${icsEscape(description)}`,
+    `SUMMARY:${icsEscape(eventTitle(race))}`,
+    `LOCATION:${icsEscape(eventPlace(race))}`,
+    `DESCRIPTION:${icsEscape(eventDetails(race))}`,
     "END:VEVENT",
     "END:VCALENDAR",
   );
