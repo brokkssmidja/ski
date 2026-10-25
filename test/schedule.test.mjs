@@ -9,6 +9,7 @@ import {
   googleCalendarUrl,
   icsFor,
   isFinished,
+  liveCodex,
   liveHref,
   liveTiming,
   localDate,
@@ -428,6 +429,30 @@ test("SE, US, and NO contenders follow discipline", () => {
   assert.ok(swedes.names.includes("Jonna Sundling"));
   assert.ok(swedes.names.includes("Maja Dahlqvist"));
   assert.ok(swedes.names.includes("Linn Svahn"));
+});
+
+test("live codex is the id in the live.fis-ski.com URL", () => {
+  assert.equal(liveCodex(find("Sölden", "men")), "al0001");
+  assert.equal(liveCodex(find("Sölden", "women")), "al5001");
+  assert.equal(liveHref(find("Sölden", "men")), "https://live.fis-ski.com/lv-al0001.htm");
+  assert.equal(liveHref(find("Sölden", "women")), "https://live.fis-ski.com/lv-al5001.htm");
+  assert.equal(
+    liveCodex(find("Ruka", "women", "10 km Interval Start Classic")),
+    "cc0578",
+  );
+  const narvik = races.find((race) => race.id === "alpine-narvik-20270312-dh");
+  assert.equal(liveCodex(narvik), null);
+
+  for (const race of races) {
+    const codex = liveCodex(race);
+    if (Number.isInteger(race.codex) && race.sport === "alpine") {
+      assert.equal(codex, `al${String(race.codex).padStart(4, "0")}`, race.id);
+    } else if (Number.isInteger(race.codex) && race.sport === "xc") {
+      assert.equal(codex, `cc${String(race.codex).padStart(4, "0")}`, race.id);
+    } else {
+      assert.equal(codex, null, race.id);
+    }
+  }
 });
 
 test("live timing uses the FIS codex and the race window", () => {
