@@ -121,23 +121,27 @@ const LIVE_TAIL_MS = 4 * 60 * 60 * 1000;
 const RUN_MS = 75 * 60 * 1000;
 const SINGLE_RUN_MS = 2 * 60 * 60 * 1000;
 const XC_RUN_MS = 90 * 60 * 1000;
+/** Innsbruck's published big-air window is four hours. Other freeski finals use the same span. */
+const FREESKI_RUN_MS = 4 * 60 * 60 * 1000;
 const HERO_HOLD_MS = 3 * 60 * 60 * 1000;
 
 /** Official live index for a sport. live.fis-ski.com has no discipline home of its own. */
 const LIVE_HOME = {
   alpine: "https://www.fis-ski.com/DB/alpine-skiing/live.html",
   xc: "https://www.fis-ski.com/DB/cross-country/live.html",
+  freeski: "https://www.fis-ski.com/DB/freestyle-freeski/freeski/live.html",
 };
 
 /**
  * Alpine timing is https://live.fis-ski.com/lv-alNNNN.htm.
  * Cross-country timing is https://live.fis-ski.com/cc-NNNN/results-pda.htm.
+ * Freeski timing is https://live.fis-ski.com/lv-fssNNNN.htm (a judged scoreboard).
  * NNNN is the FIS competition codex, zero-padded. Without one, use that sport's live index.
  */
 export function fisResultsUrl(race) {
-  const match = /^(alpine|xc)-(\d+)$/.exec(race.id || "");
+  const match = /^(alpine|xc|freeski)-(\d+)$/.exec(race.id || "");
   if (!match) return null;
-  const sector = match[1] === "alpine" ? "AL" : "CC";
+  const sector = match[1] === "alpine" ? "AL" : match[1] === "xc" ? "CC" : "FS";
   return `https://www.fis-ski.com/DB/general/results.html?sectorcode=${sector}&raceid=${match[2]}`;
 }
 
@@ -148,13 +152,15 @@ export function liveHref(race) {
     : "";
   if (pad && race.sport === "alpine") return `https://live.fis-ski.com/lv-al${pad}.htm`;
   if (pad && race.sport === "xc") return `https://live.fis-ski.com/cc-${pad}/results-pda.htm`;
+  if (pad && race.sport === "freeski") return `https://live.fis-ski.com/lv-fss${pad}.htm`;
   return LIVE_HOME[race.sport] || "https://www.fis-ski.com/DB/alpine-skiing/live.html";
 }
 
 /**
  * Relay id taken from the Live timing URL.
  * Alpine `lv-al0001.htm` is `al0001`. Cross-country `cc-0578/` is `cc0578`.
- * A sport live index has no race id, so those races stay unmapped.
+ * Freeski `lv-fss8000.htm` is a judged FSS scoreboard. The relay only accepts
+ * timed ids such as al0001, so freeski stays unmapped and the standings panel stays off.
  */
 export function liveCodex(race) {
   const href = liveHref(race);
@@ -233,6 +239,7 @@ export function estimatedFinish(race) {
   if (!times.length) return null;
   const last = times[times.length - 1].getTime();
   if (race.sport === "xc") return new Date(last + XC_RUN_MS);
+  if (race.sport === "freeski") return new Date(last + FREESKI_RUN_MS);
   if (isTechnical(race) && times.length >= 2) return new Date(last + RUN_MS);
   return new Date(last + SINGLE_RUN_MS);
 }
@@ -240,7 +247,8 @@ export function estimatedFinish(race) {
 /**
  * A podium finishes the race as soon as it is in the data and the start has passed.
  * Otherwise a two-run race ends 1h15m after run 2, a single alpine run ends 2h after the start,
- * and a timed cross-country race ends 1h30m after the start. A TBA race ends at midnight in the venue zone.
+ * a timed cross-country race ends 1h30m after the start, and a timed freeski final ends 4h after the start.
+ * A TBA race ends at midnight in the venue zone.
  */
 export function isFinished(race, now) {
   const times = instants(race);
@@ -265,7 +273,7 @@ export function stillCurrent(race, now) {
 /**
  * When the Live button is on screen.
  * Timed races: from 1h before the first start until the race is finished (at most 4h after the last start).
- * Cross-country with no start time: the whole venue-local race day, until a podium is posted.
+ * Cross-country or freeski with no start time: the whole venue-local race day, until a podium is posted.
  * `pulsing` is true while a run is in progress. The gap between runs does not pulse.
  */
 export function liveTiming(race, now) {
@@ -274,7 +282,7 @@ export function liveTiming(race, now) {
   const t = now.getTime();
   const times = instants(race);
   if (!times.length) {
-    if (race.sport !== "xc") return null;
+    if (race.sport !== "xc" && race.sport !== "freeski") return null;
     const open = zonedTimeToUtc(race.date, "00:00", race.tz).getTime();
     const close = tbaEnd(race).getTime();
     if (t < open || t >= close) return null;
@@ -306,13 +314,13 @@ export function sortKey(race) {
 }
 
 const COUNTRY = {
-  AND: "Andorra", AUT: "Austria", CAN: "Canada", FIN: "Finland", FRA: "France",
+  AND: "Andorra", AUT: "Austria", CAN: "Canada", CHN: "China", FIN: "Finland", FRA: "France",
   GER: "Germany", ITA: "Italy", NOR: "Norway", SLO: "Slovenia", SUI: "Switzerland",
   SVK: "Slovakia", SWE: "Sweden", USA: "United States",
 };
 
 /**
- * Chip filters are booleans: { alpine, xc, men, women }.
+ * Chip filters are booleans: { alpine, xc, freeski, men, women }.
  * The older { sport, gender } shape still works for the schedule tests.
  */
 export function matches(race, filters) {

@@ -10,6 +10,7 @@ import {
   onCourse,
   parseRaceTime,
   pollDelay,
+  cardStatus,
   relayUrl,
   runLabel,
   timesNote,
@@ -62,6 +63,22 @@ test("poll cadence follows the run, the tab, and relay errors", () => {
   assert.equal(pollDelay(null, { error: "http", pulsing: false }), 60_000);
   assert.equal(pollDelay(null, { error: "not_found", pulsing: true }), 60_000);
   assert.equal(pollDelay("finished", { error: "http" }), null);
+});
+
+test("a finished relay replaces Underway on the race card", () => {
+  const official = { status: "finished", message: "Race completed - Official results" };
+  assert.equal(cardStatus("Underway", official), "Finished");
+  assert.equal(cardStatus("Underway", { status: "finished" }), "Finished");
+  assert.equal(cardStatus("Starts in 3m 00s", official), "Finished");
+  assert.equal(cardStatus("Run 1 done · Run 2 at 1:30 PM CET", official), "Finished");
+  assert.equal(cardStatus("Underway", { status: "live" }), "Underway");
+  assert.equal(cardStatus("Starts in 3m 00s", { status: "live" }), "Underway");
+  assert.equal(cardStatus("Run 1 done · Run 2 at 1:30 PM CET", { status: "between_runs" }), "Run 1 done · Run 2 at 1:30 PM CET");
+  assert.equal(cardStatus("Underway", { status: "between_runs" }), "Between runs");
+  assert.equal(cardStatus("Starts in 10m 00s", { status: "scheduled" }), "Starts in 10m 00s");
+  assert.equal(cardStatus("Underway", { status: "scheduled" }), "Scheduled");
+  assert.equal(cardStatus("Underway", null), "Underway");
+  assert.equal(cardStatus("Underway", { status: "not_found" }), "Underway");
 });
 
 test("updated stamp counts seconds from fetchedAt", () => {

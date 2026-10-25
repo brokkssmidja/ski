@@ -35,6 +35,29 @@ export function statusLabel(status) {
   return STATUS_LABEL[status] || "";
 }
 
+/**
+ * Status line on the race card.
+ * A relay payload replaces the clock. Finished, including official results, is "Finished",
+ * so the card does not keep saying Underway after the race is over.
+ * Scheduled keeps a start countdown, which the relay status does not carry.
+ * Anything else with no payload is left to the caller.
+ */
+export function cardStatus(timeStatus, payload) {
+  const clock = timeStatus || "";
+  if (!payload || !LIVE_STATUS.has(payload.status)) return clock;
+  if (payload.status === "finished") return "Finished";
+  if (payload.status === "live") return "Underway";
+  if (payload.status === "between_runs") {
+    if (clock.startsWith("Run 1 done")) return clock;
+    return "Between runs";
+  }
+  if (payload.status === "scheduled" && (clock.startsWith("Starts in") || clock === "Time TBA")) {
+    return clock;
+  }
+  if (payload.status === "scheduled") return "Scheduled";
+  return clock;
+}
+
 /** A standings payload the panel can render. Error objects from the relay are not. */
 export function livePayloadOk(data, codex) {
   if (!data || typeof data !== "object") return false;

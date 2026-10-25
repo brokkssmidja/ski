@@ -1,6 +1,8 @@
 import { contendersByCountry } from "./contenders.js";
+import { IOS_DISMISS_KEY, IOS_INSTALL_COPY, iosHintVisible, iosSafari, standaloneDisplay } from "./install.js";
 import {
   athleteDiff,
+  cardStatus,
   countsLine,
   livePayloadOk,
   nationFlag,
@@ -39,17 +41,22 @@ import {
 } from "./schedule.js";
 
 const COUNTRY = {
-  ALB: "Albania", AND: "Andorra", AUT: "Austria", CAN: "Canada", FIN: "Finland", FRA: "France",
+  ALB: "Albania", AND: "Andorra", AUT: "Austria", CAN: "Canada", CHN: "China", FIN: "Finland", FRA: "France",
   GER: "Germany", ITA: "Italy", NOR: "Norway", SLO: "Slovenia", SUI: "Switzerland",
   SVK: "Slovakia", SWE: "Sweden", USA: "United States",
 };
 const ISO2 = {
-  ALB: "AL", AND: "AD", AUT: "AT", CAN: "CA", FIN: "FI", FRA: "FR", GER: "DE", ITA: "IT",
+  ALB: "AL", AND: "AD", AUT: "AT", CAN: "CA", CHN: "CN", FIN: "FI", FRA: "FR", GER: "DE", ITA: "IT",
   NOR: "NO", SLO: "SI", SUI: "CH", SVK: "SK", SWE: "SE", USA: "US",
 };
 const GENDER = { women: "Women", men: "Men", mixed: "Mixed" };
-const SPORT = { alpine: "Alpine", xc: "Cross-country" };
-const SHORT = { "Giant Slalom": "GS", Slalom: "SL", Downhill: "DH", "Super-G": "SG" };
+const SPORT = { alpine: "Alpine", xc: "Cross-country", freeski: "Freeski" };
+const SHORT = {
+  "Giant Slalom": "GS", Slalom: "SL", Downhill: "DH", "Super-G": "SG",
+  Halfpipe: "HP", "Halfpipe Qualification": "HP Q",
+  Slopestyle: "SS", "Slopestyle Qualification": "SS Q",
+  "Big Air": "BA", "Big Air Qualification": "BA Q",
+};
 
 const sportBox = document.querySelector("#sport");
 const genderBox = document.querySelector("#gender");
@@ -80,7 +87,7 @@ function save(key, value) {
 }
 
 function loadFilters() {
-  const fallback = { alpine: true, xc: true, men: true, women: true };
+  const fallback = { alpine: true, xc: true, freeski: true, men: true, women: true };
   try {
     const raw = localStorage.getItem("ski-filters");
     if (raw) {
@@ -89,6 +96,7 @@ function loadFilters() {
         return {
           alpine: parsed.alpine !== false,
           xc: parsed.xc !== false,
+          freeski: parsed.freeski !== false,
           men: parsed.men !== false,
           women: parsed.women !== false,
         };
@@ -100,6 +108,7 @@ function loadFilters() {
       return {
         alpine: sport !== "xc",
         xc: sport !== "alpine",
+        freeski: true,
         men: gender !== "women",
         women: gender !== "men",
       };
@@ -127,8 +136,24 @@ function el(tag, className, text) {
   return node;
 }
 
+function headingText(race, now) {
+  const payload = liveSessions.get(race.id)?.payload;
+  return cardStatus(statusLine(race, now), payload);
+}
+
+function paintHeading(race, now = clock) {
+  if (!race) return;
+  const hero = nextRace(races, now, filters);
+  if (!hero || hero.id !== race.id) return;
+  const node = heroEl.querySelector(".countdown");
+  if (!node) return;
+  const text = headingText(hero, now);
+  node.textContent = text;
+  node.className = text.length > 18 ? "countdown long" : "countdown";
+}
+
 function statusNode(race, now) {
-  const text = statusLine(race, now);
+  const text = headingText(race, now);
   return el("p", text.length > 18 ? "countdown long" : "countdown", text);
 }
 
@@ -512,6 +537,7 @@ async function pollLive(race) {
       session.payload = data;
     }
     paintLiveSlots(race.id);
+    paintHeading(race);
     armLive(race);
   } catch (err) {
     if (err?.name === "AbortError" || abort.signal.aborted) return;
@@ -519,6 +545,7 @@ async function pollLive(race) {
     session.error = "http";
     session.payload = null;
     paintLiveSlots(race.id);
+    paintHeading(race);
     armLive(race);
   } finally {
     if (session.abort === abort) session.abort = null;
@@ -756,7 +783,7 @@ function tick() {
   }
   const node = heroEl.querySelector(".countdown");
   if (node && hero) {
-    const text = statusLine(hero, clock);
+    const text = headingText(hero, clock);
     node.textContent = text;
     node.className = text.length > 18 ? "countdown long" : "countdown";
   }
@@ -812,6 +839,68 @@ document.addEventListener("visibilitychange", () => {
   if (!new URLSearchParams(location.search).get("asof")) clock = new Date();
   render();
 });
+
+function setupInstall() {
+  const hint = document.querySelector("#install-hint");
+  const copy = document.querySelector("#install-copy");
+  const go = document.querySelector("#install-go");
+  const dismiss = document.querySelector("#install-dismiss");
+  if (!hint || !copy || !go || !dismiss) return;
+
+  const standalone = standaloneDisplay({
+    navigatorStandalone: navigator.standalone === true,
+    displayMode: window.matchMedia?.("(display-mode: standalone)")?.matches ? "standalone" : "",
+  });
+  if (standalone) return;
+
+  const apple = iosSafari(navigator.userAgent, {
+    platform: navigator.platform,
+    maxTouchPoints: navigator.maxTouchPoints || 0,
+  });
+  const ios = iosHintVisible({
+    ua: navigator.userAgent,
+    platform: navigator.platform,
+    maxTouchPoints: navigator.maxTouchPoints || 0,
+    standalone: false,
+    dismissed: stored(IOS_DISMISS_KEY, ["0", "1"], "0") === "1",
+  });
+  if (ios) {
+    copy.textContent = IOS_INSTALL_COPY;
+    go.hidden = true;
+    hint.hidden = false;
+  }
+
+  let deferred = null;
+  window.addEventListener("beforeinstallprompt", (event) => {
+    if (apple) return;
+    event.preventDefault();
+    deferred = event;
+    copy.textContent = "Install the app on this device.";
+    go.hidden = false;
+    hint.hidden = false;
+  });
+  go.addEventListener("click", async () => {
+    if (!deferred) return;
+    deferred.prompt();
+    try {
+      await deferred.userChoice;
+    } catch {
+      /* the browser closed the prompt */
+    }
+    deferred = null;
+    hint.hidden = true;
+  });
+  window.addEventListener("appinstalled", () => {
+    deferred = null;
+    hint.hidden = true;
+  });
+  dismiss.addEventListener("click", () => {
+    if (ios) save(IOS_DISMISS_KEY, "1");
+    hint.hidden = true;
+  });
+}
+
+setupInstall();
 
 const response = await fetch("./races.json", { cache: "no-cache" });
 const payload = await response.json();

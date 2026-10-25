@@ -43,6 +43,21 @@ main, .top, footer { width: min(560px, calc(100% - 28px)); margin-inline: auto; 
 }
 .mark { width: 18px; height: 18px; color: var(--accent); }
 .sub { margin: 4px 0 0; color: var(--muted); font-size: 0.86rem; }
+.install:not([hidden]) {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px;
+  margin: 12px 0 0; padding: 10px 12px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.install p { margin: 0; flex: 1 1 12rem; font-size: 0.9rem; }
+#install-go {
+  font: inherit; font-weight: 800; color: var(--bg); background: var(--ink);
+  border: 0; border-radius: 999px; min-height: 44px; padding: 8px 16px; cursor: pointer;
+}
+#install-dismiss {
+  font: inherit; font-weight: 650; color: var(--muted); background: transparent;
+  border: 0; min-height: 44px; padding: 8px 10px; cursor: pointer;
+}
 .filters { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chips button, #past-toggle {
