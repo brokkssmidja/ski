@@ -63,7 +63,23 @@
       ],
       "watch": "US: Peacock (live). NBCSN delay Oct 25.",
       "results": {
-        "podium": []
+        "podium": [
+          {
+            "place": 1,
+            "name": "PINHEIRO BRAATHEN Lucas",
+            "country": "BRA"
+          },
+          {
+            "place": 2,
+            "name": "MEILLARD Loic",
+            "country": "SUI"
+          },
+          {
+            "place": 3,
+            "name": "ODERMATT Marco",
+            "country": "SUI"
+          }
+        ]
       },
       "note": "Opening"
     },
