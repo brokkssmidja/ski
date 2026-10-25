@@ -151,6 +151,20 @@ export function liveHref(race) {
   return LIVE_HOME[race.sport] || "https://www.fis-ski.com/DB/alpine-skiing/live.html";
 }
 
+/**
+ * Relay id taken from the Live timing URL.
+ * Alpine `lv-al0001.htm` is `al0001`. Cross-country `cc-0578/` is `cc0578`.
+ * A sport live index has no race id, so those races stay unmapped.
+ */
+export function liveCodex(race) {
+  const href = liveHref(race);
+  const alpine = /\/lv-(al\d{4})\.htm/.exec(href);
+  if (alpine) return alpine[1];
+  const xc = /\/cc-(\d{4})\//.exec(href);
+  if (xc) return `cc${xc[1]}`;
+  return null;
+}
+
 /** Longest name first, so "YouTube & Ski…" is not split into the shorter YouTube link. */
 const STREAMS = [
   {

@@ -167,6 +167,47 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   border-radius: 20px; box-shadow: var(--shadow);
 }
 .live-card p { margin: 0; font-weight: 700; }
+.live-panel {
+  margin-top: 14px;
+  padding: 12px 12px 10px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+}
+.live-status {
+  display: flex; align-items: center; gap: 8px;
+  margin: 0; color: var(--accent); font-weight: 800; letter-spacing: -0.01em;
+}
+.live-panel.racing .live-status { color: var(--live); }
+.live-panel .dot {
+  width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--live); flex: none;
+}
+.live-panel.racing .dot { animation: live-dot 1.4s ease-in-out infinite; }
+.live-message { margin: 4px 0 0; font-weight: 650; }
+.live-panel .role {
+  margin: 10px 0 2px; color: var(--muted); font-size: 0.72rem; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.live-panel .quiet { margin: 0; color: var(--muted); }
+.ath {
+  display: grid; grid-template-columns: 2.1rem minmax(0, 1fr) auto; gap: 4px 8px;
+  align-items: baseline; padding: 2px 0; font-size: 0.92rem;
+}
+.ath b { font-variant-numeric: tabular-nums; color: var(--accent); }
+.ath .who { min-width: 0; overflow-wrap: anywhere; }
+.ath .time { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+.ath.lead { font-weight: 700; }
+.ath.lead .time { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.03em; }
+.live-note, .live-meta { margin: 8px 0 0; color: var(--muted); font-size: 0.78rem; }
+.live-panel .more {
+  font: inherit; font-size: 0.82rem; font-weight: 700; color: var(--accent);
+  background: transparent; border: 0; min-height: 40px; padding: 4px 0 0; cursor: pointer;
+}
+@media (max-width: 380px) {
+  .ath { grid-template-columns: 2.1rem minmax(0, 1fr); }
+  .ath .time { grid-column: 2; font-size: 0.88rem; }
+  .ath.lead .time { font-size: 1.15rem; }
+}
 .live-link .dot {
   width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #fff; flex: none;
 }
@@ -208,5 +249,5 @@ footer { padding: 8px 0 36px; color: var(--muted); font-size: 0.78rem; }
 footer p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto; }
-  .live-link.on, .live-link.on .dot { animation: none; }
+  .live-link.on, .live-link.on .dot, .live-panel.racing .dot { animation: none; }
 }

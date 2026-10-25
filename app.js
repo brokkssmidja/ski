@@ -1,5 +1,20 @@
 import { contendersByCountry } from "./contenders.js";
 import {
+  athleteDiff,
+  countsLine,
+  livePayloadOk,
+  nationFlag,
+  nextStarters,
+  onCourse,
+  pollDelay,
+  relayUrl,
+  runLabel,
+  statusLabel,
+  timesNote,
+  topResults,
+  updatedAgo,
+} from "./live.js";
+import {
   fisResultsUrl,
   formatClock,
   googleCalendarUrl,
@@ -7,6 +22,7 @@ import {
   icsFilename,
   icsFor,
   isFinished,
+  liveCodex,
   liveTiming,
   localDate,
   matches,
@@ -302,6 +318,257 @@ function watchNode(race) {
   return watch;
 }
 
+function nationText(person) {
+  if (!person || typeof person !== "object") return typeof person === "string" ? person : "";
+  const code = person.nation || person.country || "";
+  return [nationFlag(code), code, person.name].filter(Boolean).join(" ");
+}
+
+function athleteLine(person, timeText, field) {
+  const row = el("div", "ath");
+  const mark = person && typeof person === "object" && person[field] != null ? String(person[field]) : "";
+  row.append(el("b", "", mark));
+  row.append(el("span", "who", nationText(person) || "—"));
+  row.append(el("span", "time", timeText || ""));
+  return row;
+}
+
+function lastStamp(person, leader) {
+  const diff = athleteDiff(person, leader);
+  const time = person?.time || "";
+  if (time && diff && diff !== time) return `${time}  ${diff}`;
+  return diff || time;
+}
+
+function liveBlock(title, body) {
+  const wrap = el("div", "live-block");
+  wrap.append(el("p", "role", title));
+  wrap.append(body);
+  return wrap;
+}
+
+function livePanelNode(payload, now, expanded, onToggle) {
+  const panel = el("section", "live-panel");
+  panel.setAttribute("aria-label", "Live timing");
+  if (payload.status === "live") panel.classList.add("racing");
+
+  const status = el("p", "live-status");
+  if (payload.status === "live") {
+    const dot = el("span", "dot");
+    dot.setAttribute("aria-hidden", "true");
+    status.append(dot);
+  }
+  status.append([statusLabel(payload.status), runLabel(payload)].filter(Boolean).join(" · "));
+  panel.append(status);
+  if (payload.message) panel.append(el("p", "live-message", payload.message));
+
+  const leader = payload.currentLeader;
+  const leaderBody = leader
+    ? athleteLine(leader, leader.time || "", "rank")
+    : el("p", "quiet", "No leader yet");
+  if (leader) leaderBody.classList.add("lead");
+  panel.append(liveBlock("Leader", leaderBody));
+
+  const last = payload.lastFinisher;
+  panel.append(liveBlock("Last finisher", last
+    ? athleteLine(last, lastStamp(last, leader), "rank")
+    : el("p", "quiet", "—")));
+
+  const course = onCourse(payload);
+  const courseBody = el("div", "stack");
+  if (!course.length) courseBody.append(el("p", "quiet", "Clear"));
+  else {
+    for (const person of course) {
+      const stamp = typeof person === "object" ? (person.time || "") : "";
+      courseBody.append(athleteLine(person, stamp, "bib"));
+    }
+  }
+  panel.append(liveBlock("On course", courseBody));
+
+  const starters = nextStarters(payload, 3);
+  const nextBody = el("div", "stack");
+  if (!starters.length) nextBody.append(el("p", "quiet", "—"));
+  else {
+    for (const person of starters) nextBody.append(athleteLine(person, "", "bib"));
+  }
+  panel.append(liveBlock("Next", nextBody));
+
+  const results = topResults(payload, 10);
+  if (results.length) {
+    const wrap = el("div", "live-top");
+    wrap.append(el("p", "role", results.length > 3 ? "Top 10" : `Top ${results.length}`));
+    const list = el("div", "board");
+    const shown = expanded ? results : results.slice(0, 3);
+    for (const row of shown) {
+      const diff = row.rank === 1 ? "" : athleteDiff(row, leader);
+      const stamp = [row.time, diff].filter(Boolean).join("  ");
+      list.append(athleteLine(row, stamp || (row.status && row.status !== "finish" ? row.status : ""), "rank"));
+    }
+    wrap.append(list);
+    if (results.length > 3) {
+      const button = el("button", "more", expanded ? "Show less" : `Show all ${results.length}`);
+      button.type = "button";
+      button.setAttribute("aria-expanded", String(!!expanded));
+      button.addEventListener("click", onToggle);
+      wrap.append(button);
+    }
+    panel.append(wrap);
+  }
+
+  const note = timesNote(payload);
+  if (note) panel.append(el("p", "live-note", note));
+
+  const meta = el("p", "live-meta");
+  const counts = countsLine(payload);
+  if (counts) meta.append(counts);
+  const ago = updatedAgo(payload.fetchedAt, now);
+  if (ago) {
+    if (counts) meta.append(el("span", "sep", " · "));
+    const stamp = el("span", "ago", ago);
+    if (payload.fetchedAt) stamp.dataset.fetched = payload.fetchedAt;
+    meta.append(stamp);
+  }
+  if (meta.childNodes.length) panel.append(meta);
+  return panel;
+}
+
+const liveSessions = new Map();
+
+function liveSlot(race) {
+  const slot = el("div", "live-slot");
+  slot.dataset.live = race.id;
+  slot.hidden = true;
+  return slot;
+}
+
+function paintLiveSlot(slot, session) {
+  if (!session?.payload) {
+    slot.hidden = true;
+    slot.replaceChildren();
+    return;
+  }
+  slot.hidden = false;
+  slot.replaceChildren(livePanelNode(session.payload, new Date(), session.expanded, () => {
+    session.expanded = !session.expanded;
+    paintLiveSlots(slot.dataset.live);
+  }));
+}
+
+function paintLiveSlots(id) {
+  const session = liveSessions.get(id);
+  if (!session) return;
+  for (const slot of document.querySelectorAll(`[data-live="${CSS.escape(id)}"]`)) {
+    paintLiveSlot(slot, session);
+  }
+}
+
+function delayFor(session, race) {
+  const timing = liveTiming(race, clock);
+  if (!timing) return null;
+  return pollDelay(session.status, {
+    hidden: document.hidden,
+    pulsing: timing.pulsing,
+    error: session.error,
+  });
+}
+
+function stopLive(id) {
+  const session = liveSessions.get(id);
+  if (!session) return;
+  clearTimeout(session.timer);
+  session.abort?.abort();
+  liveSessions.delete(id);
+}
+
+function armLive(race) {
+  const session = liveSessions.get(race.id);
+  if (!session) return;
+  clearTimeout(session.timer);
+  session.timer = null;
+  const delay = delayFor(session, race);
+  if (delay == null) return;
+  session.timer = setTimeout(() => { void pollLive(race); }, delay);
+}
+
+async function pollLive(race) {
+  const session = liveSessions.get(race.id);
+  if (!session) return;
+  clearTimeout(session.timer);
+  session.timer = null;
+  session.abort?.abort();
+  const abort = new AbortController();
+  session.abort = abort;
+  try {
+    const response = await fetch(relayUrl(session.codex), { cache: "no-store", signal: abort.signal });
+    let data = null;
+    try { data = await response.json(); } catch { data = null; }
+    if (abort.signal.aborted || liveSessions.get(race.id) !== session) return;
+    if (!response.ok || !livePayloadOk(data, session.codex)) {
+      session.error = (data && typeof data.status === "string" && data.status) || "http";
+      session.payload = null;
+    } else {
+      session.error = null;
+      session.status = data.status;
+      session.payload = data;
+    }
+    paintLiveSlots(race.id);
+    armLive(race);
+  } catch (err) {
+    if (err?.name === "AbortError" || abort.signal.aborted) return;
+    if (liveSessions.get(race.id) !== session) return;
+    session.error = "http";
+    session.payload = null;
+    paintLiveSlots(race.id);
+    armLive(race);
+  } finally {
+    if (session.abort === abort) session.abort = null;
+  }
+}
+
+function ensureLive() {
+  const seen = new Set();
+  for (const slot of document.querySelectorAll("[data-live]")) {
+    const race = races.find((item) => item.id === slot.dataset.live);
+    const codex = race && liveCodex(race);
+    if (!race || !codex || !liveTiming(race, clock)) {
+      slot.hidden = true;
+      slot.replaceChildren();
+      continue;
+    }
+    seen.add(race.id);
+    let session = liveSessions.get(race.id);
+    if (!session || session.codex !== codex) {
+      if (session) stopLive(race.id);
+      session = {
+        codex,
+        timer: null,
+        abort: null,
+        payload: null,
+        status: null,
+        error: null,
+        expanded: false,
+      };
+      liveSessions.set(race.id, session);
+      paintLiveSlot(slot, session);
+      void pollLive(race);
+    } else {
+      paintLiveSlot(slot, session);
+      if (!session.timer && !session.abort && session.status !== "finished") void pollLive(race);
+    }
+  }
+  for (const id of [...liveSessions.keys()]) {
+    if (!seen.has(id)) stopLive(id);
+  }
+}
+
+function refreshAgo() {
+  const now = new Date();
+  for (const node of document.querySelectorAll(".ago[data-fetched]")) {
+    const text = updatedAgo(node.dataset.fetched, now);
+    if (text) node.textContent = text;
+  }
+}
+
 function downloadIcs(race) {
   const blob = new Blob([icsFor(race, clock)], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -338,6 +605,7 @@ function renderHero(race, now) {
   card.append(statusNode(race, now));
   const podium = finished ? podiumNode(race) : null;
   if (podium) card.append(podium);
+  if (!finished && liveCodex(race) && liveTiming(race, now)) card.append(liveSlot(race));
   const action = finished ? resultsLink(race) : liveLink(race, now);
   if (action) card.append(action);
   if (race.note) {
@@ -373,6 +641,7 @@ function raceRow(race, now) {
     const results = resultsLink(race);
     if (results) body.append(results);
   } else {
+    if (liveCodex(race) && liveTiming(race, now)) body.append(liveSlot(race));
     const live = liveLink(race, now);
     if (live) body.append(live);
   }
@@ -475,12 +744,14 @@ function render() {
   renderUpcoming(upcomingRaces(races, clock, filters));
   renderPast(pastRaces(races, clock, filters));
   signature = viewSignature();
+  ensureLive();
 }
 
 function tick() {
   const hero = nextRace(races, clock, filters);
   if (viewSignature() !== signature) {
     render();
+    refreshAgo();
     return;
   }
   const node = heroEl.querySelector(".countdown");
@@ -489,6 +760,7 @@ function tick() {
     node.textContent = text;
     node.className = text.length > 18 ? "countdown long" : "countdown";
   }
+  refreshAgo();
 }
 
 function toggleFilter(key) {
@@ -524,6 +796,20 @@ document.querySelector("main").addEventListener("click", (event) => {
 pastToggle.addEventListener("click", () => {
   showPast = !showPast;
   save("ski-past", showPast ? "1" : "0");
+  render();
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    for (const session of liveSessions.values()) {
+      clearTimeout(session.timer);
+      session.timer = null;
+      session.abort?.abort();
+      session.abort = null;
+    }
+    return;
+  }
+  if (!new URLSearchParams(location.search).get("asof")) clock = new Date();
   render();
 });
 
