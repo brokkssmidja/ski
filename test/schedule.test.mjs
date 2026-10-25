@@ -146,23 +146,32 @@ test("simulated November: Gurgl is next, and a known start beats a same-day TBA"
   assert.equal(saturday.discipline, "Giant Slalom");
 });
 
-test("simulated January: Cortina downhill, unless filtered to men", () => {
+test("simulated January: Laax slopestyle qualification, alpine still Cortina and Wengen", () => {
   const jan = at("2027-01-11T15:00:00Z");
   const hero = nextRace(races, jan, all);
-  assert.equal(hero.venue, "Cortina d'Ampezzo");
+  assert.equal(hero.venue, "Laax");
   assert.equal(hero.gender, "women");
-  assert.equal(hero.discipline, "Downhill");
+  assert.equal(hero.discipline, "Slopestyle Qualification");
   const men = nextRace(races, jan, { sport: "all", gender: "men" });
-  assert.equal(men.venue, "Wengen");
-  assert.equal(men.discipline, "Super-G");
+  assert.equal(men.venue, "Laax");
+  assert.equal(men.discipline, "Slopestyle Qualification");
+  const alpineWomen = nextRace(races, jan, { sport: "alpine", gender: "women" });
+  assert.equal(alpineWomen.venue, "Cortina d'Ampezzo");
+  assert.equal(alpineWomen.discipline, "Downhill");
+  const alpineMen = nextRace(races, jan, { sport: "alpine", gender: "men" });
+  assert.equal(alpineMen.venue, "Wengen");
+  assert.equal(alpineMen.discipline, "Super-G");
 });
 
-test("simulated February: after Lahti, Garmisch downhill is next", () => {
+test("simulated February: Calgary halfpipe qualification, alpine still Garmisch", () => {
   const feb = at("2027-02-16T15:00:00Z");
   const hero = nextRace(races, feb, all);
-  assert.equal(hero.venue, "Garmisch-Partenkirchen");
-  assert.equal(hero.gender, "men");
-  assert.equal(hero.discipline, "Downhill");
+  assert.equal(hero.venue, "Calgary");
+  assert.equal(hero.gender, "women");
+  assert.equal(hero.discipline, "Halfpipe Qualification");
+  const alpineMen = nextRace(races, feb, { sport: "alpine", gender: "men" });
+  assert.equal(alpineMen.venue, "Garmisch-Partenkirchen");
+  assert.equal(alpineMen.discipline, "Downhill");
   const women = nextRace(races, feb, { sport: "alpine", gender: "women" });
   assert.equal(women.venue, "Lenzerheide");
   assert.equal(women.discipline, "Super-G");
@@ -178,13 +187,25 @@ test("a TBA race stays up through the local day and then drops", () => {
 });
 
 test("calendar shape: alpine has times except Narvik, cross-country is TBA", () => {
-  assert.equal(races.length, 144);
+  assert.equal(races.length, 196);
   const alpine = races.filter((r) => r.sport === "alpine");
   const xc = races.filter((r) => r.sport === "xc");
+  const freeski = races.filter((r) => r.sport === "freeski");
   assert.equal(alpine.length, 83);
   assert.equal(xc.length, 61);
+  assert.equal(freeski.length, 52);
+  const tally = (gender, discipline) => freeski.filter((r) => r.gender === gender && r.discipline === discipline).length;
+  for (const gender of ["women", "men"]) {
+    assert.equal(tally(gender, "Halfpipe"), 5);
+    assert.equal(tally(gender, "Halfpipe Qualification"), 5);
+    assert.equal(tally(gender, "Slopestyle"), 4);
+    assert.equal(tally(gender, "Slopestyle Qualification"), 4);
+    assert.equal(tally(gender, "Big Air"), 4);
+    assert.equal(tally(gender, "Big Air Qualification"), 4);
+  }
   const tba = races.filter((r) => r.starts.some((s) => s == null));
-  assert.equal(tba.length, 63);
+  assert.equal(tba.length, 113);
+  assert.equal(freeski.filter((r) => r.starts.some((s) => s == null)).length, 50);
   assert.deepEqual(
     tba.filter((r) => r.sport === "alpine").map((r) => r.id).sort(),
     ["alpine-narvik-20270312-dh", "alpine-narvik-20270313-sg"],
@@ -204,12 +225,17 @@ test("calendar shape: alpine has times except Narvik, cross-country is TBA", () 
 
 test("sport and gender chips combine", () => {
   const now = at("2026-10-24T06:00:00Z");
-  const womenAlpine = nextRace(races, now, { alpine: true, xc: false, men: false, women: true });
+  const womenAlpine = nextRace(races, now, { alpine: true, xc: false, freeski: false, men: false, women: true });
   assert.equal(womenAlpine.sport, "alpine");
   assert.equal(womenAlpine.gender, "women");
-  const menXc = nextRace(races, now, { alpine: false, xc: true, men: true, women: false });
+  const menXc = nextRace(races, now, { alpine: false, xc: true, freeski: false, men: true, women: false });
   assert.equal(menXc.sport, "xc");
   assert.equal(menXc.gender, "men");
+  const freeski = nextRace(races, at("2026-11-20T15:00:00Z"), { alpine: false, xc: false, freeski: true, men: true, women: true });
+  assert.equal(freeski.venue, "Innsbruck");
+  assert.equal(freeski.gender, "women");
+  assert.equal(freeski.discipline, "Big Air Qualification");
+  assert.equal(matches(freeski, { sport: "alpine", gender: "all" }), false);
   assert.equal(matches(find("Sölden", "women"), { alpine: true, xc: true, men: true, women: false }), false);
   assert.equal(matches(find("Sölden", "women"), { alpine: false, xc: true, men: true, women: true }), false);
   const relay = races.find((race) => race.gender === "mixed");
@@ -506,14 +532,46 @@ test("live timing uses the FIS codex and the race window", () => {
   assert.equal(liveTiming(ruka, at("2026-11-27T22:00:00Z")), null);
   assert.equal(liveTiming(narvik, at("2027-03-12T12:00:00Z")), null);
 
+  const final = find("Innsbruck", "women", "Big Air");
+  assert.equal(final.codex, 8003);
+  assert.equal(final.starts[0], "2026-11-27T17:45:00Z");
+  assert.equal(formatClock(final.starts[0], NY), "12:45 PM EST");
+  assert.equal(liveHref(final), "https://live.fis-ski.com/lv-fss8003.htm");
+  assert.equal(liveCodex(final), null);
+  assert.equal(liveTiming(final, at("2026-11-27T16:44:00Z")), null);
+  assert.deepEqual(liveTiming(final, at("2026-11-27T16:45:00Z")), {
+    href: "https://live.fis-ski.com/lv-fss8003.htm",
+    pulsing: false,
+  });
+  assert.equal(liveTiming(final, at("2026-11-27T17:45:00Z")).pulsing, true);
+  assert.equal(statusLine(final, at("2026-11-27T17:45:00Z")), "Underway");
+  assert.equal(statusLine(final, at("2026-11-27T21:45:00Z")), "Finished");
+  assert.equal(liveTiming(final, at("2026-11-27T21:45:00Z")), null);
+  const qual = find("Innsbruck", "women", "Big Air Qualification");
+  assert.equal(qual.codex, 8001);
+  assert.deepEqual(qual.starts, [null]);
+  assert.equal(liveCodex(qual), null);
+  assert.equal(liveTiming(qual, at("2026-11-25T22:59:59Z")), null);
+  assert.equal(liveTiming(qual, at("2026-11-25T23:00:00Z")).href, "https://live.fis-ski.com/lv-fss8001.htm");
+  assert.equal(liveTiming(qual, at("2026-11-25T23:00:00Z")).pulsing, true);
+  assert.equal(liveTiming(qual, at("2026-11-26T23:00:00Z")), null);
+
   const seen = new Set();
   for (const race of races) {
-    if (/^(alpine|xc)-\d+$/.test(race.id)) {
+    if (/^(alpine|xc|freeski)-\d+$/.test(race.id)) {
       assert.equal(Number.isInteger(race.codex), true, race.id);
       assert.ok(race.codex >= 0 && race.codex <= 9999, race.id);
       const key = `${race.sport}:${race.codex}`;
       assert.equal(seen.has(key), false, key);
       seen.add(key);
+      if (race.sport === "freeski") {
+        assert.equal(liveCodex(race), null, race.id);
+        assert.equal(
+          liveHref(race),
+          `https://live.fis-ski.com/lv-fss${String(race.codex).padStart(4, "0")}.htm`,
+          race.id,
+        );
+      }
     } else {
       assert.equal(race.codex, undefined, race.id);
     }
@@ -544,6 +602,10 @@ test("watch lines name streaming sites as compact external links", () => {
 
   for (const race of races) {
     const links = watchSegments(race.watch).filter((part) => part.type === "link");
+    if (!race.watch) {
+      assert.equal(race.sport, "freeski", race.id);
+      continue;
+    }
     assert.ok(links.length >= 1, race.id);
     for (const link of links) assert.match(link.href, /^https:\/\//);
   }
@@ -578,6 +640,9 @@ test("pages paths stay under /ski/", () => {
   for (const icon of manifest.icons) assert.equal(icon.src.includes("/"), false);
   assert.match(worker, /addEventListener\("fetch"/);
   assert.match(worker, /contenders\.js/);
+  assert.match(worker, /install\.js/);
+  assert.match(html, /id="install-hint"/);
+  assert.match(html, /data-filter="freeski"/);
   assert.match(pages, /actions\/deploy-pages@v4/);
   assert.match(pages, /path: \./);
   const podiums = readFileSync(new URL(".github/workflows/podiums.yml", root), "utf8");

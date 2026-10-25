@@ -6,8 +6,9 @@
     "alpineCalendarPdfMen": "https://assets.fis-ski.com/f/252177/x/dbc6f072ae/2627men_13-01-2026.pdf",
     "xcCalendar": "https://www.fis-ski.com/cross-country/documents",
     "xcCalendarPdf": "https://assets.fis-ski.com/f/252177/x/d9032a8e11/draft_formats_wc_calendar_cc_2026-27.pdf",
-    "times": "FIS database iCal, season 2027, category WC, sectors AL and CC",
-    "live": "FIS live timing. Alpine: https://live.fis-ski.com/lv-al{codex}.htm. Cross-country: https://live.fis-ski.com/cc-{codex}/results-pda.htm. Codex is competitionCodex on the FIS results page."
+    "freeskiCalendar": "https://www.fis-ski.com/DB/freestyle-freeski/freeski/calendar-results.html?sectorcode=FS&seasoncode=2027&categorycode=WC&disciplinecode=HP,SS,BA&seasonmonth=X-2027",
+    "times": "FIS database iCal, season 2027, category WC, sectors AL, CC, and FS",
+    "live": "FIS live timing. Alpine: https://live.fis-ski.com/lv-al{codex}.htm. Cross-country: https://live.fis-ski.com/cc-{codex}/results-pda.htm. Freeski: https://live.fis-ski.com/lv-fss{codex}.htm. Codex is competitionCodex on the FIS results page."
   },
   "races": [
     {
@@ -138,6 +139,78 @@
         "2026-11-22T12:30:00Z"
       ],
       "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19546",
+      "codex": 8001,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air Qualification",
+      "venue": "Innsbruck",
+      "country": "AUT",
+      "date": "2026-11-26",
+      "tz": "Europe/Vienna",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19550",
+      "codex": 8000,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air Qualification",
+      "venue": "Innsbruck",
+      "country": "AUT",
+      "date": "2026-11-26",
+      "tz": "Europe/Vienna",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19548",
+      "codex": 8003,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air",
+      "venue": "Innsbruck",
+      "country": "AUT",
+      "date": "2026-11-27",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-11-27T17:45:00Z"
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19701",
+      "codex": 8002,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air",
+      "venue": "Innsbruck",
+      "country": "AUT",
+      "date": "2026-11-27",
+      "tz": "Europe/Vienna",
+      "starts": [
+        "2026-11-27T17:45:00Z"
+      ],
+      "watch": "",
       "results": {
         "podium": []
       }
@@ -344,6 +417,42 @@
       }
     },
     {
+      "id": "freeski-19551",
+      "codex": 8005,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air Qualification",
+      "venue": "Beijing",
+      "country": "CHN",
+      "date": "2026-12-03",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19552",
+      "codex": 8004,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air Qualification",
+      "venue": "Beijing",
+      "country": "CHN",
+      "date": "2026-12-03",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131703",
       "codex": 9,
       "sport": "alpine",
@@ -435,6 +544,24 @@
       }
     },
     {
+      "id": "freeski-19553",
+      "codex": 8007,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air",
+      "venue": "Beijing",
+      "country": "CHN",
+      "date": "2026-12-05",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "xc-52096",
       "codex": 11,
       "sport": "xc",
@@ -448,6 +575,24 @@
         null
       ],
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19554",
+      "codex": 8006,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air",
+      "venue": "Beijing",
+      "country": "CHN",
+      "date": "2026-12-05",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
       "results": {
         "podium": []
       }
@@ -545,6 +690,78 @@
       }
     },
     {
+      "id": "freeski-19555",
+      "codex": 8015,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Secret Garden",
+      "country": "CHN",
+      "date": "2026-12-10",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19558",
+      "codex": 8016,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Breckenridge",
+      "country": "USA",
+      "date": "2026-12-10",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19556",
+      "codex": 8012,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Secret Garden",
+      "country": "CHN",
+      "date": "2026-12-10",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19559",
+      "codex": 8013,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Breckenridge",
+      "country": "USA",
+      "date": "2026-12-10",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131601",
       "codex": 5010,
       "sport": "alpine",
@@ -636,6 +853,42 @@
       }
     },
     {
+      "id": "freeski-19557",
+      "codex": 8023,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe",
+      "venue": "Secret Garden",
+      "country": "CHN",
+      "date": "2026-12-12",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19560",
+      "codex": 8025,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle",
+      "venue": "Breckenridge",
+      "country": "USA",
+      "date": "2026-12-12",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "xc-52104",
       "codex": 18,
       "sport": "xc",
@@ -649,6 +902,42 @@
         null
       ],
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19702",
+      "codex": 8020,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe",
+      "venue": "Secret Garden",
+      "country": "CHN",
+      "date": "2026-12-12",
+      "tz": "Asia/Shanghai",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19561",
+      "codex": 8022,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle",
+      "venue": "Breckenridge",
+      "country": "USA",
+      "date": "2026-12-12",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
       "results": {
         "podium": []
       }
@@ -781,6 +1070,42 @@
       }
     },
     {
+      "id": "freeski-19562",
+      "codex": 8034,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Copper Mountain",
+      "country": "USA",
+      "date": "2026-12-18",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19563",
+      "codex": 8032,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Copper Mountain",
+      "country": "USA",
+      "date": "2026-12-18",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131605",
       "codex": 5014,
       "sport": "alpine",
@@ -850,6 +1175,42 @@
         "2026-12-20T12:30:00Z"
       ],
       "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19564",
+      "codex": 8043,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe",
+      "venue": "Copper Mountain",
+      "country": "USA",
+      "date": "2026-12-20",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19565",
+      "codex": 8041,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe",
+      "venue": "Copper Mountain",
+      "country": "USA",
+      "date": "2026-12-20",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
       "results": {
         "podium": []
       }
@@ -1257,6 +1618,60 @@
       "note": "Tour de Ski"
     },
     {
+      "id": "freeski-19566",
+      "codex": 8046,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air Qualification",
+      "venue": "Kreischberg",
+      "country": "AUT",
+      "date": "2027-01-07",
+      "tz": "Europe/Vienna",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19567",
+      "codex": 8045,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air Qualification",
+      "venue": "Kreischberg",
+      "country": "AUT",
+      "date": "2027-01-07",
+      "tz": "Europe/Vienna",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19569",
+      "codex": 8048,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air",
+      "venue": "Kreischberg",
+      "country": "AUT",
+      "date": "2027-01-08",
+      "tz": "Europe/Vienna",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "xc-52122",
       "codex": 583,
       "sport": "xc",
@@ -1274,6 +1689,24 @@
         "podium": []
       },
       "note": "Tour de Ski"
+    },
+    {
+      "id": "freeski-19568",
+      "codex": 8047,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air",
+      "venue": "Kreischberg",
+      "country": "AUT",
+      "date": "2027-01-08",
+      "tz": "Europe/Vienna",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
     },
     {
       "id": "xc-52123",
@@ -1445,6 +1878,42 @@
       "note": "Tour de Ski"
     },
     {
+      "id": "freeski-19570",
+      "codex": 8053,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Laax",
+      "country": "SUI",
+      "date": "2027-01-14",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19571",
+      "codex": 8052,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Laax",
+      "country": "SUI",
+      "date": "2027-01-14",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131664",
       "codex": 5027,
       "sport": "alpine",
@@ -1517,6 +1986,42 @@
       }
     },
     {
+      "id": "freeski-19572",
+      "codex": 8062,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle",
+      "venue": "Laax",
+      "country": "SUI",
+      "date": "2027-01-16",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19573",
+      "codex": 8058,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle",
+      "venue": "Laax",
+      "country": "SUI",
+      "date": "2027-01-16",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131725",
       "codex": 35,
       "sport": "alpine",
@@ -1573,6 +2078,42 @@
       }
     },
     {
+      "id": "freeski-19574",
+      "codex": 8073,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air Qualification",
+      "venue": "Tignes",
+      "country": "FRA",
+      "date": "2027-01-20",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19575",
+      "codex": 8071,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air Qualification",
+      "venue": "Tignes",
+      "country": "FRA",
+      "date": "2027-01-20",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131729",
       "codex": 39,
       "sport": "alpine",
@@ -1586,6 +2127,42 @@
         "2027-01-22T10:30:00Z"
       ],
       "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19576",
+      "codex": 8077,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Big Air",
+      "venue": "Tignes",
+      "country": "FRA",
+      "date": "2027-01-22",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19577",
+      "codex": 8075,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Big Air",
+      "venue": "Tignes",
+      "country": "FRA",
+      "date": "2027-01-22",
+      "tz": "Europe/Paris",
+      "starts": [
+        null
+      ],
+      "watch": "",
       "results": {
         "podium": []
       }
@@ -2071,6 +2648,78 @@
       }
     },
     {
+      "id": "freeski-19578",
+      "codex": 8110,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Calgary",
+      "country": "CAN",
+      "date": "2027-02-16",
+      "tz": "America/Edmonton",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19579",
+      "codex": 8109,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Calgary",
+      "country": "CAN",
+      "date": "2027-02-16",
+      "tz": "America/Edmonton",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19580",
+      "codex": 8112,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe",
+      "venue": "Calgary",
+      "country": "CAN",
+      "date": "2027-02-18",
+      "tz": "America/Edmonton",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19581",
+      "codex": 8111,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe",
+      "venue": "Calgary",
+      "country": "CAN",
+      "date": "2027-02-18",
+      "tz": "America/Edmonton",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131737",
       "codex": 58,
       "sport": "alpine",
@@ -2143,6 +2792,78 @@
       }
     },
     {
+      "id": "freeski-19584",
+      "codex": 8127,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-25",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19585",
+      "codex": 8125,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-25",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19582",
+      "codex": 8123,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-26",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19583",
+      "codex": 8121,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-26",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131676",
       "codex": 5050,
       "sport": "alpine",
@@ -2179,6 +2900,42 @@
       }
     },
     {
+      "id": "freeski-19588",
+      "codex": 8138,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-27",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19589",
+      "codex": 8136,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-27",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
       "id": "alpine-131677",
       "codex": 5051,
       "sport": "alpine",
@@ -2210,6 +2967,42 @@
         "2027-02-28T10:30:00Z"
       ],
       "watch": "US: Peacock (live). YouTube after 24h.",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19586",
+      "codex": 8132,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-28",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19587",
+      "codex": 8129,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe",
+      "venue": "Aspen",
+      "country": "USA",
+      "date": "2027-02-28",
+      "tz": "America/Denver",
+      "starts": [
+        null
+      ],
+      "watch": "",
       "results": {
         "podium": []
       }
@@ -2697,6 +3490,150 @@
         "podium": []
       },
       "note": "Finals"
+    },
+    {
+      "id": "freeski-19590",
+      "codex": 8162,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-01",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19591",
+      "codex": 8161,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle Qualification",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-01",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19592",
+      "codex": 8164,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-02",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19593",
+      "codex": 8163,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe Qualification",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-02",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19594",
+      "codex": 8166,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Slopestyle",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-03",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19595",
+      "codex": 8165,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Slopestyle",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-03",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19596",
+      "codex": 8168,
+      "sport": "freeski",
+      "gender": "women",
+      "discipline": "Halfpipe",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-04",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
+    },
+    {
+      "id": "freeski-19597",
+      "codex": 8167,
+      "sport": "freeski",
+      "gender": "men",
+      "discipline": "Halfpipe",
+      "venue": "Silvaplana",
+      "country": "SUI",
+      "date": "2027-04-04",
+      "tz": "Europe/Zurich",
+      "starts": [
+        null
+      ],
+      "watch": "",
+      "results": {
+        "podium": []
+      }
     }
   ]
 }

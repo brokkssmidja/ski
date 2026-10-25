@@ -79,10 +79,10 @@ def parse_podium(html: str):
 
 
 def race_url(race: dict) -> str | None:
-    match = re.fullmatch(r"(alpine|xc)-(\d+)", race["id"])
+    match = re.fullmatch(r"(alpine|xc|freeski)-(\d+)", race["id"])
     if not match:
         return None
-    sector = "AL" if match.group(1) == "alpine" else "CC"
+    sector = {"alpine": "AL", "xc": "CC", "freeski": "FS"}[match.group(1)]
     return (
         "https://www.fis-ski.com/DB/general/results.html"
         f"?sectorcode={sector}&raceid={match.group(2)}"
@@ -94,6 +94,8 @@ def parse_start(stamp: str) -> datetime:
 
 
 def finish_delay(race: dict, starts: list[str]) -> timedelta:
+    if race.get("sport") == "freeski":
+        return timedelta(hours=4)
     if race.get("sport") == "xc":
         return timedelta(minutes=90)
     if race.get("discipline") in ("Slalom", "Giant Slalom") and len(starts) >= 2:
