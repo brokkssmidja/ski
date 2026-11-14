@@ -1,7 +1,7 @@
 /* Offline shell for GitHub Pages at /ski/.
    The script is /ski/sw.js, so the worker scope is /ski/. */
 
-const CACHE = "ski-v10";
+const CACHE = "ski-v11";
 const SHELL = [
   "./",
   "./index.html",
@@ -9,6 +9,8 @@ const SHELL = [
   "./app.js",
   "./schedule.js",
   "./live.js",
+  "./results.js",
+  "./cups.json",
   "./install.js",
   "./contenders.js",
   "./races.json",

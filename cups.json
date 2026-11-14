@@ -1,0 +1,487 @@
+{
+  "updated": "2026-11-14T13:35:50Z",
+  "people": {
+    "EMMAAICHER": {
+      "id": 237841,
+      "country": "GER"
+    },
+    "LARACOLTURI": {
+      "id": 269077,
+      "country": "ALB"
+    },
+    "KATHARINATRUPPE": {
+      "id": 175818,
+      "country": "AUT"
+    },
+    "ZRINKALJUTIC": {
+      "id": 252519,
+      "country": "CRO"
+    },
+    "ANNASWENNLARSSON": {
+      "id": 127270,
+      "country": "SWE"
+    },
+    "MARIONCHEVRIER": {
+      "id": 220898,
+      "country": "FRA"
+    },
+    "MARIELAMURE": {
+      "id": 220926,
+      "country": "FRA"
+    },
+    "MADISONHOFFMAN": {
+      "id": 211875,
+      "country": "AUS"
+    },
+    "KATHARINAHUBER": {
+      "id": 165766,
+      "country": "AUT"
+    },
+    "WENDYHOLDENER": {
+      "id": 148331,
+      "country": "SUI"
+    },
+    "CAMILLERAST": {
+      "id": 203812,
+      "country": "SUI"
+    },
+    "DZENIFERAGERMANE": {
+      "id": 240236,
+      "country": "LAT"
+    },
+    "SARAHECTOR": {
+      "id": 140095,
+      "country": "SWE"
+    },
+    "ALINEHOEPLI": {
+      "id": 220457,
+      "country": "SUI"
+    },
+    "AJHURT": {
+      "id": 210951,
+      "country": "USA"
+    },
+    "PETRAVLHOVA": {
+      "id": 168809,
+      "country": "SVK"
+    },
+    "NEJADVORNIK": {
+      "id": 221143,
+      "country": "SLO"
+    },
+    "LENADUERR": {
+      "id": 126526,
+      "country": "GER"
+    },
+    "BEATRICESOLA": {
+      "id": 245042,
+      "country": "ITA"
+    },
+    "LARADELLAMEA": {
+      "id": 203427,
+      "country": "ITA"
+    },
+    "CHARLOTTELINGG": {
+      "id": 203810,
+      "country": "LIE"
+    },
+    "LAURENCESTGERMAIN": {
+      "id": 155388,
+      "country": "CAN"
+    },
+    "VALENTINARINGSWANNER": {
+      "id": 260881,
+      "country": "AUT"
+    },
+    "MARTINAPETERLINI": {
+      "id": 188568,
+      "country": "ITA"
+    },
+    "FRANZISKAGRITSCH": {
+      "id": 191309,
+      "country": "AUT"
+    },
+    "CAITLINMCFARLANE": {
+      "id": 228828,
+      "country": "FRA"
+    },
+    "HANNAARONSSONELFMAN": {
+      "id": 228233,
+      "country": "SWE"
+    },
+    "PAULAMOLTZAN": {
+      "id": 155859,
+      "country": "USA"
+    },
+    "ASJAZENERE": {
+      "id": 175037,
+      "country": "ITA"
+    },
+    "MIKAELASHIFFRIN": {
+      "id": 164835,
+      "country": "USA"
+    },
+    "ALICEROBINSON": {
+      "id": 221779,
+      "country": "NZL"
+    },
+    "MARYNAGASIENICADANIEL": {
+      "id": 160104,
+      "country": "POL"
+    },
+    "ESTELLEALPHAND": {
+      "id": 163567,
+      "country": "SWE"
+    },
+    "ELISABETHBOCOCK": {
+      "id": 260596,
+      "country": "USA"
+    },
+    "HILMALOEVBLOM": {
+      "id": 211099,
+      "country": "SWE"
+    },
+    "MINAFUERSTHOLTMANN": {
+      "id": 165800,
+      "country": "NOR"
+    },
+    "NINAOBRIEN": {
+      "id": 187620,
+      "country": "USA"
+    },
+    "THEALOUISESTJERNESUND": {
+      "id": 174491,
+      "country": "NOR"
+    },
+    "SIMONEWILD": {
+      "id": 148146,
+      "country": "SUI"
+    },
+    "STEFANIEGROB": {
+      "id": 252204,
+      "country": "SUI"
+    },
+    "KIRAWEIDLEWINKELMANN": {
+      "id": 173545,
+      "country": "GER"
+    },
+    "BRITTRICHARDSON": {
+      "id": 240548,
+      "country": "CAN"
+    },
+    "VANESSAKASPER": {
+      "id": 173470,
+      "country": "SUI"
+    },
+    "ALICEPAZZAGLIA": {
+      "id": 232757,
+      "country": "ITA"
+    },
+    "LUCASPINHEIROBRAATHEN": {
+      "id": 213820,
+      "country": "BRA"
+    },
+    "LOICMEILLARD": {
+      "id": 174158,
+      "country": "SUI"
+    },
+    "MARCOODERMATT": {
+      "id": 190231,
+      "country": "SUI"
+    },
+    "RIVERRADAMUS": {
+      "id": 194503,
+      "country": "USA"
+    },
+    "RAPHAELHAASER": {
+      "id": 191305,
+      "country": "AUT"
+    },
+    "FABIANGRATZ": {
+      "id": 187951,
+      "country": "GER"
+    },
+    "ALEXVINATZER": {
+      "id": 204319,
+      "country": "ITA"
+    },
+    "EIRIKHYSTADSOLBERG": {
+      "id": 231688,
+      "country": "NOR"
+    },
+    "LEOANGUENOT": {
+      "id": 195194,
+      "country": "FRA"
+    },
+    "PATRICKFEURSTEIN": {
+      "id": 176104,
+      "country": "AUT"
+    },
+    "STEFANBRENNSTEINER": {
+      "id": 128892,
+      "country": "AUT"
+    },
+    "FREDDYCARRICKSMITH": {
+      "id": 278718,
+      "country": "GBR"
+    },
+    "THIBAUTFAVROT": {
+      "id": 159244,
+      "country": "FRA"
+    },
+    "RASMUSBAKKEVIG": {
+      "id": 264793,
+      "country": "NOR"
+    },
+    "ANTONGRAMMEL": {
+      "id": 195408,
+      "country": "GER"
+    },
+    "EDUARDHALLBERG": {
+      "id": 246186,
+      "country": "FIN"
+    },
+    "JOSHUASTURM": {
+      "id": 219779,
+      "country": "AUT"
+    },
+    "ZANKRANJEC": {
+      "id": 137306,
+      "country": "SLO"
+    },
+    "FILIPZUBCIC": {
+      "id": 146641,
+      "country": "CRO"
+    },
+    "SAMMAES": {
+      "id": 194529,
+      "country": "BEL"
+    },
+    "ALEXANDERSCHMID": {
+      "id": 156112,
+      "country": "GER"
+    },
+    "HENRIKKRISTOFFERSEN": {
+      "id": 154950,
+      "country": "NOR"
+    },
+    "THOMASTUMLER": {
+      "id": 105040,
+      "country": "SUI"
+    },
+    "ALBANELEZICANNAFERINA": {
+      "id": 239148,
+      "country": "FRA"
+    },
+    "LENZHAECHLER": {
+      "id": 240101,
+      "country": "SUI"
+    },
+    "HANSGRAHLMADSEN": {
+      "id": 246187,
+      "country": "NOR"
+    }
+  },
+  "cups": {
+    "AL-W-SL": {
+      "label": "Slalom",
+      "rows": [
+        {
+          "place": 1,
+          "name": "AICHER Emma",
+          "country": "GER",
+          "points": 100,
+          "id": 237841
+        },
+        {
+          "place": 2,
+          "name": "COLTURI Lara",
+          "country": "ALB",
+          "points": 80,
+          "id": 269077
+        },
+        {
+          "place": 3,
+          "name": "TRUPPE Katharina",
+          "country": "AUT",
+          "points": 60,
+          "id": 175818
+        },
+        {
+          "place": 4,
+          "name": "LJUTIC Zrinka",
+          "country": "CRO",
+          "points": 50,
+          "id": 252519
+        },
+        {
+          "place": 5,
+          "name": "SWENN LARSSON Anna",
+          "country": "SWE",
+          "points": 45,
+          "id": 127270
+        }
+      ]
+    },
+    "AL-W-GS": {
+      "label": "Giant Slalom",
+      "rows": [
+        {
+          "place": 1,
+          "name": "MOLTZAN Paula",
+          "country": "USA",
+          "points": 100,
+          "id": 155859
+        },
+        {
+          "place": 2,
+          "name": "COLTURI Lara",
+          "country": "ALB",
+          "points": 80,
+          "id": 269077
+        },
+        {
+          "place": 3,
+          "name": "AICHER Emma",
+          "country": "GER",
+          "points": 60,
+          "id": 237841
+        },
+        {
+          "place": 4,
+          "name": "HECTOR Sara",
+          "country": "SWE",
+          "points": 50,
+          "id": 140095
+        },
+        {
+          "place": 5,
+          "name": "ZENERE Asja",
+          "country": "ITA",
+          "points": 45,
+          "id": 175037
+        }
+      ]
+    },
+    "AL-W-ALL": {
+      "label": "Overall",
+      "rows": [
+        {
+          "place": 1,
+          "name": "AICHER Emma",
+          "country": "GER",
+          "points": 160,
+          "id": 237841
+        },
+        {
+          "place": 1,
+          "name": "COLTURI Lara",
+          "country": "ALB",
+          "points": 160,
+          "id": 269077
+        },
+        {
+          "place": 3,
+          "name": "MOLTZAN Paula",
+          "country": "USA",
+          "points": 100,
+          "id": 155859
+        },
+        {
+          "place": 4,
+          "name": "LJUTIC Zrinka",
+          "country": "CRO",
+          "points": 74,
+          "id": 252519
+        },
+        {
+          "place": 5,
+          "name": "HECTOR Sara",
+          "country": "SWE",
+          "points": 70,
+          "id": 140095
+        }
+      ]
+    },
+    "AL-M-GS": {
+      "label": "Giant Slalom",
+      "rows": [
+        {
+          "place": 1,
+          "name": "PINHEIRO BRAATHEN Lucas",
+          "country": "BRA",
+          "points": 100,
+          "id": 213820
+        },
+        {
+          "place": 2,
+          "name": "MEILLARD Loic",
+          "country": "SUI",
+          "points": 80,
+          "id": 174158
+        },
+        {
+          "place": 3,
+          "name": "ODERMATT Marco",
+          "country": "SUI",
+          "points": 60,
+          "id": 190231
+        },
+        {
+          "place": 4,
+          "name": "RADAMUS River",
+          "country": "USA",
+          "points": 50,
+          "id": 194503
+        },
+        {
+          "place": 5,
+          "name": "HAASER Raphael",
+          "country": "AUT",
+          "points": 45,
+          "id": 191305
+        }
+      ]
+    },
+    "AL-M-ALL": {
+      "label": "Overall",
+      "rows": [
+        {
+          "place": 1,
+          "name": "PINHEIRO BRAATHEN Lucas",
+          "country": "BRA",
+          "points": 100,
+          "id": 213820
+        },
+        {
+          "place": 2,
+          "name": "MEILLARD Loic",
+          "country": "SUI",
+          "points": 80,
+          "id": 174158
+        },
+        {
+          "place": 3,
+          "name": "ODERMATT Marco",
+          "country": "SUI",
+          "points": 60,
+          "id": 190231
+        },
+        {
+          "place": 4,
+          "name": "RADAMUS River",
+          "country": "USA",
+          "points": 50,
+          "id": 194503
+        },
+        {
+          "place": 5,
+          "name": "HAASER Raphael",
+          "country": "AUT",
+          "points": 45,
+          "id": 191305
+        }
+      ]
+    }
+  }
+}

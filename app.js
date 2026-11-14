@@ -57,6 +57,16 @@ import {
   watchSegments,
   zoneHeading,
 } from "./schedule.js";
+import {
+  initials,
+  markText,
+  photoUrl,
+  podiumFromRelay,
+  podiumFromStored,
+  presentPodium,
+  standingsChoices,
+  standingRows,
+} from "./results.js";
 
 const COUNTRY = {
   ALB: "Albania", AND: "Andorra", AUT: "Austria", CAN: "Canada", CHN: "China", FIN: "Finland", FRA: "France",
@@ -819,6 +829,170 @@ function downloadIcs(race) {
   setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 
+const PODIUM_KEY = "ski-podium";
+const PODIUM_TTL_MS = 12 * 60 * 60 * 1000;
+const finishViews = new Map();
+const cupPick = new Map();
+let cupsBook;
+let cupsPromise = null;
+const podiumPromises = new Map();
+
+function readPodiumCache(codex) {
+  try {
+    const all = JSON.parse(localStorage.getItem(PODIUM_KEY) || "{}");
+    const hit = all[codex];
+    if (!hit || !Array.isArray(hit.rows)) return null;
+    if (Date.now() - Number(hit.at) > PODIUM_TTL_MS) return null;
+    return hit.rows;
+  } catch {
+    return null;
+  }
+}
+
+function writePodiumCache(codex, rows) {
+  try {
+    const all = JSON.parse(localStorage.getItem(PODIUM_KEY) || "{}");
+    all[codex] = { at: Date.now(), rows };
+    localStorage.setItem(PODIUM_KEY, JSON.stringify(all));
+  } catch {
+    /* private mode */
+  }
+}
+
+function loadCups() {
+  if (cupsBook !== undefined) return Promise.resolve(cupsBook);
+  if (!cupsPromise) {
+    cupsPromise = fetch("./cups.json", { cache: "no-cache" })
+      .then((response) => (response.ok ? response.json() : null))
+      .catch(() => null)
+      .then((data) => {
+        cupsBook = data;
+        return data;
+      });
+  }
+  return cupsPromise;
+}
+
+function loadRelayPodium(race) {
+  const codex = liveCodex(race);
+  if (!codex) return Promise.resolve([]);
+  if (podiumPromises.has(codex)) return podiumPromises.get(codex);
+  const job = (async () => {
+    const saved = readPodiumCache(codex);
+    if (saved) return saved;
+    try {
+      const response = await fetch(relayUrl(codex), { cache: "no-store" });
+      const data = await response.json();
+      if (!response.ok || !livePayloadOk(data, codex)) return [];
+      const rows = podiumFromRelay(data);
+      if (rows.length) writePodiumCache(codex, rows);
+      return rows;
+    } catch {
+      return [];
+    }
+  })();
+  podiumPromises.set(codex, job);
+  return job;
+}
+
+function finishSlot(race) {
+  const slot = el("div", "finish");
+  slot.dataset.finish = race.id;
+  return slot;
+}
+
+function avatarNode(name, id) {
+  const box = el("span", "avatar");
+  box.setAttribute("aria-hidden", "true");
+  box.append(el("span", "letters", initials(name)));
+  const src = photoUrl(id);
+  if (!src) return box;
+  const img = document.createElement("img");
+  img.alt = "";
+  img.referrerPolicy = "no-referrer";
+  img.src = src;
+  img.addEventListener("error", () => img.remove());
+  box.append(img);
+  return box;
+}
+
+function resultRow(row, mark) {
+  const li = el("li", Number(row.place) === 1 ? "win" : "");
+  li.append(el("b", "place", String(row.place)));
+  li.append(avatarNode(row.name, row.id));
+  const who = el("span", "who");
+  who.textContent = [nationFlag(row.country), row.country, row.name].filter(Boolean).join(" ");
+  li.append(who);
+  li.append(el("span", "mark", mark));
+  return li;
+}
+
+function finishNode(race, view) {
+  const root = el("div", "finish-body");
+  if (view.podium.length) {
+    root.append(el("p", "role", "Podium"));
+    const list = el("ol", "board");
+    for (const row of view.podium) list.append(resultRow(row, markText(row)));
+    root.append(list);
+  }
+  if (!view.choices.length) return root.childNodes.length ? root : null;
+  root.append(el("p", "role", "World Cup"));
+  const picked = cupPick.get(race.id);
+  const current = view.choices.find((choice) => choice.id === picked) || view.choices[0];
+  if (view.choices.length > 1) {
+    const group = el("div", "cup-switch");
+    group.setAttribute("role", "group");
+    group.setAttribute("aria-label", "World Cup list");
+    for (const choice of view.choices) {
+      const button = el("button", "", choice.label);
+      button.type = "button";
+      button.setAttribute("aria-pressed", String(choice.id === current.id));
+      button.addEventListener("click", () => {
+        cupPick.set(race.id, choice.id);
+        const slot = button.closest("[data-finish]");
+        if (slot) paintFinishSlot(slot, race);
+      });
+      group.append(button);
+    }
+    root.append(group);
+  }
+  const list = el("ol", "board");
+  for (const row of standingRows(current, view.people)) {
+    list.append(resultRow(row, row.points == null ? "" : String(row.points)));
+  }
+  root.append(list);
+  return root;
+}
+
+function paintFinishSlot(slot, race) {
+  const view = finishViews.get(race.id);
+  if (!slot || !view) return;
+  const node = finishNode(race, view);
+  slot.replaceChildren(node || "");
+}
+
+async function ensureFinish() {
+  const slots = [...document.querySelectorAll("[data-finish]")];
+  await Promise.all(slots.map(async (slot) => {
+    const race = races.find((item) => item.id === slot.dataset.finish);
+    if (!race) return;
+    const token = String((Number(slot.dataset.token) || 0) + 1);
+    slot.dataset.token = token;
+    const [book, relay] = await Promise.all([loadCups(), loadRelayPodium(race)]);
+    if (slot.dataset.token !== token) return;
+    const people = book?.people || {};
+    const podium = presentPodium(relay, podiumFromStored(race), people);
+    const choices = standingsChoices(book, race);
+    if (!podium.length && !choices.length) {
+      slot.replaceChildren();
+      finishViews.delete(race.id);
+      return;
+    }
+    finishViews.set(race.id, { podium, choices, people });
+    paintFinishSlot(slot, race);
+  }));
+}
+
 function renderHero(race, now) {
   heroEl.replaceChildren();
   if (!race) {
@@ -841,8 +1015,7 @@ function renderHero(race, now) {
   const watching = contenderNode(race);
   if (watching) card.append(watching);
   card.append(statusNode(race, now));
-  const podium = finished ? podiumNode(race) : null;
-  if (podium) card.append(podium);
+  if (finished) card.append(finishSlot(race));
   if (!finished && liveCodex(race) && liveTiming(race, now)) card.append(liveSlot(race));
   const action = finished ? resultsLink(race) : liveLink(race, now);
   if (action) card.append(action);
@@ -983,6 +1156,7 @@ function render() {
   renderPast(pastRaces(races, clock, filters));
   signature = viewSignature();
   ensureLive();
+  void ensureFinish();
 }
 
 function tick() {
