@@ -206,8 +206,9 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .live-panel .quiet { margin: 0; color: var(--muted); }
 .ath {
   display: grid; grid-template-columns: 2.1rem minmax(0, 1fr) auto; gap: 4px 8px;
-  align-items: baseline; padding: 2px 0; font-size: 0.92rem;
+  align-items: center; padding: 5px 0; font-size: 0.92rem;
 }
+.ath .who { line-height: 1.35; }
 .ath b { font-variant-numeric: tabular-nums; color: var(--accent); }
 .ath .who { min-width: 0; overflow-wrap: anywhere; }
 .ath .time { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
@@ -218,10 +219,33 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   font: inherit; font-size: 0.82rem; font-weight: 700; color: var(--accent);
   background: transparent; border: 0; min-height: 40px; padding: 4px 0 0; cursor: pointer;
 }
+.tv {
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line);
+}
+.live-panel > .tv:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+.tv-delay {
+  margin: 0; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.tv-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.tv-actions button, .live-panel .sync {
+  font: inherit; font-weight: 800; font-size: 0.92rem; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line); border-radius: 999px;
+  min-height: 44px; min-width: 44px; padding: 8px 14px; cursor: pointer;
+  touch-action: manipulation;
+}
+.tv-actions button:disabled, .live-panel .sync:disabled { opacity: 0.4; cursor: default; }
+.tv-hint, .tv-note, .tv-wait {
+  margin: 8px 0 0; color: var(--muted); font-size: 0.82rem; font-weight: 650;
+}
+.tv-note { color: var(--live); }
+.ath.has-sync { align-items: center; }
+.ath .side { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
 @media (max-width: 380px) {
   .ath { grid-template-columns: 2.1rem minmax(0, 1fr); }
   .ath .time { grid-column: 2; font-size: 0.88rem; }
   .ath.lead .time { font-size: 1.15rem; }
+  .ath.has-sync .side { grid-column: 2; justify-content: flex-start; flex-wrap: wrap; }
 }
 .live-link .dot {
   width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #fff; flex: none;

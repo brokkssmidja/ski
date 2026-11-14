@@ -4,16 +4,34 @@ import {
   athleteDiff,
   cardStatus,
   countsLine,
+  delayFromTap,
+  emptyStartLog,
+  formatTvDelay,
+  holdMessage,
   livePayloadOk,
   nationFlag,
   nextStarters,
+  nudgeDelay,
+  observeStarts,
   onCourse,
+  parseTvDelay,
   pollDelay,
+  pruneSnapshots,
+  pushSnapshot,
+  recentStarters,
   relayUrl,
   runLabel,
+  serializeTvDelay,
+  skierId,
+  snapshotAt,
+  startFor,
   statusLabel,
+  syncReady,
   timesNote,
   topResults,
+  TV_DELAY_KEY,
+  TV_DELAY_MAX_MS,
+  TV_NUDGE_MS,
   updatedAgo,
 } from "./live.js";
 import {
@@ -137,7 +155,8 @@ function el(tag, className, text) {
 }
 
 function headingText(race, now) {
-  const payload = liveSessions.get(race.id)?.payload;
+  const session = liveSessions.get(race.id);
+  const payload = session && !session.holding ? session.view : null;
   return cardStatus(statusLine(race, now), payload);
 }
 
@@ -349,12 +368,20 @@ function nationText(person) {
   return [nationFlag(code), code, person.name].filter(Boolean).join(" ");
 }
 
-function athleteLine(person, timeText, field) {
+function athleteLine(person, timeText, field, sync) {
   const row = el("div", "ath");
   const mark = person && typeof person === "object" && person[field] != null ? String(person[field]) : "";
   row.append(el("b", "", mark));
   row.append(el("span", "who", nationText(person) || "—"));
-  row.append(el("span", "time", timeText || ""));
+  if (!sync) {
+    row.append(el("span", "time", timeText || ""));
+    return row;
+  }
+  row.classList.add("has-sync");
+  const side = el("span", "side");
+  if (timeText) side.append(el("span", "time", timeText));
+  side.append(sync);
+  row.append(side);
   return row;
 }
 
@@ -372,10 +399,65 @@ function liveBlock(title, body) {
   return wrap;
 }
 
-function livePanelNode(payload, now, expanded, onToggle) {
+function syncButton(person, ready, partial, onSync) {
+  const button = el("button", "sync", "Sync");
+  button.type = "button";
+  const who = [person?.bib, person?.name].filter((part) => part != null && part !== "").join(" ");
+  button.setAttribute("aria-label", who ? `Sync TV to ${who}` : "Sync TV");
+  if (!ready) {
+    button.disabled = true;
+    button.title = "Waiting until the live timing shows this start.";
+  } else if (partial) {
+    button.title = "Already on course when this page opened. The delay may be short.";
+  } else {
+    button.title = "Tap when this skier leaves the start on TV.";
+  }
+  button.addEventListener("click", () => { if (ready) onSync(person); });
+  return button;
+}
+
+function tvControls(session, onNudge, onLive) {
+  const box = el("div", "tv");
+  box.setAttribute("role", "group");
+  box.setAttribute("aria-label", "Broadcast sync");
+  const delay = el("p", "tv-delay", `TV delay ${formatTvDelay(session.delayMs)}`);
+  box.append(delay);
+  const actions = el("div", "tv-actions");
+  const minus = el("button", "", "-5s");
+  minus.type = "button";
+  minus.setAttribute("aria-label", "Subtract 5 seconds from the TV delay");
+  minus.disabled = session.delayMs <= 0;
+  minus.addEventListener("click", () => onNudge(-TV_NUDGE_MS));
+  const plus = el("button", "", "+5s");
+  plus.type = "button";
+  plus.setAttribute("aria-label", "Add 5 seconds to the TV delay");
+  plus.disabled = session.delayMs >= TV_DELAY_MAX_MS;
+  plus.addEventListener("click", () => onNudge(TV_NUDGE_MS));
+  const live = el("button", "", "Live");
+  live.type = "button";
+  live.setAttribute("aria-label", "Clear the TV delay and show live timing");
+  live.disabled = session.delayMs <= 0;
+  live.addEventListener("click", onLive);
+  actions.append(minus, plus, live);
+  box.append(actions);
+  box.append(el("p", "tv-hint", "Tap Sync when that skier leaves the start on TV."));
+  if (session.syncNote) box.append(el("p", "tv-note", session.syncNote));
+  return box;
+}
+
+function livePanelNode(session, now, actions) {
+  const payload = session.view;
   const panel = el("section", "live-panel");
   panel.setAttribute("aria-label", "Live timing");
-  if (payload.status === "live") panel.classList.add("racing");
+  if (payload?.status === "live") panel.classList.add("racing");
+
+  if (session.holding || !payload) {
+    panel.append(tvControls(session, actions.onNudge, actions.onLive));
+    const wait = el("p", "tv-wait", holdMessage(session.waitMs));
+    if (session.holdUntil) wait.dataset.until = String(session.holdUntil);
+    panel.append(wait);
+    return panel;
+  }
 
   const status = el("p", "live-status");
   if (payload.status === "live") {
@@ -386,6 +468,28 @@ function livePanelNode(payload, now, expanded, onToggle) {
   status.append([statusLabel(payload.status), runLabel(payload)].filter(Boolean).join(" · "));
   panel.append(status);
   if (payload.message) panel.append(el("p", "live-message", payload.message));
+  panel.append(tvControls(session, actions.onNudge, actions.onLive));
+
+  const run = Number(payload.run) || 0;
+  const buttonFor = (person) => {
+    const starter = syncReady(session.starts, run, person, session.viewAt);
+    return syncButton(person, !!starter, !!starter?.partial, actions.onSync);
+  };
+
+  const started = recentStarters(session.starts, {
+    run,
+    asOf: session.viewAt,
+    limit: 4,
+    exclude: [...onCourse(payload), ...nextStarters(payload, 3)].map(skierId),
+  });
+  if (started.length) {
+    const startedBody = el("div", "stack");
+    for (const person of started) {
+      const starter = startFor(session.starts, run, person);
+      startedBody.append(athleteLine(person, "", "bib", syncButton(person, true, !!starter?.partial, actions.onSync)));
+    }
+    panel.append(liveBlock("Started", startedBody));
+  }
 
   const leader = payload.currentLeader;
   const leaderBody = leader
@@ -405,7 +509,7 @@ function livePanelNode(payload, now, expanded, onToggle) {
   else {
     for (const person of course) {
       const stamp = typeof person === "object" ? (person.time || "") : "";
-      courseBody.append(athleteLine(person, stamp, "bib"));
+      courseBody.append(athleteLine(person, stamp, "bib", buttonFor(person)));
     }
   }
   panel.append(liveBlock("On course", courseBody));
@@ -414,7 +518,7 @@ function livePanelNode(payload, now, expanded, onToggle) {
   const nextBody = el("div", "stack");
   if (!starters.length) nextBody.append(el("p", "quiet", "—"));
   else {
-    for (const person of starters) nextBody.append(athleteLine(person, "", "bib"));
+    for (const person of starters) nextBody.append(athleteLine(person, "", "bib", buttonFor(person)));
   }
   panel.append(liveBlock("Next", nextBody));
 
@@ -423,7 +527,7 @@ function livePanelNode(payload, now, expanded, onToggle) {
     const wrap = el("div", "live-top");
     wrap.append(el("p", "role", results.length > 3 ? "Top 10" : `Top ${results.length}`));
     const list = el("div", "board");
-    const shown = expanded ? results : results.slice(0, 3);
+    const shown = session.expanded ? results : results.slice(0, 3);
     for (const row of shown) {
       const diff = row.rank === 1 ? "" : athleteDiff(row, leader);
       const stamp = [row.time, diff].filter(Boolean).join("  ");
@@ -431,10 +535,10 @@ function livePanelNode(payload, now, expanded, onToggle) {
     }
     wrap.append(list);
     if (results.length > 3) {
-      const button = el("button", "more", expanded ? "Show less" : `Show all ${results.length}`);
+      const button = el("button", "more", session.expanded ? "Show less" : `Show all ${results.length}`);
       button.type = "button";
-      button.setAttribute("aria-expanded", String(!!expanded));
-      button.addEventListener("click", onToggle);
+      button.setAttribute("aria-expanded", String(!!session.expanded));
+      button.addEventListener("click", actions.onToggle);
       wrap.append(button);
     }
     panel.append(wrap);
@@ -467,15 +571,21 @@ function liveSlot(race) {
 }
 
 function paintLiveSlot(slot, session) {
-  if (!session?.payload) {
+  if (!session?.view && !session?.holding) {
     slot.hidden = true;
     slot.replaceChildren();
     return;
   }
   slot.hidden = false;
-  slot.replaceChildren(livePanelNode(session.payload, new Date(), session.expanded, () => {
-    session.expanded = !session.expanded;
-    paintLiveSlots(slot.dataset.live);
+  const id = slot.dataset.live;
+  slot.replaceChildren(livePanelNode(session, new Date(), {
+    onToggle: () => {
+      session.expanded = !session.expanded;
+      paintLiveSlots(id);
+    },
+    onNudge: (delta) => adjustDelay(id, nudgeDelay(session.delayMs, delta)),
+    onLive: () => adjustDelay(id, 0),
+    onSync: (person) => syncSkier(id, person),
   }));
 }
 
@@ -530,11 +640,19 @@ async function pollLive(race) {
     if (abort.signal.aborted || liveSessions.get(race.id) !== session) return;
     if (!response.ok || !livePayloadOk(data, session.codex)) {
       session.error = (data && typeof data.status === "string" && data.status) || "http";
-      session.payload = null;
+      if (!session.buffer.length) {
+        session.payload = null;
+        session.view = null;
+        session.holding = false;
+      }
     } else {
+      const at = Date.now();
       session.error = null;
       session.status = data.status;
       session.payload = data;
+      session.starts = observeStarts(session.starts, data, at);
+      session.buffer = pruneSnapshots(pushSnapshot(session.buffer, data, at), at);
+      publishView(session, at);
     }
     paintLiveSlots(race.id);
     paintHeading(race);
@@ -543,7 +661,11 @@ async function pollLive(race) {
     if (err?.name === "AbortError" || abort.signal.aborted) return;
     if (liveSessions.get(race.id) !== session) return;
     session.error = "http";
-    session.payload = null;
+    if (!session.buffer.length) {
+      session.payload = null;
+      session.view = null;
+      session.holding = false;
+    }
     paintLiveSlots(race.id);
     paintHeading(race);
     armLive(race);
@@ -571,14 +693,26 @@ function ensureLive() {
         timer: null,
         abort: null,
         payload: null,
+        view: null,
+        viewAt: null,
+        holding: false,
+        waitMs: 0,
+        holdUntil: null,
         status: null,
         error: null,
         expanded: false,
+        delayMs: readStoredDelay(codex),
+        syncNote: "",
+        starts: emptyStartLog(),
+        buffer: [],
+        openedAt: Date.now(),
       };
+      publishView(session, session.openedAt);
       liveSessions.set(race.id, session);
       paintLiveSlot(slot, session);
       void pollLive(race);
     } else {
+      publishView(session, Date.now());
       paintLiveSlot(slot, session);
       if (!session.timer && !session.abort && session.status !== "finished") void pollLive(race);
     }
@@ -588,11 +722,88 @@ function ensureLive() {
   }
 }
 
+function readStoredDelay(codex) {
+  try {
+    return parseTvDelay(localStorage.getItem(TV_DELAY_KEY), codex, Date.now());
+  } catch {
+    return 0;
+  }
+}
+
+function writeStoredDelay(codex, delayMs) {
+  try {
+    localStorage.setItem(TV_DELAY_KEY, serializeTvDelay(codex, delayMs, Date.now()));
+  } catch {
+    /* private mode */
+  }
+}
+
+function publishView(session, now = Date.now()) {
+  const picked = snapshotAt(session.buffer, now, session.delayMs, session.openedAt || now);
+  session.holding = !picked.ready;
+  session.view = picked.ready ? picked.payload : null;
+  session.viewAt = picked.ready ? picked.at : null;
+  session.holdUntil = picked.holdUntil || null;
+  session.waitMs = picked.ready ? 0 : Math.max(0, (picked.holdUntil || now) - now);
+}
+
+function adjustDelay(id, delayMs) {
+  const session = liveSessions.get(id);
+  if (!session) return;
+  session.delayMs = delayMs;
+  session.syncNote = "";
+  writeStoredDelay(session.codex, delayMs);
+  publishView(session, Date.now());
+  paintLiveSlots(id);
+  const race = races.find((item) => item.id === id);
+  if (race) paintHeading(race);
+}
+
+function syncSkier(id, person) {
+  const session = liveSessions.get(id);
+  if (!session?.view || session.viewAt == null) return;
+  const run = Number(session.view.run) || 0;
+  const starter = startFor(session.starts, run, person);
+  if (!starter || starter.at == null || starter.at > session.viewAt) return;
+  const delay = delayFromTap(Date.now(), starter.at);
+  if (delay == null) return;
+  session.delayMs = delay;
+  session.syncNote = starter.partial
+    ? "This skier was already on course when the page opened, so this delay may be short. Tap the next start to correct it."
+    : "";
+  writeStoredDelay(session.codex, delay);
+  publishView(session, Date.now());
+  paintLiveSlots(id);
+  const race = races.find((item) => item.id === id);
+  if (race) paintHeading(race);
+}
+
+function refreshLiveViews() {
+  const now = Date.now();
+  for (const [id, session] of liveSessions) {
+    if (!session.buffer.length && !session.holding) continue;
+    const prevAt = session.viewAt;
+    const prevHold = session.holding;
+    publishView(session, now);
+    if (session.viewAt !== prevAt || session.holding !== prevHold) {
+      paintLiveSlots(id);
+      const race = races.find((item) => item.id === id);
+      if (race) paintHeading(race);
+    }
+  }
+}
+
 function refreshAgo() {
   const now = new Date();
   for (const node of document.querySelectorAll(".ago[data-fetched]")) {
     const text = updatedAgo(node.dataset.fetched, now);
     if (text) node.textContent = text;
+  }
+  const ms = now.getTime();
+  for (const node of document.querySelectorAll(".tv-wait[data-until]")) {
+    const until = Number(node.dataset.until);
+    if (!Number.isFinite(until)) continue;
+    node.textContent = holdMessage(Math.max(0, until - ms));
   }
 }
 
@@ -776,6 +987,7 @@ function render() {
 
 function tick() {
   const hero = nextRace(races, clock, filters);
+  refreshLiveViews();
   if (viewSignature() !== signature) {
     render();
     refreshAgo();

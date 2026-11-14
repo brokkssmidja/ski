@@ -3,19 +3,35 @@ import test from "node:test";
 import {
   athleteDiff,
   countsLine,
+  delayFromTap,
+  emptyStartLog,
+  explicitStartMs,
   formatDiff,
+  formatTvDelay,
+  holdMessage,
   livePayloadOk,
   nationFlag,
   nextStarters,
+  nudgeDelay,
+  observeStarts,
   onCourse,
   parseRaceTime,
+  parseTvDelay,
   pollDelay,
+  pushSnapshot,
+  pruneSnapshots,
+  recentStarters,
   cardStatus,
   relayUrl,
   runLabel,
+  serializeTvDelay,
+  snapshotAt,
+  startFor,
+  syncReady,
   timesNote,
   topResults,
   updatedAgo,
+  TV_DELAY_MAX_MS,
 } from "../live.js";
 
 const leader = {
@@ -137,4 +153,113 @@ test("panel slices on-course, the next three, and the top 10", () => {
   assert.equal(nationFlag("SUI"), "🇨🇭");
   assert.equal(nationFlag("USA"), "🇺🇸");
   assert.equal(nationFlag("ZZZ"), "");
+});
+
+const lamure = { bib: 23, name: "Marie LAMURE", nation: "FRA" };
+const holdener = { bib: 7, name: "Wendy HOLDENER", nation: "SUI" };
+
+test("the relay shape has no start clock, so the first on-course sighting is the start", () => {
+  assert.equal(explicitStartMs(lamure), null);
+  assert.equal(explicitStartMs({ ...lamure, time: "54.20", timeMs: 54200 }), null);
+  assert.equal(explicitStartMs({ ...lamure, startTime: "2026-11-14T12:36:02.000Z" }), Date.parse("2026-11-14T12:36:02.000Z"));
+  assert.equal(explicitStartMs({ ...lamure, startMs: 1_700_000_000_000 }), 1_700_000_000_000);
+
+  const first = {
+    run: 2,
+    onCourse: [lamure],
+    nextOnCourse: [{ ...holdener, pos: 22, next: true }],
+  };
+  const joined = observeStarts(emptyStartLog(), first, 1_000);
+  assert.equal(startFor(joined, 2, lamure).at, 1_000);
+  assert.equal(startFor(joined, 2, lamure).partial, true);
+  assert.equal(startFor(joined, 2, lamure).source, "onCourse");
+  assert.equal(startFor(joined, 2, holdener), null);
+
+  const second = observeStarts(joined, {
+    run: 2,
+    onCourse: [holdener],
+    nextOnCourse: [],
+  }, 5_000);
+  assert.equal(startFor(second, 2, lamure).at, 1_000);
+  assert.equal(startFor(second, 2, holdener).at, 5_000);
+  assert.equal(startFor(second, 2, holdener).partial, false);
+
+  const clocked = observeStarts(second, {
+    run: 2,
+    onCourse: [{ ...holdener, startTime: "2026-11-14T12:36:10.000Z" }],
+  }, 9_000);
+  assert.equal(startFor(clocked, 2, holdener).source, "start");
+  assert.equal(startFor(clocked, 2, holdener).partial, false);
+  assert.equal(startFor(clocked, 2, holdener).at, Date.parse("2026-11-14T12:36:10.000Z"));
+  assert.equal(startFor(clocked, 1, holdener), null);
+});
+
+test("a sync tap is the gap from the start, and nudges stay in range", () => {
+  assert.equal(delayFromTap(42_000, 0), 42_000);
+  assert.equal(delayFromTap(1_000, 1_000), 0);
+  assert.equal(delayFromTap(500, 1_000), 0);
+  assert.equal(delayFromTap(TV_DELAY_MAX_MS + 5_000, 0), TV_DELAY_MAX_MS);
+  assert.equal(delayFromTap(Number.NaN, 0), null);
+  assert.equal(nudgeDelay(40_000, 5_000), 45_000);
+  assert.equal(nudgeDelay(3_000, -5_000), 0);
+  assert.equal(nudgeDelay(TV_DELAY_MAX_MS, 5_000), TV_DELAY_MAX_MS);
+  assert.equal(formatTvDelay(42_000), "0:42");
+  assert.equal(formatTvDelay(65_000), "1:05");
+  assert.equal(formatTvDelay(0), "0:00");
+  assert.equal(holdMessage(28_000), "Holding results for 0:28 so a reload stays behind the TV.");
+});
+
+test("sync stays disabled until the snapshot on screen reaches that start", () => {
+  const log = observeStarts(observeStarts(emptyStartLog(), { run: 2, onCourse: [] }, 0), {
+    run: 2,
+    onCourse: [lamure],
+  }, 10_000);
+  assert.equal(syncReady(log, 2, lamure, 9_000), null);
+  assert.equal(syncReady(log, 2, lamure, 10_000).at, 10_000);
+  assert.deepEqual(
+    recentStarters(log, { run: 2, asOf: 10_000, exclude: ["bib:23"] }).map((row) => row.bib),
+    [],
+  );
+  const later = observeStarts(log, { run: 2, onCourse: [holdener] }, 20_000);
+  assert.deepEqual(
+    recentStarters(later, { run: 2, asOf: 20_000, exclude: ["bib:7"] }).map((row) => row.bib),
+    [23],
+  );
+  assert.deepEqual(
+    recentStarters(later, { run: 2, asOf: 15_000, exclude: [] }).map((row) => row.bib),
+    [23],
+  );
+});
+
+test("a delay replays an older snapshot and hides anything newer", () => {
+  const early = { status: "live", run: 2, onCourse: [lamure], currentLeader: { bib: 1, time: "1:54.00" } };
+  const finish = { status: "live", run: 2, onCourse: [], lastFinisher: { bib: 23, time: "1:55.10" } };
+  let buffer = pushSnapshot([], early, 60_000);
+  buffer = pushSnapshot(buffer, finish, 100_000);
+  const behind = snapshotAt(buffer, 100_000, 40_000, 0);
+  assert.equal(behind.ready, true);
+  assert.equal(behind.payload.onCourse[0].bib, 23);
+  assert.equal(behind.payload.lastFinisher, undefined);
+  const held = snapshotAt(buffer, 70_000, 40_000, 0);
+  assert.equal(held.ready, false);
+  assert.equal(held.payload, null);
+  assert.equal(held.holdUntil, 100_000);
+  assert.equal(snapshotAt(buffer, 100_000, 0, 0).payload, finish);
+  assert.equal(snapshotAt([], 50_000, 40_000, 20_000).ready, false);
+  assert.equal(snapshotAt([], 70_000, 40_000, 20_000).ready, true);
+  const pruned = pruneSnapshots(buffer, 100_000 + TV_DELAY_MAX_MS + 1_000);
+  assert.equal(pruned.length, 1);
+  assert.equal(pruned[0].at, 100_000);
+});
+
+test("the TV delay is kept per race and expires", () => {
+  const now = Date.parse("2026-11-15T13:00:00.000Z");
+  const raw = serializeTvDelay("al0002", 42_000, now - 60_000);
+  assert.equal(parseTvDelay(raw, "al0002", now), 42_000);
+  assert.equal(parseTvDelay(raw, "AL0002", now), 42_000);
+  assert.equal(parseTvDelay(raw, "al5002", now), 0);
+  assert.equal(parseTvDelay(raw, "al0002", now + 13 * 60 * 60 * 1000), 0);
+  assert.equal(parseTvDelay(serializeTvDelay("al0002", 0, now), "al0002", now), 0);
+  assert.equal(parseTvDelay("nope", "al0002", now), 0);
+  assert.equal(parseTvDelay(serializeTvDelay("al0002", TV_DELAY_MAX_MS + 50_000, now), "al0002", now), TV_DELAY_MAX_MS);
 });
