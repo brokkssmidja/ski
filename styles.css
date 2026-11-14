@@ -278,6 +278,39 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .podium { list-style: none; margin: 8px 0 0; padding: 0; }
 .podium li { display: grid; grid-template-columns: 1.2rem 1fr auto; gap: 8px; padding: 3px 0; }
 .podium b { color: var(--accent); }
+.finish { margin-top: 12px; }
+.finish .role {
+  margin: 12px 0 4px; color: var(--muted); font-size: 0.72rem; font-weight: 800;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.finish .board { list-style: none; margin: 0; padding: 0; }
+.finish .board li {
+  display: grid; grid-template-columns: 1.25rem 44px minmax(0, 1fr) auto;
+  gap: 8px; align-items: center; min-height: 52px; padding: 3px 0;
+}
+.finish .place { color: var(--accent); font-variant-numeric: tabular-nums; }
+.finish .who { min-width: 0; line-height: 1.35; overflow-wrap: anywhere; }
+.finish .mark {
+  font-variant-numeric: tabular-nums; font-weight: 800; white-space: nowrap;
+  min-width: max-content; justify-self: end;
+}
+.finish .win .mark { font-size: 1.15rem; letter-spacing: -0.03em; }
+.avatar {
+  width: 44px; height: 44px; border-radius: 50%; overflow: hidden;
+  display: grid; place-items: center; background: var(--spot); color: var(--accent);
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 0.02em;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; grid-area: 1 / 1; }
+.avatar .letters { grid-area: 1 / 1; }
+.cup-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
+.cup-switch button {
+  font: inherit; font-weight: 750; font-size: 0.88rem; color: inherit;
+  background: transparent; border: 1px solid var(--line); border-radius: 999px;
+  min-height: 44px; padding: 6px 14px; cursor: pointer; touch-action: manipulation;
+}
+.cup-switch button[aria-pressed="true"] {
+  background: var(--ink); color: var(--bg); border-color: var(--ink);
+}
 .empty { color: var(--muted); padding: 12px 0; }
 .preview {
   margin: 0 0 12px; padding: 8px 12px; border-radius: 12px;
