@@ -174,3 +174,216 @@ export function countsLine(payload) {
   if (counts.remaining) parts.push(`${counts.remaining} remaining`);
   return parts.join(" · ");
 }
+
+/** Remembered TV delay. Per race codex, dropped after 12 hours. */
+export const TV_DELAY_KEY = "ski-tv-delay";
+export const TV_DELAY_MAX_MS = 20 * 60 * 1000;
+export const TV_DELAY_TTL_MS = 12 * 60 * 60 * 1000;
+export const TV_NUDGE_MS = 5_000;
+
+/**
+ * Wall-clock start, when the payload actually carries one.
+ * Checked against the live relay during the Levi women's slalom (14 Nov 2026, codex al5002):
+ * onCourse is only bib, name, and nation; nextOnCourse adds pos and next; results add the
+ * running time. There is no start clock. The FIS livetiming file behind the relay is the same:
+ * splits are running time from each skier's own start, and the only clock is the run start.
+ * Callers fall back to the first moment this page sees the skier in onCourse.
+ */
+const START_AT_KEYS = ["startTime", "startedAt", "startAt", "gateTime"];
+const START_MS_KEYS = ["startMs", "startedAtMs", "gateMs"];
+
+export function skierId(person) {
+  if (!person || typeof person !== "object") return "";
+  if (person.bib != null && String(person.bib) !== "") return `bib:${person.bib}`;
+  if (person.name) return `name:${String(person.name)}`;
+  return "";
+}
+
+export function explicitStartMs(person) {
+  if (!person || typeof person !== "object") return null;
+  for (const key of START_MS_KEYS) {
+    const n = Number(person[key]);
+    if (Number.isFinite(n) && n > 1e11) return Math.round(n);
+  }
+  for (const key of START_AT_KEYS) {
+    const raw = person[key];
+    if (typeof raw === "number" && raw > 1e11) return Math.round(raw);
+    if (typeof raw === "string" && raw.trim()) {
+      const parsed = Date.parse(raw);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+  }
+  return null;
+}
+
+export function emptyStartLog() {
+  return { primed: false, seen: {}, starters: {} };
+}
+
+function startStamp(person, run, at, source, partial) {
+  return {
+    at,
+    source,
+    partial: !!partial,
+    run,
+    bib: person.bib,
+    name: person.name || "",
+    nation: person.nation || person.country || "",
+  };
+}
+
+/**
+ * Remember when each skier leaves the start.
+ * The first payload only marks who is already on course (partial: the gate was missed).
+ * A later poll that newly lists them records that arrival. An explicit start clock replaces either.
+ */
+export function observeStarts(log, payload, observedAt) {
+  const prev = log && typeof log === "object" ? log : emptyStartLog();
+  const run = Number(payload?.run) || 0;
+  const seen = { ...prev.seen };
+  const starters = { ...prev.starters };
+  for (const person of onCourse(payload)) {
+    const id = skierId(person);
+    if (!id) continue;
+    const key = `${run}:${id}`;
+    const exact = explicitStartMs(person);
+    if (exact != null) {
+      starters[key] = startStamp(person, run, exact, "start", false);
+      seen[key] = true;
+      continue;
+    }
+    if (!seen[key]) {
+      starters[key] = startStamp(person, run, observedAt, "onCourse", !prev.primed);
+      seen[key] = true;
+    }
+  }
+  return { primed: true, seen, starters };
+}
+
+export function startFor(log, run, person) {
+  const id = skierId(person);
+  if (!id || !log?.starters) return null;
+  return log.starters[`${Number(run) || 0}:${id}`] || null;
+}
+
+/** Tap time minus the skier's start. Early taps stay at 0. Capped at 20 minutes. */
+export function delayFromTap(tapAt, startAt) {
+  if (!Number.isFinite(tapAt) || !Number.isFinite(startAt)) return null;
+  const delay = Math.round(tapAt - startAt);
+  if (delay <= 0) return 0;
+  return Math.min(TV_DELAY_MAX_MS, delay);
+}
+
+export function nudgeDelay(delayMs, deltaMs) {
+  const base = Number.isFinite(delayMs) ? delayMs : 0;
+  const next = base + (Number(deltaMs) || 0);
+  if (next <= 0) return 0;
+  return Math.min(TV_DELAY_MAX_MS, Math.round(next));
+}
+
+/** "0:42" or "1:05". */
+export function formatTvDelay(ms) {
+  const total = Math.max(0, Math.round((Number(ms) || 0) / 1000));
+  const seconds = total % 60;
+  const minutes = Math.floor(total / 60);
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
+export function holdMessage(waitMs) {
+  return `Holding results for ${formatTvDelay(waitMs)} so a reload stays behind the TV.`;
+}
+
+/**
+ * Skiers who have already left the start in the snapshot on screen.
+ * Excludes anyone still listed on course or in the next starters, who have their own Sync button.
+ */
+export function recentStarters(log, { run, asOf, limit = 4, exclude = [] } = {}) {
+  const skip = new Set(exclude.filter(Boolean));
+  const starters = log?.starters ? Object.values(log.starters) : [];
+  return starters
+    .filter((starter) => (
+      starter
+      && starter.at != null
+      && (run == null || starter.run === run)
+      && starter.at <= asOf
+      && !skip.has(skierId(starter))
+    ))
+    .sort((a, b) => b.at - a.at || String(a.bib).localeCompare(String(b.bib)))
+    .slice(0, limit);
+}
+
+/** A Sync tap is safe once the snapshot on screen has reached that start. */
+export function syncReady(log, run, person, viewAt) {
+  const starter = startFor(log, run, person);
+  if (!starter || starter.at == null || !Number.isFinite(viewAt) || starter.at > viewAt) return null;
+  return starter;
+}
+
+export function pushSnapshot(buffer, payload, at) {
+  const list = Array.isArray(buffer) ? buffer : [];
+  const next = list.length && list[list.length - 1].at === at ? list.slice(0, -1) : list.slice();
+  next.push({ at, payload });
+  return next;
+}
+
+/** Keep enough history to replay the maximum TV delay, including one frame at the edge. */
+export function pruneSnapshots(buffer, now, keepMs = TV_DELAY_MAX_MS) {
+  const list = Array.isArray(buffer) ? buffer : [];
+  const cutoff = now - keepMs;
+  let index = 0;
+  while (index < list.length - 1 && list[index + 1].at <= cutoff) index += 1;
+  return index ? list.slice(index) : list.slice();
+}
+
+/**
+ * The payload to draw at broadcast time.
+ * Not ready until the page has been collecting snapshots for the whole delay,
+ * so a reload cannot flash the live result.
+ */
+export function snapshotAt(buffer, now, delayMs, openedAt = now) {
+  const list = Array.isArray(buffer) ? buffer : [];
+  const delay = Math.max(0, Number(delayMs) || 0);
+  if (!list.length) {
+    if (delay === 0) return { payload: null, at: null, ready: true, holdUntil: null };
+    const holdUntil = openedAt + delay;
+    if (now >= holdUntil) return { payload: null, at: null, ready: true, holdUntil: null };
+    return { payload: null, at: null, ready: false, holdUntil, waitMs: holdUntil - now };
+  }
+  if (delay === 0) {
+    const last = list[list.length - 1];
+    return { payload: last.payload, at: last.at, ready: true, holdUntil: null };
+  }
+  const target = now - delay;
+  if (list[0].at > target) {
+    const holdUntil = list[0].at + delay;
+    return { payload: null, at: null, ready: false, holdUntil, waitMs: Math.max(0, holdUntil - now) };
+  }
+  let chosen = list[0];
+  for (const snap of list) {
+    if (snap.at <= target) chosen = snap;
+    else break;
+  }
+  return { payload: chosen.payload, at: chosen.at, ready: true, holdUntil: null };
+}
+
+export function parseTvDelay(raw, codex, now) {
+  if (!raw || !codex || !Number.isFinite(now)) return 0;
+  let data;
+  try { data = JSON.parse(raw); } catch { return 0; }
+  if (!data || typeof data !== "object") return 0;
+  if (String(data.codex).toLowerCase() !== String(codex).toLowerCase()) return 0;
+  const savedAt = Number(data.savedAt);
+  const delayMs = Number(data.delayMs);
+  if (!Number.isFinite(savedAt) || !Number.isFinite(delayMs)) return 0;
+  if (now - savedAt > TV_DELAY_TTL_MS || savedAt - now > 60_000) return 0;
+  if (delayMs <= 0) return 0;
+  return Math.min(TV_DELAY_MAX_MS, Math.round(delayMs));
+}
+
+export function serializeTvDelay(codex, delayMs, now) {
+  return JSON.stringify({
+    codex,
+    delayMs: Math.min(TV_DELAY_MAX_MS, Math.max(0, Math.round(Number(delayMs) || 0))),
+    savedAt: now,
+  });
+}
