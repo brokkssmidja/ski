@@ -30,6 +30,7 @@ test("names from the relay and from FIS match, and photos use the FIS picture ur
   assert.equal(displayName("Emma AICHER"), "Emma Aicher");
   assert.equal(displayName("PINHEIRO BRAATHEN Lucas"), "Lucas Pinheiro Braathen");
   assert.equal(displayName("GUT-BEHRAMI Lara"), "Lara Gut-Behrami");
+  assert.equal(displayName("MCGRATH Atle Lie"), "Atle Lie McGrath");
   assert.equal(nameKey("Emma AICHER"), nameKey("AICHER Emma"));
   assert.equal(initials("AICHER Emma"), "EA");
   assert.equal(initials("PINHEIRO BRAATHEN Lucas"), "LB");

@@ -35,7 +35,14 @@ export function photoUrl(id) {
 function titleWord(word) {
   return String(word)
     .split("-")
-    .map((part) => (part ? part[0].toUpperCase() + part.slice(1).toLowerCase() : part))
+    .map((part) => {
+      if (!part) return part;
+      const lower = part.toLowerCase();
+      if (lower.startsWith("mc") && lower.length > 2) {
+        return `Mc${lower[2].toUpperCase()}${lower.slice(3)}`;
+      }
+      return part[0].toUpperCase() + part.slice(1).toLowerCase();
+    })
     .join("-");
 }
 

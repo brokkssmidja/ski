@@ -23,11 +23,11 @@ const NATION = {
   SWE: "SE", TUR: "TR", UKR: "UA", USA: "US", UZB: "UZ",
 };
 
-export function relayUrl(codex) {
+export function relayUrl(codex, options = {}) {
   const url = new URL(LIVE_RELAY);
   url.searchParams.set("codex", codex);
-  url.searchParams.set("top", "10");
-  url.searchParams.set("next", "5");
+  url.searchParams.set("top", String(options.top ?? 10));
+  url.searchParams.set("next", String(options.next ?? 5));
   return url.toString();
 }
 
