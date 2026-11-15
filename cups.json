@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-15T09:56:32Z",
+  "updated": "2026-11-15T16:47:34Z",
   "people": {
     "EMMAAICHER": {
       "id": 237841,
@@ -181,9 +181,89 @@
       "id": 213820,
       "country": "BRA"
     },
+    "CLEMENTNOEL": {
+      "id": 187117,
+      "country": "FRA"
+    },
     "LOICMEILLARD": {
       "id": 174158,
       "country": "SUI"
+    },
+    "FABIANAXSWARTZ": {
+      "id": 252120,
+      "country": "SWE"
+    },
+    "ALEXVINATZER": {
+      "id": 204319,
+      "country": "ITA"
+    },
+    "PACORASSAT": {
+      "id": 194724,
+      "country": "FRA"
+    },
+    "ATLELIEMCGRATH": {
+      "id": 213823,
+      "country": "NOR"
+    },
+    "EDUARDHALLBERG": {
+      "id": 246186,
+      "country": "FIN"
+    },
+    "SAMUELKOLEGA": {
+      "id": 202395,
+      "country": "CRO"
+    },
+    "ALBERTPOPOV": {
+      "id": 190120,
+      "country": "BUL"
+    },
+    "OSCARANDREASSANDVIK": {
+      "id": 254733,
+      "country": "NOR"
+    },
+    "TANGUYNEF": {
+      "id": 175449,
+      "country": "SUI"
+    },
+    "LINUSSTRASSER": {
+      "id": 137475,
+      "country": "GER"
+    },
+    "SHIROAIHARA": {
+      "id": 220176,
+      "country": "JPN"
+    },
+    "BILLYMAJOR": {
+      "id": 173085,
+      "country": "GBR"
+    },
+    "DANIELYULE": {
+      "id": 148287,
+      "country": "SUI"
+    },
+    "GUSTAVWISSTING": {
+      "id": 260538,
+      "country": "SWE"
+    },
+    "TIMONHAUGAN": {
+      "id": 174450,
+      "country": "NOR"
+    },
+    "HENRIKKRISTOFFERSEN": {
+      "id": 154950,
+      "country": "NOR"
+    },
+    "AUGUSTEAULNETTE": {
+      "id": 228839,
+      "country": "FRA"
+    },
+    "LIAMWALLACE": {
+      "id": 203418,
+      "country": "CAN"
+    },
+    "JOHANNESSTROLZ": {
+      "id": 137598,
+      "country": "AUT"
     },
     "MARCOODERMATT": {
       "id": 190231,
@@ -200,10 +280,6 @@
     "FABIANGRATZ": {
       "id": 187951,
       "country": "GER"
-    },
-    "ALEXVINATZER": {
-      "id": 204319,
-      "country": "ITA"
     },
     "EIRIKHYSTADSOLBERG": {
       "id": 231688,
@@ -237,10 +313,6 @@
       "id": 195408,
       "country": "GER"
     },
-    "EDUARDHALLBERG": {
-      "id": 246186,
-      "country": "FIN"
-    },
     "JOSHUASTURM": {
       "id": 219779,
       "country": "AUT"
@@ -260,10 +332,6 @@
     "ALEXANDERSCHMID": {
       "id": 156112,
       "country": "GER"
-    },
-    "HENRIKKRISTOFFERSEN": {
-      "id": 154950,
-      "country": "NOR"
     },
     "THOMASTUMLER": {
       "id": 105040,
@@ -403,6 +471,46 @@
         }
       ]
     },
+    "AL-M-SL": {
+      "label": "Slalom",
+      "rows": [
+        {
+          "place": 1,
+          "name": "PINHEIRO BRAATHEN Lucas",
+          "country": "BRA",
+          "points": 100,
+          "id": 213820
+        },
+        {
+          "place": 2,
+          "name": "NOEL Clement",
+          "country": "FRA",
+          "points": 80,
+          "id": 187117
+        },
+        {
+          "place": 3,
+          "name": "MEILLARD Loic",
+          "country": "SUI",
+          "points": 60,
+          "id": 174158
+        },
+        {
+          "place": 4,
+          "name": "AX SWARTZ Fabian",
+          "country": "SWE",
+          "points": 50,
+          "id": 252120
+        },
+        {
+          "place": 5,
+          "name": "VINATZER Alex",
+          "country": "ITA",
+          "points": 45,
+          "id": 204319
+        }
+      ]
+    },
     "AL-M-GS": {
       "label": "Giant Slalom",
       "rows": [
@@ -450,36 +558,36 @@
           "place": 1,
           "name": "PINHEIRO BRAATHEN Lucas",
           "country": "BRA",
-          "points": 100,
+          "points": 200,
           "id": 213820
         },
         {
           "place": 2,
           "name": "MEILLARD Loic",
           "country": "SUI",
-          "points": 80,
+          "points": 140,
           "id": 174158
         },
         {
           "place": 3,
+          "name": "VINATZER Alex",
+          "country": "ITA",
+          "points": 81,
+          "id": 204319
+        },
+        {
+          "place": 4,
+          "name": "NOEL Clement",
+          "country": "FRA",
+          "points": 80,
+          "id": 187117
+        },
+        {
+          "place": 5,
           "name": "ODERMATT Marco",
           "country": "SUI",
           "points": 60,
           "id": 190231
-        },
-        {
-          "place": 4,
-          "name": "RADAMUS River",
-          "country": "USA",
-          "points": 50,
-          "id": 194503
-        },
-        {
-          "place": 5,
-          "name": "HAASER Raphael",
-          "country": "AUT",
-          "points": 45,
-          "id": 191305
         }
       ]
     }

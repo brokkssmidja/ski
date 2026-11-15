@@ -134,7 +134,23 @@
       ],
       "watch": "US: Peacock (live). YouTube after 24h.",
       "results": {
-        "podium": []
+        "podium": [
+          {
+            "place": 1,
+            "name": "PINHEIRO BRAATHEN Lucas",
+            "country": "BRA"
+          },
+          {
+            "place": 2,
+            "name": "NOEL Clement",
+            "country": "FRA"
+          },
+          {
+            "place": 3,
+            "name": "MEILLARD Loic",
+            "country": "SUI"
+          }
+        ]
       }
     },
     {
