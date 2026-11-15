@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Inga’s tables</title>
+  <meta name="description" content="Practice the times tables from 1×1 to 10×10. Progress stays on this device.">
+  <meta name="theme-color" content="#f7f1e7">
+  <meta name="color-scheme" content="light">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tables">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="home" class="screen">
+    <header class="brand">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="16" fill="#ee7a34"/>
+        <path d="M20 20 L44 44 M44 20 L20 44" stroke="#fff8ef" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <div class="brand-text">
+        <h1>Inga’s tables</h1>
+        <p>1 × 1 to 10 × 10</p>
+      </div>
+      <p class="lit"><strong id="lit-num">0</strong> of 100</p>
+    </header>
+
+    <div class="board">
+      <div id="grid" class="grid" aria-hidden="true"></div>
+    </div>
+    <p id="grid-summary" class="sr-only"></p>
+
+    <div class="panel">
+      <ul class="legend" aria-label="Square colors">
+        <li><i class="swatch swatch-new" aria-hidden="true"></i> Not yet</li>
+        <li><i class="swatch swatch-learning" aria-hidden="true"></i> Learning</li>
+        <li><i class="swatch swatch-mastered" aria-hidden="true"></i> Mastered</li>
+      </ul>
+      <p id="cell-info" class="cell-info" aria-live="polite">Tap a square.</p>
+      <div class="actions">
+        <button type="button" class="go" id="start-practice">
+          <span class="go-title">Practice</span>
+          <span class="go-sub">20 cards · 5 minutes</span>
+        </button>
+        <button type="button" class="go go-alt" id="start-speed">
+          <span class="go-title">Speed round</span>
+          <span class="go-sub" id="best-label">60 seconds</span>
+        </button>
+      </div>
+      <p class="why">Three quick right answers in a row light a square, and it stays lit. 7 × 8 and 8 × 7 are separate squares, so both orders get practiced.</p>
+      <button type="button" class="quiet" id="open-reset">Erase progress</button>
+    </div>
+  </main>
+
+  <section id="play" class="screen" hidden>
+    <header class="bar">
+      <button type="button" class="back" id="play-back"><span aria-hidden="true">‹</span> Grid</button>
+      <p class="bar-mid" id="play-count">1 / 20</p>
+      <p class="bar-time" id="play-time">5:00</p>
+    </header>
+    <div class="timerbar" aria-hidden="true"><span id="play-bar"></span></div>
+    <div class="play-frame">
+      <div class="prompt">
+        <h2 class="sr-only">Practice</h2>
+        <p id="play-problem" class="problem" aria-live="polite"></p>
+        <p id="play-entry" class="entry" aria-hidden="true"></p>
+        <div id="play-feedback" class="feedback" aria-live="polite" aria-atomic="true">
+          <p id="play-note"></p>
+          <p id="play-trick" class="trick" hidden></p>
+        </div>
+      </div>
+      <div class="answer-side">
+        <div class="pad" id="play-pad">
+          <button type="button" class="key" data-key="1">1</button>
+          <button type="button" class="key" data-key="2">2</button>
+          <button type="button" class="key" data-key="3">3</button>
+          <button type="button" class="key" data-key="4">4</button>
+          <button type="button" class="key" data-key="5">5</button>
+          <button type="button" class="key" data-key="6">6</button>
+          <button type="button" class="key" data-key="7">7</button>
+          <button type="button" class="key" data-key="8">8</button>
+          <button type="button" class="key" data-key="9">9</button>
+          <button type="button" class="key" data-key="del" aria-label="Delete">
+            <svg viewBox="0 0 24 24" aria-hidden="true" width="28" height="28">
+              <path d="M8 5h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-6-7 6-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M11 9l6 6M17 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button type="button" class="key" data-key="0">0</button>
+          <button type="button" class="key ok" data-key="ok">OK</button>
+        </div>
+        <button type="button" class="go" id="play-continue" hidden>Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sprint" class="screen" hidden>
+    <header class="bar">
+      <button type="button" class="back" id="speed-back"><span aria-hidden="true">‹</span> Grid</button>
+      <p class="bar-mid">
+        <span id="speed-score">0 right</span>
+        <span class="bar-sub" id="speed-best">First round</span>
+      </p>
+      <p class="bar-time" id="speed-time">60</p>
+    </header>
+    <div class="timerbar" aria-hidden="true"><span id="speed-bar"></span></div>
+    <div class="play-frame">
+      <div class="prompt">
+        <h2 class="sr-only">Speed round</h2>
+        <p id="speed-problem" class="problem" aria-live="polite"></p>
+        <p id="speed-entry" class="entry" aria-hidden="true"></p>
+        <p id="speed-note" class="feedback" aria-live="polite"></p>
+        <p id="speed-hint" class="hint" hidden>It checks itself when the number is complete.</p>
+      </div>
+      <div class="answer-side">
+        <div class="pad" id="speed-pad">
+          <button type="button" class="key" data-key="1">1</button>
+          <button type="button" class="key" data-key="2">2</button>
+          <button type="button" class="key" data-key="3">3</button>
+          <button type="button" class="key" data-key="4">4</button>
+          <button type="button" class="key" data-key="5">5</button>
+          <button type="button" class="key" data-key="6">6</button>
+          <button type="button" class="key" data-key="7">7</button>
+          <button type="button" class="key" data-key="8">8</button>
+          <button type="button" class="key" data-key="9">9</button>
+          <button type="button" class="key" data-key="del" aria-label="Delete">
+            <svg viewBox="0 0 24 24" aria-hidden="true" width="28" height="28">
+              <path d="M8 5h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-6-7 6-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M11 9l6 6M17 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button type="button" class="key" data-key="0">0</button>
+          <button type="button" class="key ok" data-key="ok">OK</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="summary" class="screen" hidden>
+    <div class="summary-card">
+      <p id="sum-kicker" class="kicker"></p>
+      <h2 id="sum-title" tabindex="-1"></h2>
+      <p id="sum-detail"></p>
+      <p id="sum-extra" hidden></p>
+      <div class="actions">
+        <button type="button" class="go" id="sum-again">Another round</button>
+        <button type="button" class="go go-alt" id="sum-home">Back to the grid</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="celebrate" class="celebrate" hidden>
+    <div class="celebrate-card" role="dialog" aria-modal="true" aria-labelledby="celebrate-title">
+      <p id="celebrate-kicker" class="kicker"></p>
+      <h2 id="celebrate-title"></h2>
+      <p id="celebrate-sub"></p>
+      <div id="celebrate-row" class="mini-row" hidden></div>
+      <button type="button" class="go" id="celebrate-go">Keep going</button>
+    </div>
+  </div>
+
+  <dialog id="reset-dialog" aria-labelledby="reset-title">
+    <h2 id="reset-title">Erase everything on this device?</h2>
+    <p id="reset-copy">This clears the squares, what practice remembers, and the speed-round best.</p>
+    <button type="button" class="hold" id="reset-hold"><span>Hold to erase</span></button>
+    <button type="button" class="go" id="reset-cancel" autofocus>Keep my squares</button>
+  </dialog>
+
+  <noscript><p class="why">Inga’s tables needs JavaScript. Progress is saved on this device only.</p></noscript>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
