@@ -43,6 +43,7 @@ import {
   icsFor,
   isFinished,
   liveCodex,
+  liveHref,
   liveTiming,
   localDate,
   matches,
@@ -67,6 +68,17 @@ import {
   standingsChoices,
   standingRows,
 } from "./results.js";
+import {
+  ageLabel,
+  badgeText,
+  displayState,
+  findRace,
+  parseTimingXml,
+  raceModel,
+  raceSlug,
+  timingXmlUrl,
+} from "./racemodel.js";
+import { renderRacePage } from "./racepage.js";
 
 const COUNTRY = {
   ALB: "Albania", AND: "Andorra", AUT: "Austria", CAN: "Canada", CHN: "China", FIN: "Finland", FRA: "France",
@@ -90,6 +102,8 @@ const sportBox = document.querySelector("#sport");
 const genderBox = document.querySelector("#gender");
 const heroEl = document.querySelector("#hero");
 const liveStrip = document.querySelector("#live-strip");
+const raceEl = document.querySelector("#race");
+const RACE_CACHE = "ski-race-cache";
 const upcomingEl = document.querySelector("#upcoming");
 const pastEl = document.querySelector("#past");
 const pastToggle = document.querySelector("#past-toggle");
@@ -728,7 +742,13 @@ function ensureLive() {
     }
   }
   for (const id of [...liveSessions.keys()]) {
-    if (!seen.has(id)) stopLive(id);
+    if (seen.has(id)) continue;
+    const session = liveSessions.get(id);
+    const race = races.find((item) => item.id === id);
+    const open = findRace(location.hash, races)?.id === id;
+    const onCard = race && !isFinished(race, clock) && liveTiming(race, clock);
+    if (session?.raceId && (open || onCard)) continue;
+    stopLive(id);
   }
 }
 
@@ -763,10 +783,14 @@ function adjustDelay(id, delayMs) {
   session.delayMs = delayMs;
   session.syncNote = "";
   writeStoredDelay(session.codex, delayMs);
-  publishView(session, Date.now());
+  publishRace(session, Date.now());
   paintLiveSlots(id);
   const race = races.find((item) => item.id === id);
-  if (race) paintHeading(race);
+  if (race) {
+    paintHeading(race);
+    paintRace(race);
+    paintBadge(race);
+  }
 }
 
 function syncSkier(id, person) {
@@ -782,10 +806,14 @@ function syncSkier(id, person) {
     ? "This skier was already on course when the page opened, so this delay may be short. Tap the next start to correct it."
     : "";
   writeStoredDelay(session.codex, delay);
-  publishView(session, Date.now());
+  publishRace(session, Date.now());
   paintLiveSlots(id);
   const race = races.find((item) => item.id === id);
-  if (race) paintHeading(race);
+  if (race) {
+    paintHeading(race);
+    paintRace(race);
+    paintBadge(race);
+  }
 }
 
 function refreshLiveViews() {
@@ -993,6 +1021,232 @@ async function ensureFinish() {
   }));
 }
 
+function readRaceCache(id) {
+  try {
+    const all = JSON.parse(localStorage.getItem(RACE_CACHE) || "{}");
+    const hit = all[id];
+    if (!hit?.payload || Date.now() - Number(hit.at) > 12 * 60 * 60 * 1000) return null;
+    return hit;
+  } catch {
+    return null;
+  }
+}
+
+function writeRaceCache(id, shown) {
+  if (!shown?.payload) return;
+  try {
+    const all = JSON.parse(localStorage.getItem(RACE_CACHE) || "{}");
+    all[id] = { at: shown.at, payload: shown.payload, field: shown.field || null };
+    const ids = Object.keys(all);
+    while (ids.length > 3) delete all[ids.shift()];
+    localStorage.setItem(RACE_CACHE, JSON.stringify(all));
+  } catch {
+    /* private mode */
+  }
+}
+
+function publishRace(session, now = Date.now()) {
+  const shown = displayState({
+    snapshots: session.buffer,
+    delayMs: session.delayMs,
+    now,
+    cached: session.cached,
+  });
+  session.shown = shown;
+  session.view = shown?.payload || null;
+  session.viewAt = shown?.at ?? null;
+  if (shown?.payload) writeRaceCache(session.raceId, shown);
+}
+
+function paintBadge(race) {
+  const node = document.querySelector(`[data-badge="${race.id}"]`);
+  if (!node) return;
+  const session = liveSessions.get(race.id);
+  node.textContent = badgeText(session?.shown?.payload || session?.payload);
+}
+
+function paintRace(race) {
+  if (!raceEl || findRace(location.hash, races)?.id !== race.id) return;
+  const session = liveSessions.get(race.id);
+  const shown = session?.shown;
+  const model = raceModel({
+    payload: shown?.payload || null,
+    field: shown?.field || null,
+    at: shown?.at,
+    now: Date.now(),
+    judged: race.sport === "freeski",
+  });
+  renderRacePage(raceEl, {
+    title: race.discipline,
+    kicker: `${SPORT[race.sport]} · ${GENDER[race.gender]}`,
+    venue: `${flag(race.country)} ${race.venue}`,
+    when: raceCalendar(race).label,
+    times: timesNode(race, "p"),
+    team: contenderNode(race),
+    model,
+    updatedAt: shown?.at,
+    delayMs: session?.delayMs || 0,
+    delayOpen: !!session?.delayOpen,
+    resultsOpen: !!session?.resultsOpen,
+    syncNote: session?.syncNote || "",
+    waiting: !shown && race.sport !== "freeski",
+  }, {
+    onBack: () => { location.hash = ""; },
+    liveHref: liveTiming(race, clock)?.href || liveHref(race),
+    canSync: (person) => {
+      if (!session?.shown || session.viewAt == null) return false;
+      return !!syncReady(session.starts, Number(session.shown.payload?.run) || 0, person, session.viewAt);
+    },
+    onSync: (person) => syncSkier(race.id, person),
+    onNudge: (delta) => adjustDelay(race.id, nudgeDelay(session?.delayMs || 0, delta)),
+    onLive: () => adjustDelay(race.id, 0),
+    onToggleResults: () => {
+      if (!session) return;
+      session.resultsOpen = !session.resultsOpen;
+      paintRace(race);
+    },
+    onToggleDelay: () => {
+      if (!session) return;
+      session.delayOpen = !session.delayOpen;
+      paintRace(race);
+    },
+  });
+}
+
+function armRace(race) {
+  const session = liveSessions.get(race.id);
+  if (!session) return;
+  clearTimeout(session.timer);
+  session.timer = null;
+  const timing = liveTiming(race, clock);
+  const delay = pollDelay(session.status, {
+    hidden: document.hidden,
+    pulsing: timing?.pulsing,
+    error: session.error,
+  });
+  if (delay == null) return;
+  session.timer = setTimeout(() => { void pollRace(race); }, delay);
+}
+
+async function pollRace(race) {
+  const session = liveSessions.get(race.id);
+  if (!session?.codex) return;
+  clearTimeout(session.timer);
+  session.timer = null;
+  session.abort?.abort();
+  const abort = new AbortController();
+  session.abort = abort;
+  try {
+    const xmlUrl = timingXmlUrl(session.codex);
+    const [relayRes, xmlText] = await Promise.all([
+      fetch(relayUrl(session.codex, { top: 40, next: 40 }), { cache: "no-store", signal: abort.signal }),
+      xmlUrl
+        ? fetch(xmlUrl, { cache: "no-store", signal: abort.signal }).then((response) => (response.ok ? response.text() : "")).catch(() => "")
+        : Promise.resolve(""),
+    ]);
+    let data = null;
+    try { data = await relayRes.json(); } catch { data = null; }
+    if (abort.signal.aborted || liveSessions.get(race.id) !== session) return;
+    const at = Date.now();
+    if (relayRes.ok && livePayloadOk(data, session.codex)) {
+      session.error = null;
+      session.status = data.status;
+      session.payload = data;
+      session.starts = observeStarts(session.starts, data, at);
+      const field = xmlText ? parseTimingXml(xmlText) : null;
+      if (field) session.field = field;
+      const cutoff = at - 20 * 60 * 1000;
+      session.buffer = session.buffer.filter((snap) => snap.at >= cutoff);
+      session.buffer.push({ at, payload: data, field: field || session.field || null });
+    } else {
+      session.error = "http";
+    }
+    publishRace(session, at);
+    paintRace(race);
+    paintBadge(race);
+    armRace(race);
+  } catch (err) {
+    if (err?.name === "AbortError" || abort.signal.aborted) return;
+    if (liveSessions.get(race.id) !== session) return;
+    session.error = "http";
+    paintRace(race);
+    armRace(race);
+  } finally {
+    if (session.abort === abort) session.abort = null;
+  }
+}
+
+function openFeed(race) {
+  if (!race) return null;
+  let session = liveSessions.get(race.id);
+  if (!session) {
+    const codex = liveCodex(race);
+    const cached = readRaceCache(race.id);
+    session = {
+      raceId: race.id,
+      codex,
+      timer: null,
+      abort: null,
+      payload: cached?.payload || null,
+      field: cached?.field || null,
+      buffer: [],
+      cached,
+      shown: cached ? { ...cached, fromCache: true } : null,
+      view: cached?.payload || null,
+      viewAt: cached?.at ?? null,
+      delayMs: codex ? readStoredDelay(codex) : 0,
+      starts: emptyStartLog(),
+      status: cached?.payload?.status || null,
+      error: null,
+      expanded: false,
+      delayOpen: false,
+      resultsOpen: false,
+      syncNote: "",
+      openedAt: Date.now(),
+    };
+    liveSessions.set(race.id, session);
+    if (codex) void pollRace(race);
+  } else if (session.codex && !session.timer && !session.abort && session.status !== "finished") {
+    void pollRace(race);
+  }
+  return session;
+}
+
+function refreshOpenRace() {
+  const race = findRace(location.hash, races);
+  if (!race) return;
+  const session = liveSessions.get(race.id);
+  if (!session) return;
+  const before = session.shown?.at;
+  const beforeCache = session.shown?.fromCache;
+  publishRace(session, Date.now());
+  if (session.shown?.at !== before || session.shown?.fromCache !== beforeCache) paintRace(race);
+  else {
+    const age = raceEl?.querySelector(".age[data-at]");
+    if (age) age.textContent = ageLabel(Number(age.dataset.at), Date.now());
+  }
+}
+
+let routedId = "";
+
+function applyRoute() {
+  const race = findRace(location.hash, races);
+  document.body.classList.toggle("on-race", !!race);
+  if (!race || !raceEl) {
+    if (raceEl) {
+      raceEl.hidden = true;
+      raceEl.replaceChildren();
+    }
+    routedId = "";
+    return;
+  }
+  raceEl.hidden = false;
+  openFeed(race);
+  paintRace(race);
+  if (routedId !== race.id) window.scrollTo(0, 0);
+  routedId = race.id;
+}
+
 function renderHero(race, now) {
   heroEl.replaceChildren();
   if (!race) {
@@ -1004,6 +1258,28 @@ function renderHero(race, now) {
   const classes = ["hero"];
   if (status === "live") classes.push("live");
   if (contendersByCountry(race).length) classes.push("featured");
+  const timing = !finished && liveTiming(race, now);
+  if (timing) {
+    const card = el("a", `${classes.join(" ")} race-open`);
+    card.href = `#${raceSlug(race, races)}`;
+    const bits = ["Live", SPORT[race.sport], GENDER[race.gender]];
+    card.append(el("p", "kicker", bits.join(" · ")));
+    card.append(el("h2", "", race.discipline));
+    card.append(el("p", "venue", `${flag(race.country)} ${race.venue}, ${COUNTRY[race.country] || race.country}`));
+    card.append(el("p", "when", raceCalendar(race).label));
+    card.append(timesNode(race, "p"));
+    const watching = contenderNode(race);
+    if (watching) card.append(watching);
+    openFeed(race);
+    const badge = el("p", "live-badge");
+    badge.dataset.badge = race.id;
+    const dot = el("span", "dot");
+    dot.setAttribute("aria-hidden", "true");
+    badge.append(dot, document.createTextNode(` ${badgeText(liveSessions.get(race.id)?.shown?.payload)}`));
+    card.append(badge);
+    heroEl.append(card);
+    return;
+  }
   const card = el("article", classes.join(" "));
   const bits = [SPORT[race.sport], GENDER[race.gender]];
   if (status === "live") bits.unshift("Live");
@@ -1051,8 +1327,16 @@ function raceRow(race, now) {
     if (podium) body.append(podium);
     const results = resultsLink(race);
     if (results) body.append(results);
+  } else if (liveCodex(race) && liveTiming(race, now)) {
+    openFeed(race);
+    const link = el("a", "live-badge small");
+    link.href = `#${raceSlug(race, races)}`;
+    link.dataset.badge = race.id;
+    const dot = el("span", "dot");
+    dot.setAttribute("aria-hidden", "true");
+    link.append(dot, document.createTextNode(` ${badgeText(liveSessions.get(race.id)?.shown?.payload)}`));
+    body.append(link);
   } else {
-    if (liveCodex(race) && liveTiming(race, now)) body.append(liveSlot(race));
     const live = liveLink(race, now);
     if (live) body.append(live);
   }
@@ -1068,8 +1352,19 @@ function renderLiveStrip(hero, now) {
     if (phase(race, now) !== "past" || !liveTiming(race, now)) continue;
     const card = el("article", "live-card");
     const who = `${GENDER[race.gender]} ${race.discipline}`;
-    card.append(el("p", "", `${who} · ${race.venue}`));
-    card.append(liveLink(race, now));
+    const link = el("a", "race-open", `${who} · ${race.venue}`);
+    link.href = `#${raceSlug(race, races)}`;
+    card.append(link);
+    if (liveCodex(race)) {
+      openFeed(race);
+      const badge = el("a", "live-badge small");
+      badge.href = link.href;
+      badge.dataset.badge = race.id;
+      badge.textContent = badgeText(liveSessions.get(race.id)?.shown?.payload);
+      card.append(badge);
+    } else {
+      card.append(liveLink(race, now));
+    }
     liveStrip.append(card);
   }
 }
@@ -1157,10 +1452,12 @@ function render() {
   signature = viewSignature();
   ensureLive();
   void ensureFinish();
+  applyRoute();
 }
 
 function tick() {
   const hero = nextRace(races, clock, filters);
+  refreshOpenRace();
   refreshLiveViews();
   if (viewSignature() !== signature) {
     render();
@@ -1285,6 +1582,8 @@ function setupInstall() {
     hint.hidden = true;
   });
 }
+
+window.addEventListener("hashchange", () => applyRoute());
 
 setupInstall();
 
