@@ -1,93 +1,129 @@
 {
-  "updated": "2026-11-21T09:12:09Z",
+  "updated": "2026-11-21T16:47:50Z",
   "people": {
-    "EMMAAICHER": {
-      "id": 237841,
-      "country": "GER"
-    },
     "LARACOLTURI": {
       "id": 269077,
       "country": "ALB"
     },
-    "KATHARINATRUPPE": {
-      "id": 175818,
-      "country": "AUT"
-    },
-    "ZRINKALJUTIC": {
-      "id": 252519,
-      "country": "CRO"
+    "EMMAAICHER": {
+      "id": 237841,
+      "country": "GER"
     },
     "ANNASWENNLARSSON": {
       "id": 127270,
       "country": "SWE"
     },
-    "MARIONCHEVRIER": {
-      "id": 220898,
-      "country": "FRA"
-    },
-    "MARIELAMURE": {
-      "id": 220926,
-      "country": "FRA"
-    },
-    "MADISONHOFFMAN": {
-      "id": 211875,
-      "country": "AUS"
-    },
-    "KATHARINAHUBER": {
-      "id": 165766,
-      "country": "AUT"
-    },
-    "WENDYHOLDENER": {
-      "id": 148331,
-      "country": "SUI"
-    },
-    "CAMILLERAST": {
-      "id": 203812,
-      "country": "SUI"
-    },
-    "DZENIFERAGERMANE": {
-      "id": 240236,
-      "country": "LAT"
-    },
     "SARAHECTOR": {
       "id": 140095,
       "country": "SWE"
     },
-    "ALINEHOEPLI": {
-      "id": 220457,
+    "ZRINKALJUTIC": {
+      "id": 252519,
+      "country": "CRO"
+    },
+    "CAMILLERAST": {
+      "id": 203812,
       "country": "SUI"
     },
     "AJHURT": {
       "id": 210951,
       "country": "USA"
     },
-    "PETRAVLHOVA": {
-      "id": 168809,
-      "country": "SVK"
+    "MARIONCHEVRIER": {
+      "id": 220898,
+      "country": "FRA"
     },
-    "NEJADVORNIK": {
-      "id": 221143,
-      "country": "SLO"
+    "KATHARINATRUPPE": {
+      "id": 175818,
+      "country": "AUT"
     },
-    "LENADUERR": {
-      "id": 126526,
-      "country": "GER"
+    "HANNAARONSSONELFMAN": {
+      "id": 228233,
+      "country": "SWE"
     },
-    "BEATRICESOLA": {
-      "id": 245042,
-      "country": "ITA"
+    "DZENIFERAGERMANE": {
+      "id": 240236,
+      "country": "LAT"
+    },
+    "MARIELAMURE": {
+      "id": 220926,
+      "country": "FRA"
     },
     "LARADELLAMEA": {
       "id": 203427,
       "country": "ITA"
     },
+    "LENADUERR": {
+      "id": 126526,
+      "country": "GER"
+    },
+    "MADISONHOFFMAN": {
+      "id": 211875,
+      "country": "AUS"
+    },
+    "ALINEHOEPLI": {
+      "id": 220457,
+      "country": "SUI"
+    },
+    "KATHARINAHUBER": {
+      "id": 165766,
+      "country": "AUT"
+    },
+    "NEJADVORNIK": {
+      "id": 221143,
+      "country": "SLO"
+    },
+    "WENDYHOLDENER": {
+      "id": 148331,
+      "country": "SUI"
+    },
+    "CAITLINMCFARLANE": {
+      "id": 228828,
+      "country": "FRA"
+    },
+    "PAULAMOLTZAN": {
+      "id": 155859,
+      "country": "USA"
+    },
     "CHARLOTTELINGG": {
       "id": 203810,
       "country": "LIE"
     },
+    "SELINAEGLOFF": {
+      "id": 220815,
+      "country": "SUI"
+    },
+    "PETRAVLHOVA": {
+      "id": 168809,
+      "country": "SVK"
+    },
+    "KATIEHENSIEN": {
+      "id": 202350,
+      "country": "USA"
+    },
+    "ELIANECHRISTEN": {
+      "id": 203777,
+      "country": "SUI"
+    },
+    "BEATRICESOLA": {
+      "id": 245042,
+      "country": "ITA"
+    },
+    "MARTINADUBOVSKA": {
+      "id": 145630,
+      "country": "CZE"
+    },
+    "CORNELIAOEHLUND": {
+      "id": 260652,
+      "country": "SWE"
+    },
     "LAURENCESTGERMAIN": {
       "id": 155388,
       "country": "CAN"
+    },
+    "LIVMORITZ": {
+      "id": 252304,
+      "country": "USA"
     },
     "VALENTINARINGSWANNER": {
       "id": 260881,
@@ -100,18 +136,6 @@
     "FRANZISKAGRITSCH": {
       "id": 191309,
       "country": "AUT"
-    },
-    "CAITLINMCFARLANE": {
-      "id": 228828,
-      "country": "FRA"
-    },
-    "HANNAARONSSONELFMAN": {
-      "id": 228233,
-      "country": "SWE"
-    },
-    "PAULAMOLTZAN": {
-      "id": 155859,
-      "country": "USA"
     },
     "ASJAZENERE": {
       "id": 175037,
@@ -356,38 +380,38 @@
       "rows": [
         {
           "place": 1,
-          "name": "AICHER Emma",
-          "country": "GER",
-          "points": 100,
-          "id": 237841
-        },
-        {
-          "place": 2,
           "name": "COLTURI Lara",
           "country": "ALB",
-          "points": 80,
+          "points": 180,
           "id": 269077
         },
         {
+          "place": 2,
+          "name": "AICHER Emma",
+          "country": "GER",
+          "points": 132,
+          "id": 237841
+        },
+        {
           "place": 3,
-          "name": "TRUPPE Katharina",
-          "country": "AUT",
-          "points": 60,
-          "id": 175818
+          "name": "SWENN LARSSON Anna",
+          "country": "SWE",
+          "points": 105,
+          "id": 127270
         },
         {
           "place": 4,
-          "name": "LJUTIC Zrinka",
-          "country": "CRO",
-          "points": 50,
-          "id": 252519
+          "name": "HECTOR Sara",
+          "country": "SWE",
+          "points": 100,
+          "id": 140095
         },
         {
           "place": 5,
-          "name": "SWENN LARSSON Anna",
-          "country": "SWE",
-          "points": 45,
-          "id": 127270
+          "name": "LJUTIC Zrinka",
+          "country": "CRO",
+          "points": 86,
+          "id": 252519
         }
       ]
     },
@@ -436,38 +460,38 @@
       "rows": [
         {
           "place": 1,
-          "name": "AICHER Emma",
-          "country": "GER",
-          "points": 160,
-          "id": 237841
-        },
-        {
-          "place": 1,
           "name": "COLTURI Lara",
           "country": "ALB",
-          "points": 160,
+          "points": 260,
           "id": 269077
         },
         {
+          "place": 2,
+          "name": "AICHER Emma",
+          "country": "GER",
+          "points": 192,
+          "id": 237841
+        },
+        {
           "place": 3,
-          "name": "MOLTZAN Paula",
-          "country": "USA",
-          "points": 100,
-          "id": 155859
+          "name": "HECTOR Sara",
+          "country": "SWE",
+          "points": 150,
+          "id": 140095
         },
         {
           "place": 4,
-          "name": "LJUTIC Zrinka",
-          "country": "CRO",
-          "points": 74,
-          "id": 252519
+          "name": "MOLTZAN Paula",
+          "country": "USA",
+          "points": 120,
+          "id": 155859
         },
         {
           "place": 5,
-          "name": "HECTOR Sara",
-          "country": "SWE",
-          "points": 70,
-          "id": 140095
+          "name": "LJUTIC Zrinka",
+          "country": "CRO",
+          "points": 110,
+          "id": 252519
         }
       ]
     },

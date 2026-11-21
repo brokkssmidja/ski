@@ -169,7 +169,23 @@
       ],
       "watch": "US: Peacock (live). YouTube after 24h.",
       "results": {
-        "podium": []
+        "podium": [
+          {
+            "place": 1,
+            "name": "COLTURI Lara",
+            "country": "ALB"
+          },
+          {
+            "place": 2,
+            "name": "HECTOR Sara",
+            "country": "SWE"
+          },
+          {
+            "place": 3,
+            "name": "SWENN LARSSON Anna",
+            "country": "SWE"
+          }
+        ]
       }
     },
     {
