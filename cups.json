@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-22T09:44:23Z",
+  "updated": "2026-11-22T17:25:09Z",
   "people": {
     "LARACOLTURI": {
       "id": 269077,
@@ -201,41 +201,85 @@
       "id": 232757,
       "country": "ITA"
     },
-    "LUCASPINHEIROBRAATHEN": {
-      "id": 213820,
-      "country": "BRA"
+    "TIMONHAUGAN": {
+      "id": 174450,
+      "country": "NOR"
     },
     "CLEMENTNOEL": {
       "id": 187117,
       "country": "FRA"
     },
-    "LOICMEILLARD": {
-      "id": 174158,
-      "country": "SUI"
+    "LUCASPINHEIROBRAATHEN": {
+      "id": 213820,
+      "country": "BRA"
     },
     "FABIANAXSWARTZ": {
       "id": 252120,
       "country": "SWE"
     },
-    "ALEXVINATZER": {
-      "id": 204319,
-      "country": "ITA"
+    "TANGUYNEF": {
+      "id": 175449,
+      "country": "SUI"
+    },
+    "EIRIKHYSTADSOLBERG": {
+      "id": 231688,
+      "country": "NOR"
+    },
+    "LOICMEILLARD": {
+      "id": 174158,
+      "country": "SUI"
+    },
+    "SAMUELKOLEGA": {
+      "id": 202395,
+      "country": "CRO"
     },
     "PACORASSAT": {
       "id": 194724,
       "country": "FRA"
     },
+    "ARMANDMARCHANT": {
+      "id": 189043,
+      "country": "BEL"
+    },
+    "ALEXVINATZER": {
+      "id": 204319,
+      "country": "ITA"
+    },
+    "MICHAELMATT": {
+      "id": 149514,
+      "country": "AUT"
+    },
     "ATLELIEMCGRATH": {
       "id": 213823,
       "country": "NOR"
+    },
+    "LINUSSTRASSER": {
+      "id": 137475,
+      "country": "GER"
     },
     "EDUARDHALLBERG": {
       "id": 246186,
       "country": "FIN"
     },
-    "SAMUELKOLEGA": {
-      "id": 202395,
-      "country": "CRO"
+    "LAURIETAYLOR": {
+      "id": 175928,
+      "country": "GBR"
+    },
+    "DANIELYULE": {
+      "id": 148287,
+      "country": "SUI"
+    },
+    "JETTSEYMOUR": {
+      "id": 196192,
+      "country": "USA"
+    },
+    "AUGUSTEAULNETTE": {
+      "id": 228839,
+      "country": "FRA"
+    },
+    "STEVENAMIEZ": {
+      "id": 194749,
+      "country": "FRA"
     },
     "ALBERTPOPOV": {
       "id": 190120,
@@ -245,13 +289,13 @@
       "id": 254733,
       "country": "NOR"
     },
-    "TANGUYNEF": {
-      "id": 175449,
-      "country": "SUI"
+    "JOSHUASTURM": {
+      "id": 219779,
+      "country": "AUT"
     },
-    "LINUSSTRASSER": {
-      "id": 137475,
-      "country": "GER"
+    "HANSGRAHLMADSEN": {
+      "id": 246187,
+      "country": "NOR"
     },
     "SHIROAIHARA": {
       "id": 220176,
@@ -261,32 +305,48 @@
       "id": 173085,
       "country": "GBR"
     },
-    "DANIELYULE": {
-      "id": 148287,
-      "country": "SUI"
+    "ANTOINEAZZOLIN": {
+      "id": 239318,
+      "country": "FRA"
     },
     "GUSTAVWISSTING": {
       "id": 260538,
       "country": "SWE"
     },
-    "TIMONHAUGAN": {
-      "id": 174450,
-      "country": "NOR"
-    },
     "HENRIKKRISTOFFERSEN": {
       "id": 154950,
       "country": "NOR"
     },
-    "AUGUSTEAULNETTE": {
-      "id": 228839,
-      "country": "FRA"
+    "FABIOGSTREIN": {
+      "id": 191304,
+      "country": "AUT"
+    },
+    "SAMMAES": {
+      "id": 194529,
+      "country": "BEL"
     },
     "LIAMWALLACE": {
       "id": 203418,
       "country": "CAN"
     },
+    "BENJAMINRITCHIE": {
+      "id": 210997,
+      "country": "USA"
+    },
     "JOHANNESSTROLZ": {
       "id": 137598,
+      "country": "AUT"
+    },
+    "DOMINIKRASCHNER": {
+      "id": 159978,
+      "country": "AUT"
+    },
+    "TOBIASKASTLUNGER": {
+      "id": 205709,
+      "country": "ITA"
+    },
+    "ADRIANPERTL": {
+      "id": 175813,
       "country": "AUT"
     },
     "MARCOODERMATT": {
@@ -304,10 +364,6 @@
     "FABIANGRATZ": {
       "id": 187951,
       "country": "GER"
-    },
-    "EIRIKHYSTADSOLBERG": {
-      "id": 231688,
-      "country": "NOR"
     },
     "LEOANGUENOT": {
       "id": 195194,
@@ -337,10 +393,6 @@
       "id": 195408,
       "country": "GER"
     },
-    "JOSHUASTURM": {
-      "id": 219779,
-      "country": "AUT"
-    },
     "ZANKRANJEC": {
       "id": 137306,
       "country": "SLO"
@@ -348,10 +400,6 @@
     "FILIPZUBCIC": {
       "id": 146641,
       "country": "CRO"
-    },
-    "SAMMAES": {
-      "id": 194529,
-      "country": "BEL"
     },
     "ALEXANDERSCHMID": {
       "id": 156112,
@@ -368,10 +416,6 @@
     "LENZHAECHLER": {
       "id": 240101,
       "country": "SUI"
-    },
-    "HANSGRAHLMADSEN": {
-      "id": 246187,
-      "country": "NOR"
     }
   },
   "cups": {
@@ -500,38 +544,38 @@
       "rows": [
         {
           "place": 1,
+          "name": "HAUGAN Timon",
+          "country": "NOR",
+          "points": 113,
+          "id": 174450
+        },
+        {
+          "place": 2,
+          "name": "NOEL Clement",
+          "country": "FRA",
+          "points": 104,
+          "id": 187117
+        },
+        {
+          "place": 3,
           "name": "PINHEIRO BRAATHEN Lucas",
           "country": "BRA",
           "points": 100,
           "id": 213820
         },
         {
-          "place": 2,
-          "name": "NOEL Clement",
-          "country": "FRA",
-          "points": 80,
-          "id": 187117
-        },
-        {
-          "place": 3,
-          "name": "MEILLARD Loic",
-          "country": "SUI",
-          "points": 60,
-          "id": 174158
-        },
-        {
           "place": 4,
           "name": "AX SWARTZ Fabian",
           "country": "SWE",
-          "points": 50,
+          "points": 90,
           "id": 252120
         },
         {
           "place": 5,
-          "name": "VINATZER Alex",
-          "country": "ITA",
-          "points": 45,
-          "id": 204319
+          "name": "NEF Tanguy",
+          "country": "SUI",
+          "points": 82,
+          "id": 175449
         }
       ]
     },
@@ -589,29 +633,29 @@
           "place": 2,
           "name": "MEILLARD Loic",
           "country": "SUI",
-          "points": 140,
+          "points": 151,
           "id": 174158
         },
         {
           "place": 3,
-          "name": "VINATZER Alex",
-          "country": "ITA",
-          "points": 81,
-          "id": 204319
+          "name": "HAUGAN Timon",
+          "country": "NOR",
+          "points": 113,
+          "id": 174450
         },
         {
           "place": 4,
-          "name": "NOEL Clement",
-          "country": "FRA",
-          "points": 80,
-          "id": 187117
+          "name": "SOLBERG Eirik Hystad",
+          "country": "NOR",
+          "points": 112,
+          "id": 231688
         },
         {
           "place": 5,
-          "name": "ODERMATT Marco",
-          "country": "SUI",
-          "points": 60,
-          "id": 190231
+          "name": "NOEL Clement",
+          "country": "FRA",
+          "points": 104,
+          "id": 187117
         }
       ]
     }
