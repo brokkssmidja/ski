@@ -228,6 +228,34 @@ def parse_alpine(ev: dict[str, str]) -> dict:
     return race
 
 
+def xc_when(ev: dict[str, str], tz_name: str) -> tuple[str, str | None]:
+    """Venue date, and the UTC start when FIS has published one.
+
+    `Run 1 loc` is venue-local, same as alpine. It has to match the UTC
+    DTSTART. A date-only row has no clock yet and stays TBA. Sprint
+    qualification is folded into the final later; this is one row's clock.
+    """
+    desc = ev.get("DESCRIPTION", "")
+    summary = ev.get("SUMMARY", "")
+    stamp = ev["DTSTART"]
+    run1 = re.search(r"Run 1 loc:\s*(\d{2}:\d{2})", desc)
+    if run1:
+        if not re.fullmatch(r"\d{8}T\d{6}Z", stamp):
+            raise SystemExit(f"timed xc missing a UTC start: {summary} ({stamp})")
+        date = local_date_from_utc(stamp, tz_name)
+        start = to_utc(date, run1.group(1), tz_name)
+        got = datetime.strptime(start, "%Y-%m-%dT%H:%M:%SZ").strftime("%Y%m%dT%H%M%SZ")
+        if got != stamp:
+            raise SystemExit(
+                f"UTC mismatch {summary}: local {run1.group(1)} {date} "
+                f"{tz_name} -> {got}, FIS DTSTART {stamp}"
+            )
+        return date, start
+    if not re.fullmatch(r"\d{8}", stamp):
+        raise SystemExit(f"expected a date-only xc start, got {stamp} for {summary}")
+    return f"{stamp[0:4]}-{stamp[4:6]}-{stamp[6:8]}", None
+
+
 def parse_xc_rows(evs: list[dict[str, str]]) -> list[dict]:
     grouped: dict[tuple, dict] = {}
     for ev in evs:
@@ -244,10 +272,7 @@ def parse_xc_rows(evs: list[dict[str, str]]) -> list[dict]:
             raise SystemExit(f"unmapped xc place {location!r}")
         venue, tz_name = PLACES[location]
         country = re.search(r"\(([A-Z]{3})\)", summary).group(1)
-        stamp = ev["DTSTART"]
-        if not re.fullmatch(r"\d{8}", stamp):
-            raise SystemExit(f"expected a date-only xc start, got {stamp} for {summary}")
-        date = f"{stamp[0:4]}-{stamp[4:6]}-{stamp[6:8]}"
+        date, start = xc_when(ev, tz_name)
         base = raw_event.replace(" Qualification", "").replace(" Final", "")
         key = (date, location, gender, base)
         row = grouped.get(key)
@@ -262,6 +287,7 @@ def parse_xc_rows(evs: list[dict[str, str]]) -> list[dict]:
                 "country": country,
                 "date": date,
                 "tz": tz_name,
+                "start": start,
                 "stage": "Stage World Cup" in desc,
                 "mass_engadin": venue == "Engadin" and "Mass Start" in base,
             }
@@ -281,7 +307,7 @@ def parse_xc_rows(evs: list[dict[str, str]]) -> list[dict]:
             "country": row["country"],
             "date": row["date"],
             "tz": row["tz"],
-            "starts": [None],
+            "starts": [row["start"]],
             "watch": watch_for("xc", row["venue"]),
             "results": {"podium": []},
         }

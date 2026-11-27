@@ -142,8 +142,13 @@ test("simulated November: Gurgl is next, and a known start beats a same-day TBA"
 
   const sat = at("2026-11-28T10:00:00Z");
   const saturday = nextRace(races, sat, all);
-  assert.equal(saturday.venue, "Killington");
-  assert.equal(saturday.discipline, "Giant Slalom");
+  assert.equal(saturday.venue, "Ruka");
+  assert.equal(saturday.gender, "women");
+  assert.equal(saturday.discipline, "1.2 km Sprint Classic");
+  assert.equal(formatClock(saturday.starts[0], NY), "5:15 AM EST");
+  const alpine = nextRace(races, sat, { sport: "alpine", gender: "all" });
+  assert.equal(alpine.venue, "Killington");
+  assert.equal(alpine.discipline, "Giant Slalom");
 });
 
 test("simulated January: Laax slopestyle qualification, alpine still Cortina and Wengen", () => {
@@ -179,14 +184,14 @@ test("simulated February: Calgary halfpipe qualification, alpine still Garmisch"
 });
 
 test("a TBA race stays up through the local day and then drops", () => {
-  const ruka = find("Ruka", "women", "10 km Interval Start Classic");
-  assert.deepEqual(ruka.starts, [null]);
-  assert.equal(tbaEnd(ruka).toISOString(), "2026-11-27T22:00:00.000Z");
-  assert.equal(phase(ruka, at("2026-11-27T21:00:00Z")), "upcoming");
-  assert.equal(phase(ruka, at("2026-11-27T22:00:00Z")), "past");
+  const les = find("Les Rousses", "women", "1.3 km Sprint Classic");
+  assert.deepEqual(les.starts, [null]);
+  assert.equal(tbaEnd(les).toISOString(), "2027-01-01T23:00:00.000Z");
+  assert.equal(phase(les, at("2027-01-01T22:00:00Z")), "upcoming");
+  assert.equal(phase(les, at("2027-01-01T23:00:00Z")), "past");
 });
 
-test("calendar shape: alpine has times except Narvik, cross-country is TBA", () => {
+test("calendar shape: alpine has times except Narvik, published cross-country clocks are kept", () => {
   assert.equal(races.length, 196);
   const alpine = races.filter((r) => r.sport === "alpine");
   const xc = races.filter((r) => r.sport === "xc");
@@ -204,7 +209,9 @@ test("calendar shape: alpine has times except Narvik, cross-country is TBA", () 
     assert.equal(tally(gender, "Big Air Qualification"), 4);
   }
   const tba = races.filter((r) => r.starts.some((s) => s == null));
-  assert.equal(tba.length, 113);
+  assert.equal(tba.length, 95);
+  assert.equal(xc.filter((r) => r.starts.some((s) => s == null)).length, 43);
+  assert.equal(xc.filter((r) => r.starts.every(Boolean)).length, 18);
   assert.equal(freeski.filter((r) => r.starts.some((s) => s == null)).length, 50);
   assert.deepEqual(
     tba.filter((r) => r.sport === "alpine").map((r) => r.id).sort(),
@@ -218,8 +225,12 @@ test("calendar shape: alpine has times except Narvik, cross-country is TBA", () 
     for (const key of ["id", "sport", "gender", "discipline", "venue", "country", "starts", "watch", "results"]) {
       assert.ok(key in race, race.id + " " + key);
     }
-    if (race.id === "alpine-131577") continue;
-    assert.deepEqual(race.results, { podium: [] });
+    assert.ok(Array.isArray(race.results.podium), race.id);
+    for (const row of race.results.podium) {
+      assert.ok([1, 2, 3].includes(row.place), race.id);
+      assert.equal(typeof row.name, "string", race.id);
+      assert.match(row.country, /^[A-Z]{3}$/, race.id);
+    }
   }
 });
 
@@ -257,7 +268,19 @@ test("slalom and GS show run 1 and run 2 together", () => {
     "Run 2 · 7:00 AM EST",
   ]);
   assert.deepEqual(startLines(find("Sun Valley", "women", "Downhill"), NY), ["2:30 PM EDT"]);
-  assert.deepEqual(startLines(find("Ruka", "women", "10 km Interval Start Classic"), STO), ["Time TBA"]);
+  const rukaWomen = find("Ruka", "women", "10 km Interval Start Classic");
+  const rukaMen = find("Ruka", "men", "10 km Interval Start Classic");
+  assert.equal(rukaWomen.starts[0], "2026-11-27T09:30:00Z");
+  assert.equal(rukaMen.starts[0], "2026-11-27T12:00:00Z");
+  assert.deepEqual(startLines(rukaWomen, NY), ["4:30 AM EST"]);
+  assert.deepEqual(startLines(rukaMen, NY), ["7:00 AM EST"]);
+  assert.deepEqual(startLines(rukaWomen, "Europe/Helsinki"), ["11:30 AM EET"]);
+  assert.deepEqual(startLines(rukaMen, "Europe/Helsinki"), ["2:00 PM EET"]);
+  assert.equal(find("Trondheim", "women", "10 km Interval Start Classic").starts[0], "2026-12-04T08:30:00Z");
+  assert.equal(find("Davos", "men", "5 km Heat Mass Start Free").starts[0], "2026-12-13T10:00:00Z");
+  assert.equal(find("Ruka", "women", "1.2 km Sprint Classic").starts[0], "2026-11-28T10:15:00Z");
+  assert.deepEqual(find("Lahti", "women", "10 km Interval Start Classic").starts, [null]);
+  assert.deepEqual(startLines(find("Lahti", "women", "10 km Interval Start Classic"), NY), ["Time TBA"]);
 });
 
 test("upcoming groups: today, the days before the weekend, this weekend, then weeks", () => {
@@ -336,9 +359,16 @@ test("ics uses the real instants, and TBA is all-day", () => {
   assert.match(text, new RegExp(solden.id));
 
   const ruka = find("Ruka", "women", "10 km Interval Start Classic");
-  const allDay = icsFor(ruka, at("2026-11-01T00:00:00Z")).replace(/\r\n[ \t]/g, "");
-  assert.match(allDay, /DTSTART;VALUE=DATE:20261127/);
-  assert.match(allDay, /DTEND;VALUE=DATE:20261128/);
+  const timed = icsFor(ruka, at("2026-11-01T00:00:00Z"), NY).replace(/\r\n[ \t]/g, "");
+  assert.match(timed, /DTSTART:20261127T093000Z/);
+  assert.match(timed, /DTEND:20261127T110000Z/);
+  assert.match(timed, /4:30 AM EST/);
+  assert.doesNotMatch(timed, /Time TBA/);
+
+  const les = find("Les Rousses", "women", "1.3 km Sprint Classic");
+  const allDay = icsFor(les, at("2026-11-01T00:00:00Z")).replace(/\r\n[ \t]/g, "");
+  assert.match(allDay, /DTSTART;VALUE=DATE:20270101/);
+  assert.match(allDay, /DTEND;VALUE=DATE:20270102/);
   assert.doesNotMatch(allDay, /DTSTART:\d/);
   assert.match(allDay, /Time TBA/);
 });
@@ -390,14 +420,31 @@ test("google calendar keeps UTC instants and puts the viewer zone in the details
   assert.equal(formatClock("2027-03-20T20:30:00Z", NY), "4:30 PM EDT");
 
   const ruka = find("Ruka", "women", "10 km Interval Start Classic");
-  const tba = new URL(googleCalendarUrl(ruka, STO));
-  assert.equal(tba.searchParams.get("dates"), "20261127/20261128");
-  assert.equal(raceDay(ruka, STO), ruka.date);
-  assert.equal(raceDay(ruka, "Pacific/Auckland"), ruka.date);
+  const rukaNy = new URL(googleCalendarUrl(ruka, NY));
+  const rukaHel = new URL(googleCalendarUrl(ruka, "Europe/Helsinki"));
+  assert.equal(rukaNy.searchParams.get("dates"), "20261127T093000Z/20261127T110000Z");
+  assert.equal(rukaHel.searchParams.get("dates"), rukaNy.searchParams.get("dates"));
+  assert.match(rukaNy.searchParams.get("details"), /4:30 AM EST/);
+  assert.match(rukaHel.searchParams.get("details"), /11:30 AM EET/);
+  assert.match(rukaNy.searchParams.get("details"), /YouTube/);
+  assert.match(rukaNy.searchParams.get("details"), /raceid=52084/);
+  assert.equal(rukaNy.searchParams.get("location"), "Ruka, Finland");
+  assert.equal(raceDay(ruka, NY), "2026-11-27");
+  const rukaMen = find("Ruka", "men", "10 km Interval Start Classic");
+  assert.equal(formatClock(rukaMen.starts[0], NY), "7:00 AM EST");
+  assert.equal(
+    new URL(googleCalendarUrl(rukaMen, NY)).searchParams.get("dates"),
+    "20261127T120000Z/20261127T133000Z",
+  );
+
+  const les = find("Les Rousses", "women", "1.3 km Sprint Classic");
+  const tba = new URL(googleCalendarUrl(les, STO));
+  assert.equal(tba.searchParams.get("dates"), "20270101/20270102");
+  assert.equal(raceDay(les, STO), les.date);
+  assert.equal(raceDay(les, "Pacific/Auckland"), les.date);
+  assert.equal(raceDay(les, "Pacific/Honolulu"), les.date);
   assert.match(tba.searchParams.get("details"), /Time TBA/);
-  assert.match(tba.searchParams.get("details"), /YouTube/);
-  assert.match(tba.searchParams.get("details"), /raceid=52084/);
-  assert.equal(tba.searchParams.get("location"), "Ruka, Finland");
+  assert.equal(tba.searchParams.get("location"), "Les Rousses, France");
 });
 
 test("date headings follow the viewer zone when a start crosses midnight", () => {
@@ -526,10 +573,20 @@ test("live timing uses the FIS codex and the race window", () => {
   assert.equal(statusLine(xc, at("2026-11-27T10:29:00Z")), "Underway");
   assert.equal(statusLine(xc, at("2026-11-27T10:30:00Z")), "Finished");
 
-  assert.equal(liveTiming(ruka, at("2026-11-26T21:59:59Z")), null);
-  assert.equal(liveTiming(ruka, at("2026-11-26T22:00:00Z")).pulsing, true);
-  assert.equal(liveTiming(ruka, at("2026-11-27T12:00:00Z")).href, liveHref(ruka));
-  assert.equal(liveTiming(ruka, at("2026-11-27T22:00:00Z")), null);
+  assert.equal(liveTiming(ruka, at("2026-11-27T08:29:59Z")), null);
+  assert.deepEqual(liveTiming(ruka, at("2026-11-27T08:30:00Z")), {
+    href: liveHref(ruka),
+    pulsing: false,
+  });
+  assert.equal(liveTiming(ruka, at("2026-11-27T09:30:00Z")).pulsing, true);
+  assert.equal(statusLine(ruka, at("2026-11-27T10:59:00Z")), "Underway");
+  assert.equal(statusLine(ruka, at("2026-11-27T11:00:00Z")), "Finished");
+  assert.equal(liveTiming(ruka, at("2026-11-27T11:00:00Z")), null);
+  const les = find("Les Rousses", "women", "1.3 km Sprint Classic");
+  assert.equal(liveTiming(les, at("2026-12-31T22:59:59Z")), null);
+  assert.equal(liveTiming(les, at("2026-12-31T23:00:00Z")).pulsing, true);
+  assert.equal(liveTiming(les, at("2027-01-01T12:00:00Z")).href, liveHref(les));
+  assert.equal(liveTiming(les, at("2027-01-01T23:00:00Z")), null);
   assert.equal(liveTiming(narvik, at("2027-03-12T12:00:00Z")), null);
 
   const final = find("Innsbruck", "women", "Big Air");
