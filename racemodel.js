@@ -68,6 +68,16 @@ export function timingXmlUrl(codex) {
   return `https://live.fis-ski.com/${String(codex).toLowerCase()}/main.xml`;
 }
 
+/**
+ * Cross-country livetiming. FIS publishes it at cc-NNNN/main.xml.
+ * The alpine relay requests ccNNNN/main.xml, without the hyphen, and that path 404s.
+ */
+export function ccTimingUrl(codex) {
+  const match = /^cc(\d{4})$/i.exec(String(codex || ""));
+  if (!match) return "";
+  return `https://live.fis-ski.com/cc-${match[1]}/main.xml`;
+}
+
 export function ordinal(n) {
   const value = Math.abs(Number(n)) || 0;
   const teen = value % 100;
@@ -212,6 +222,134 @@ export function parseTimingXml(xml) {
   return {
     message: typeof root.message === "string" ? root.message : "",
     runs,
+  };
+}
+
+const CC_OUT = new Set(["dnf", "dns", "dsq", "dq", "dqf", "ral"]);
+
+function clockSeconds(value) {
+  const match = /^(\d{1,2}):(\d{2}):(\d{2})$/.exec(String(value || ""));
+  if (!match) return null;
+  return Number(match[1]) * 3600 + Number(match[2]) * 60 + Number(match[3]);
+}
+
+/**
+ * Standings shaped like the alpine relay, read from a cross-country main.xml.
+ * Start-list rows are bib, status, and the local start clock. Racers carry the name.
+ * A finish time is milliseconds. People still marked "start" are on course.
+ */
+export function ccLivePayload(xml, codex) {
+  const text = String(xml || "");
+  const start = text.indexOf("<lt>");
+  const end = text.lastIndexOf("</lt>");
+  if (start < 0 || end < 0) return null;
+  let root;
+  try {
+    [root] = phpParse(text.slice(start + 4, end));
+  } catch {
+    return null;
+  }
+  const racers = root?.racers || {};
+  const times = root?.result || {};
+  const athletes = list(root?.startlist).filter((entry) => entry && typeof entry === "object").map((entry) => {
+    const bib = entry[0];
+    if (!Number.isFinite(Number(bib))) return null;
+    const who = racers[bib] || {};
+    const status = String(entry[1] || who[7] || "").toLowerCase();
+    const splits = splitsOf(times[bib]);
+    const stored = Number(who[8]);
+    const timeMs = status === "finish"
+      ? (Number.isFinite(stored) && stored > 0 ? stored : (splits.at(-1) ?? null))
+      : null;
+    return {
+      bib: Number(bib),
+      name: `${who[2] || ""} ${who[3] || ""}`.trim(),
+      nation: who[4] || "",
+      status,
+      timeMs: Number.isFinite(timeMs) ? timeMs : null,
+      startSec: clockSeconds(entry[4]),
+    };
+  }).filter(Boolean);
+  if (!athletes.length) return null;
+
+  const finished = athletes
+    .filter((athlete) => athlete.status === "finish" && athlete.timeMs != null)
+    .sort((a, b) => a.timeMs - b.timeMs || a.bib - b.bib);
+  const best = finished[0]?.timeMs ?? 0;
+  const ranked = finished.map((athlete, index) => ({
+    ...athlete,
+    rank: index + 1,
+    time: formatRunTime(athlete.timeMs),
+    diff: index === 0 ? "" : formatDiff(athlete.timeMs - best),
+  }));
+  const on = athletes
+    .filter((athlete) => athlete.status === "start")
+    .sort((a, b) => (a.startSec ?? 0) - (b.startSec ?? 0) || a.bib - b.bib);
+  const out = athletes.filter((athlete) => CC_OUT.has(athlete.status));
+  const waiting = athletes.filter((athlete) => (
+    athlete.status !== "start" && athlete.status !== "finish" && !CC_OUT.has(athlete.status)
+  ));
+  let status = "scheduled";
+  if (!on.length && !waiting.length && (ranked.length || out.length)) status = "finished";
+  else if (on.length || ranked.length || out.length) status = "live";
+  const counts = {
+    starters: athletes.length,
+    finished: ranked.length,
+    dnf: out.length,
+  };
+  if (waiting.length) counts.remaining = waiting.length;
+  const leader = ranked[0] || null;
+  const last = ranked.reduce((pick, athlete) => {
+    const stamp = (athlete.startSec ?? -1) * 1000 + athlete.timeMs;
+    if (!pick || stamp >= pick.stamp) return { athlete, stamp };
+    return pick;
+  }, null);
+  return {
+    source: "fis-cc",
+    codex: String(codex || "").toLowerCase(),
+    status,
+    counts,
+    onCourse: on.map((athlete) => ({ bib: athlete.bib, name: athlete.name, nation: athlete.nation })),
+    nextOnCourse: waiting.map((athlete) => ({ bib: athlete.bib, name: athlete.name, nation: athlete.nation })),
+    results: [
+      ...ranked.map((athlete) => ({
+        rank: athlete.rank,
+        bib: athlete.bib,
+        name: athlete.name,
+        nation: athlete.nation,
+        time: athlete.time,
+        diff: athlete.diff,
+        status: "finish",
+        timeMs: athlete.timeMs,
+      })),
+      ...out.map((athlete) => ({
+        rank: "",
+        bib: athlete.bib,
+        name: athlete.name,
+        nation: athlete.nation,
+        time: "",
+        diff: "",
+        status: athlete.status,
+      })),
+    ],
+    currentLeader: leader && {
+      rank: 1,
+      bib: leader.bib,
+      name: leader.name,
+      nation: leader.nation,
+      time: leader.time,
+      diff: "",
+    },
+    lastFinisher: last && {
+      rank: last.athlete.rank,
+      bib: last.athlete.bib,
+      name: last.athlete.name,
+      nation: last.athlete.nation,
+      time: last.athlete.time,
+      diff: last.athlete.diff,
+      status: "finish",
+    },
+    message: typeof root.message === "string" ? root.message : "",
   };
 }
 
