@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-27T15:02:39Z",
+  "updated": "2026-11-27T23:26:59Z",
   "people": {
     "LARACOLTURI": {
       "id": 269077,
@@ -736,6 +736,198 @@
     "EMILLIEKARI": {
       "id": 222648,
       "country": "FIN"
+    },
+    "MATHILDEGREMAUD": {
+      "id": 198076,
+      "country": "SUI"
+    },
+    "MEGANOLDHAM": {
+      "id": 217197,
+      "country": "CAN"
+    },
+    "LARAWOLF": {
+      "id": 199799,
+      "country": "AUT"
+    },
+    "MENGTINGLIU": {
+      "id": 221847,
+      "country": "CHN"
+    },
+    "LINSHANHAN": {
+      "id": 240172,
+      "country": "CHN"
+    },
+    "ANOUKANDRASKA": {
+      "id": 245209,
+      "country": "SUI"
+    },
+    "GIULIATANNO": {
+      "id": 191666,
+      "country": "SUI"
+    },
+    "ELENAGASKELL": {
+      "id": 204938,
+      "country": "CAN"
+    },
+    "JIAYINGZHANG": {
+      "id": 308111,
+      "country": "CHN"
+    },
+    "MARIAGASSLITTER": {
+      "id": 274199,
+      "country": "ITA"
+    },
+    "KIRSTYMUIR": {
+      "id": 229716,
+      "country": "GBR"
+    },
+    "KSENIAORLOVA": {
+      "id": 235921,
+      "country": "AIN"
+    },
+    "GRACEHENDERSON": {
+      "id": 206973,
+      "country": "USA"
+    },
+    "SYLVIATROTTER": {
+      "id": 271445,
+      "country": "NZL"
+    },
+    "MADELEINEDISBROWE": {
+      "id": 271311,
+      "country": "NZL"
+    },
+    "RUYIYANG": {
+      "id": 232175,
+      "country": "CHN"
+    },
+    "RUBYSTARANDREWS": {
+      "id": 230335,
+      "country": "NZL"
+    },
+    "ASHCLAYTON": {
+      "id": 265306,
+      "country": "GBR"
+    },
+    "CODYLAPLANTE": {
+      "id": 211006,
+      "country": "USA"
+    },
+    "MIROTABANELLI": {
+      "id": 246495,
+      "country": "ITA"
+    },
+    "JESPERTJADER": {
+      "id": 180346,
+      "country": "SWE"
+    },
+    "SVENPEILLEX": {
+      "id": 253103,
+      "country": "FRA"
+    },
+    "TIMOTHESIVIGNON": {
+      "id": 221031,
+      "country": "FRA"
+    },
+    "JULIUSFORER": {
+      "id": 210093,
+      "country": "AUT"
+    },
+    "FRANKWAHLSTROEM": {
+      "id": 281780,
+      "country": "NOR"
+    },
+    "KADITANEGOMIS": {
+      "id": 221012,
+      "country": "FRA"
+    },
+    "ALEXANDERHENDERSON": {
+      "id": 233945,
+      "country": "CAN"
+    },
+    "KUURAKOIVISTO": {
+      "id": 219283,
+      "country": "FIN"
+    },
+    "MATEJSVANCER": {
+      "id": 227077,
+      "country": "AUT"
+    },
+    "TORMODFROSTAD": {
+      "id": 215675,
+      "country": "NOR"
+    },
+    "KEAGANSUPPLE": {
+      "id": 227265,
+      "country": "USA"
+    },
+    "KONNORRALPH": {
+      "id": 218088,
+      "country": "USA"
+    },
+    "MARTINNORDQVIST": {
+      "id": 224770,
+      "country": "SWE"
+    },
+    "FADRIRHYNER": {
+      "id": 231637,
+      "country": "SUI"
+    },
+    "VIKTORALEXANDERMAKSYAGIN": {
+      "id": 256450,
+      "country": "SUI"
+    },
+    "LUKEHARROLD": {
+      "id": 261882,
+      "country": "NZL"
+    },
+    "ULRIKMAXHARSTADSAMNOEY": {
+      "id": 215746,
+      "country": "NOR"
+    },
+    "BIRKRUUD": {
+      "id": 202103,
+      "country": "NOR"
+    },
+    "SEBASTIANSCHJERVE": {
+      "id": 215718,
+      "country": "NOR"
+    },
+    "SEVERISILVANDER": {
+      "id": 268141,
+      "country": "FIN"
+    },
+    "NOAHSCHALLERT": {
+      "id": 210092,
+      "country": "AUT"
+    },
+    "VINCENTVEILE": {
+      "id": 199812,
+      "country": "GER"
+    },
+    "JEREMYGAGNE": {
+      "id": 236256,
+      "country": "CAN"
+    },
+    "LUCASBALL": {
+      "id": 278732,
+      "country": "NZL"
+    },
+    "ADRIENVAUDAUX": {
+      "id": 205787,
+      "country": "SUI"
+    },
+    "ORESTKOVALENKO": {
+      "id": 200193,
+      "country": "UKR"
+    },
+    "LUISRESCH": {
+      "id": 251221,
+      "country": "AUT"
+    },
+    "LENNARTBONDARENKO": {
+      "id": 265263,
+      "country": "GER"
     }
   },
   "cups": {
@@ -1056,6 +1248,86 @@
           "country": "NOR",
           "points": 80,
           "id": 183928
+        }
+      ]
+    },
+    "FS-W-BA": {
+      "label": "Big Air",
+      "rows": [
+        {
+          "place": 1,
+          "name": "GREMAUD Mathilde",
+          "country": "SUI",
+          "points": 100,
+          "id": 198076
+        },
+        {
+          "place": 2,
+          "name": "OLDHAM Megan",
+          "country": "CAN",
+          "points": 80,
+          "id": 217197
+        },
+        {
+          "place": 3,
+          "name": "WOLF Lara",
+          "country": "AUT",
+          "points": 60,
+          "id": 199799
+        },
+        {
+          "place": 4,
+          "name": "LIU Mengting",
+          "country": "CHN",
+          "points": 50,
+          "id": 221847
+        },
+        {
+          "place": 5,
+          "name": "HAN Linshan",
+          "country": "CHN",
+          "points": 45,
+          "id": 240172
+        }
+      ]
+    },
+    "FS-M-BA": {
+      "label": "Big Air",
+      "rows": [
+        {
+          "place": 1,
+          "name": "LAPLANTE Cody",
+          "country": "USA",
+          "points": 100,
+          "id": 211006
+        },
+        {
+          "place": 2,
+          "name": "TABANELLI Miro",
+          "country": "ITA",
+          "points": 80,
+          "id": 246495
+        },
+        {
+          "place": 3,
+          "name": "TJADER Jesper",
+          "country": "SWE",
+          "points": 60,
+          "id": 180346
+        },
+        {
+          "place": 4,
+          "name": "PEILLEX Sven",
+          "country": "FRA",
+          "points": 50,
+          "id": 253103
+        },
+        {
+          "place": 5,
+          "name": "SIVIGNON Timothe",
+          "country": "FRA",
+          "points": 45,
+          "id": 221031
         }
       ]
     }
