@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-27T05:15:22Z",
+  "updated": "2026-11-27T15:02:39Z",
   "people": {
     "LARACOLTURI": {
       "id": 269077,
@@ -416,6 +416,326 @@
     "LENZHAECHLER": {
       "id": 240101,
       "country": "SUI"
+    },
+    "EBBAANDERSSON": {
+      "id": 190104,
+      "country": "SWE"
+    },
+    "LINNSVAHN": {
+      "id": 206377,
+      "country": "SWE"
+    },
+    "FRIDAKARLSSON": {
+      "id": 206324,
+      "country": "SWE"
+    },
+    "NATALIATERENTEVA": {
+      "id": 167480,
+      "country": "AIN"
+    },
+    "HEIDIWENG": {
+      "id": 147012,
+      "country": "NOR"
+    },
+    "JOHANNAMATINTALO": {
+      "id": 185258,
+      "country": "FIN"
+    },
+    "MOAILAR": {
+      "id": 190310,
+      "country": "SWE"
+    },
+    "KRISTINAUSTGULENFOSNAES": {
+      "id": 214459,
+      "country": "NOR"
+    },
+    "LOTTAUDNESWENG": {
+      "id": 183523,
+      "country": "NOR"
+    },
+    "TERESASTADLOBER": {
+      "id": 128976,
+      "country": "AUT"
+    },
+    "JASMIJOENSUU": {
+      "id": 184356,
+      "country": "FIN"
+    },
+    "TIRILUDNESWENG": {
+      "id": 183524,
+      "country": "NOR"
+    },
+    "CATERINAGANZ": {
+      "id": 175848,
+      "country": "ITA"
+    },
+    "LISAERIKSSON": {
+      "id": 237658,
+      "country": "SWE"
+    },
+    "KATHARINAHENNIGDOTZLER": {
+      "id": 167367,
+      "country": "GER"
+    },
+    "HELENHOFFMANN": {
+      "id": 224184,
+      "country": "GER"
+    },
+    "EVAINGEBRIGTSEN": {
+      "id": 258371,
+      "country": "NOR"
+    },
+    "MILLAGROSBERGHAUGENANDREASSEN": {
+      "id": 265378,
+      "country": "NOR"
+    },
+    "EMMARIBOM": {
+      "id": 190533,
+      "country": "SWE"
+    },
+    "VILMANISSINEN": {
+      "id": 192133,
+      "country": "FIN"
+    },
+    "KAROLINEGROETTING": {
+      "id": 222595,
+      "country": "NOR"
+    },
+    "IRISDEMARTINPINTER": {
+      "id": 245052,
+      "country": "ITA"
+    },
+    "ANJAWEBER": {
+      "id": 210289,
+      "country": "SUI"
+    },
+    "VILMARYYTTY": {
+      "id": 222227,
+      "country": "FIN"
+    },
+    "GINADELRIO": {
+      "id": 239521,
+      "country": "AND"
+    },
+    "PIAFINK": {
+      "id": 159717,
+      "country": "GER"
+    },
+    "LAURAGIMMLER": {
+      "id": 141970,
+      "country": "GER"
+    },
+    "DARIYANEPRYAEVA": {
+      "id": 224783,
+      "country": "AIN"
+    },
+    "HILLANIEMELA": {
+      "id": 225716,
+      "country": "FIN"
+    },
+    "KATHERINESAUERBREY": {
+      "id": 174182,
+      "country": "GER"
+    },
+    "MONIKASKINDER": {
+      "id": 208984,
+      "country": "POL"
+    },
+    "SONJAASCHMIDT": {
+      "id": 235543,
+      "country": "CAN"
+    },
+    "KATERINAJANATOVA": {
+      "id": 192498,
+      "country": "CZE"
+    },
+    "ALISONMACKIE": {
+      "id": 266914,
+      "country": "CAN"
+    },
+    "MASAETSUCHIYA": {
+      "id": 202976,
+      "country": "JPN"
+    },
+    "JULIAKERN": {
+      "id": 181770,
+      "country": "USA"
+    },
+    "KATHERINESTEWARTJONES": {
+      "id": 185607,
+      "country": "CAN"
+    },
+    "LILIANEGAGNON": {
+      "id": 226270,
+      "country": "CAN"
+    },
+    "ANNIALAKOSKI": {
+      "id": 189450,
+      "country": "FIN"
+    },
+    "NADJAKAELIN": {
+      "id": 210291,
+      "country": "SUI"
+    },
+    "MARTINLOEWSTROEMNYENGET": {
+      "id": 147076,
+      "country": "NOR"
+    },
+    "ANDREASFJORDENREE": {
+      "id": 217029,
+      "country": "NOR"
+    },
+    "JOHANNESHOESFLOTKLAEBO": {
+      "id": 184205,
+      "country": "NOR"
+    },
+    "LARSHEGGEN": {
+      "id": 264371,
+      "country": "NOR"
+    },
+    "MATTISSTENSHAGEN": {
+      "id": 183928,
+      "country": "NOR"
+    },
+    "EMILIVERSEN": {
+      "id": 147554,
+      "country": "NOR"
+    },
+    "NIKOANTTOLA": {
+      "id": 236379,
+      "country": "FIN"
+    },
+    "GUSSCHUMACHER": {
+      "id": 207090,
+      "country": "USA"
+    },
+    "EVENSOLEMMICHELSEN": {
+      "id": 213625,
+      "country": "NOR"
+    },
+    "SAVELIIKOROSTELEV": {
+      "id": 240750,
+      "country": "AIN"
+    },
+    "TRULSGISSELMAN": {
+      "id": 219591,
+      "country": "SWE"
+    },
+    "DAVIDEGRAZ": {
+      "id": 210377,
+      "country": "ITA"
+    },
+    "ELIABARP": {
+      "id": 231213,
+      "country": "ITA"
+    },
+    "THOMASMALONEYWESTGAARD": {
+      "id": 211472,
+      "country": "IRL"
+    },
+    "JANOSCHBRUGGER": {
+      "id": 178156,
+      "country": "GER"
+    },
+    "RISTOMATTIHAKOLA": {
+      "id": 142125,
+      "country": "FIN"
+    },
+    "MAXHOLLMANN": {
+      "id": 256437,
+      "country": "CAN"
+    },
+    "THOMASSTEPHEN": {
+      "id": 226849,
+      "country": "CAN"
+    },
+    "LEOJOHANSSON": {
+      "id": 206318,
+      "country": "SWE"
+    },
+    "JANSTOELBEN": {
+      "id": 216450,
+      "country": "GER"
+    },
+    "GUSTAFBERGLUND": {
+      "id": 198202,
+      "country": "SWE"
+    },
+    "XAVIERMCKEEVER": {
+      "id": 233251,
+      "country": "CAN"
+    },
+    "WILLIAMPOROMAA": {
+      "id": 212004,
+      "country": "SWE"
+    },
+    "ANTOINECYR": {
+      "id": 208442,
+      "country": "CAN"
+    },
+    "ZAKKETTERSON": {
+      "id": 200909,
+      "country": "USA"
+    },
+    "LARSAGNARHJELMESET": {
+      "id": 223917,
+      "country": "NOR"
+    },
+    "EDVINANGER": {
+      "id": 233196,
+      "country": "SWE"
+    },
+    "ZANDENMCMULLEN": {
+      "id": 223557,
+      "country": "USA"
+    },
+    "HUGOLAPALUS": {
+      "id": 207367,
+      "country": "FRA"
+    },
+    "THEOSCHELY": {
+      "id": 207366,
+      "country": "FRA"
+    },
+    "MARTINOCAROLLO": {
+      "id": 240834,
+      "country": "ITA"
+    },
+    "ANDREWMUSGRAVE": {
+      "id": 90931,
+      "country": "GBR"
+    },
+    "PETTERIKOIVISTO": {
+      "id": 215677,
+      "country": "FIN"
+    },
+    "MATYASBAUER": {
+      "id": 251297,
+      "country": "CZE"
+    },
+    "MIKEOPHOFF": {
+      "id": 208806,
+      "country": "CZE"
+    },
+    "FRIEDRICHMOCH": {
+      "id": 197676,
+      "country": "GER"
+    },
+    "REMIBOURDIN": {
+      "id": 225620,
+      "country": "FRA"
+    },
+    "JOHANEKBERG": {
+      "id": 211951,
+      "country": "SWE"
+    },
+    "LAURIVUORINEN": {
+      "id": 176533,
+      "country": "FIN"
+    },
+    "EMILLIEKARI": {
+      "id": 222648,
+      "country": "FIN"
     }
   },
   "cups": {
@@ -656,6 +976,86 @@
           "country": "FRA",
           "points": 104,
           "id": 187117
+        }
+      ]
+    },
+    "CC-W-ALL": {
+      "label": "Overall",
+      "rows": [
+        {
+          "place": 1,
+          "name": "ANDERSSON Ebba",
+          "country": "SWE",
+          "points": 100,
+          "id": 190104
+        },
+        {
+          "place": 2,
+          "name": "SVAHN Linn",
+          "country": "SWE",
+          "points": 95,
+          "id": 206377
+        },
+        {
+          "place": 3,
+          "name": "KARLSSON Frida",
+          "country": "SWE",
+          "points": 90,
+          "id": 206324
+        },
+        {
+          "place": 4,
+          "name": "TERENTEVA Natalia",
+          "country": "AIN",
+          "points": 85,
+          "id": 167480
+        },
+        {
+          "place": 5,
+          "name": "WENG Heidi",
+          "country": "NOR",
+          "points": 80,
+          "id": 147012
+        }
+      ]
+    },
+    "CC-M-ALL": {
+      "label": "Overall",
+      "rows": [
+        {
+          "place": 1,
+          "name": "NYENGET Martin Loewstroem",
+          "country": "NOR",
+          "points": 100,
+          "id": 147076
+        },
+        {
+          "place": 2,
+          "name": "REE Andreas Fjorden",
+          "country": "NOR",
+          "points": 95,
+          "id": 217029
+        },
+        {
+          "place": 3,
+          "name": "KLAEBO Johannes Hoesflot",
+          "country": "NOR",
+          "points": 90,
+          "id": 184205
+        },
+        {
+          "place": 4,
+          "name": "HEGGEN Lars",
+          "country": "NOR",
+          "points": 85,
+          "id": 264371
+        },
+        {
+          "place": 5,
+          "name": "STENSHAGEN Mattis",
+          "country": "NOR",
+          "points": 80,
+          "id": 183928
         }
       ]
     }
