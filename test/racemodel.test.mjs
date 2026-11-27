@@ -10,6 +10,8 @@ import {
   leaderModel,
   ordinal,
   parseTimingXml,
+  ccLivePayload,
+  ccTimingUrl,
   raceModel,
   raceSlug,
   stillToCome,
@@ -103,4 +105,29 @@ test("the real Levi file has the whole run 2 start list and run 1 ranks", () => 
   assert.equal(model.coming.some((row) => row.nation === "NOR" && row.highlight), true);
   const queued = stillToCome(rewound, { run: 2, onCourse: [{ bib: 12 }] });
   assert.equal(queued.some((row) => row.bib === 12), false);
+});
+
+test("cross-country timing comes from the hyphenated main.xml, not the relay path", () => {
+  assert.equal(ccTimingUrl("cc0578"), "https://live.fis-ski.com/cc-0578/main.xml");
+  assert.equal(ccTimingUrl("CC0001"), "https://live.fis-ski.com/cc-0001/main.xml");
+  assert.equal(ccTimingUrl("al5002"), "");
+  assert.equal(timingXmlUrl("al5002"), "https://live.fis-ski.com/al5002/main.xml");
+  assert.equal(timingXmlUrl("cc0578"), "");
+  const xml = `<lt>a:4:{s:9:"startlist";a:4:{i:0;a:3:{i:0;i:1;i:1;s:6:"finish";i:4;s:8:"11:30:30";}i:1;a:3:{i:0;i:2;i:1;s:5:"start";i:4;s:8:"11:31:00";}i:2;a:3:{i:0;i:3;i:1;s:3:"dnf";i:4;s:8:"11:31:30";}i:3;a:3:{i:0;i:4;i:1;s:0:"";i:4;s:8:"11:32:00";}}s:6:"result";a:2:{i:1;a:1:{i:0;i:1704830;}i:2;a:1:{i:0;i:400000;}}s:6:"racers";a:5:{i:0;N;i:1;a:5:{i:0;i:10;i:1;i:1;i:2;s:7:"PAGNIER";i:3;s:4:"Cloe";i:4;s:3:"FRA";}i:2;a:5:{i:0;i:11;i:1;i:2;i:2;s:4:"WENG";i:3;s:5:"Lotta";i:4;s:3:"NOR";}i:3;a:5:{i:0;i:12;i:1;i:3;i:2;s:7:"DIGGINS";i:3;s:6:"Jessie";i:4;s:3:"USA";}i:4;a:5:{i:0;i:13;i:1;i:4;i:2;s:8:"KARLSSON";i:3;s:5:"Frida";i:4;s:3:"SWE";}}s:7:"message";s:0:"";}</lt>`;
+  const data = ccLivePayload(xml, "cc0578");
+  assert.equal(data.status, "live");
+  assert.equal(data.codex, "cc0578");
+  assert.equal(data.currentLeader.name, "PAGNIER Cloe");
+  assert.equal(data.currentLeader.time, "28:24.83");
+  assert.deepEqual(data.onCourse, [{ bib: 2, name: "WENG Lotta", nation: "NOR" }]);
+  assert.equal(data.nextOnCourse[0].name, "KARLSSON Frida");
+  assert.equal(data.counts.finished, 1);
+  assert.equal(data.counts.dnf, 1);
+  assert.equal(data.counts.remaining, 1);
+  const model = raceModel({ payload: data, at: 0, now: 1000 });
+  assert.equal(model.status.text, "1 of 4 down · 1 to go");
+  assert.equal(model.onCourse[0].name, "Lotta Weng");
+  assert.equal(model.leader.name, "Cloe Pagnier");
+  assert.equal(model.coming[0].name, "Frida Karlsson");
+  assert.equal(ccLivePayload("<lt>a:0:{}</lt>", "cc0578"), null);
 });

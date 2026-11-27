@@ -409,6 +409,9 @@ a.race-open, a.hero.race-open {
 }
 footer { padding: 8px 0 36px; color: var(--muted); font-size: 0.78rem; }
 footer p { margin: 0; }
+footer summary { cursor: pointer; font-weight: 650; }
+footer details p { margin-top: 8px; }
+body.on-race footer { display: none; }
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto; }
   .live-link.on, .live-link.on .dot, .live-panel.racing .dot { animation: none; }

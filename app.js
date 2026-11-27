@@ -73,6 +73,8 @@ import {
   badgeText,
   displayState,
   findRace,
+  ccLivePayload,
+  ccTimingUrl,
   parseTimingXml,
   raceModel,
   raceSlug,
@@ -1128,6 +1130,26 @@ function armRace(race) {
   session.timer = setTimeout(() => { void pollRace(race); }, delay);
 }
 
+async function fetchCcXml(direct, signal) {
+  const stamped = `${direct}${direct.includes("?") ? "&" : "?"}t=${Date.now()}`;
+  const urls = [
+    stamped,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(stamped)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(stamped)}`,
+  ];
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { cache: "no-store", signal });
+      if (!response.ok) continue;
+      const text = await response.text();
+      if (text.includes("<lt>") && text.includes("</lt>")) return text;
+    } catch (err) {
+      if (err?.name === "AbortError") throw err;
+    }
+  }
+  return "";
+}
+
 async function pollRace(race) {
   const session = liveSessions.get(race.id);
   if (!session?.codex) return;
@@ -1138,17 +1160,28 @@ async function pollRace(race) {
   session.abort = abort;
   try {
     const xmlUrl = timingXmlUrl(session.codex);
-    const [relayRes, xmlText] = await Promise.all([
-      fetch(relayUrl(session.codex, { top: 40, next: 40 }), { cache: "no-store", signal: abort.signal }),
+    const ccUrl = ccTimingUrl(session.codex);
+    const [relay, xmlText, ccXml] = await Promise.all([
+      fetch(relayUrl(session.codex, { top: 40, next: 40 }), { cache: "no-store", signal: abort.signal })
+        .then(async (response) => {
+          let data = null;
+          try { data = await response.json(); } catch { data = null; }
+          return { response, data };
+        })
+        .catch((err) => {
+          if (err?.name === "AbortError") throw err;
+          return { response: null, data: null };
+        }),
       xmlUrl
         ? fetch(xmlUrl, { cache: "no-store", signal: abort.signal }).then((response) => (response.ok ? response.text() : "")).catch(() => "")
         : Promise.resolve(""),
+      ccUrl ? fetchCcXml(ccUrl, abort.signal) : Promise.resolve(""),
     ]);
-    let data = null;
-    try { data = await relayRes.json(); } catch { data = null; }
     if (abort.signal.aborted || liveSessions.get(race.id) !== session) return;
     const at = Date.now();
-    if (relayRes.ok && livePayloadOk(data, session.codex)) {
+    const relayOk = !!(relay.response?.ok && livePayloadOk(relay.data, session.codex));
+    const data = relayOk ? relay.data : (ccXml ? ccLivePayload(ccXml, session.codex) : null);
+    if (livePayloadOk(data, session.codex)) {
       session.error = null;
       session.status = data.status;
       session.payload = data;
