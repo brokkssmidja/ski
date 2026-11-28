@@ -226,6 +226,7 @@ export function parseTimingXml(xml) {
 }
 
 const CC_OUT = new Set(["dnf", "dns", "dsq", "dq", "dqf", "ral"]);
+const CC_TIMED = new Set(["finish", "q", "nq", "lucky", "currentlucky", "ll", "ql"]);
 
 function clockSeconds(value) {
   const match = /^(\d{1,2}):(\d{2}):(\d{2})$/.exec(String(value || ""));
@@ -258,9 +259,8 @@ export function ccLivePayload(xml, codex) {
     const status = String(entry[1] || who[7] || "").toLowerCase();
     const splits = splitsOf(times[bib]);
     const stored = Number(who[8]);
-    const timeMs = status === "finish"
-      ? (Number.isFinite(stored) && stored > 0 ? stored : (splits.at(-1) ?? null))
-      : null;
+    const clock = Number.isFinite(stored) && stored > 0 ? stored : (splits.at(-1) ?? null);
+    const timeMs = status !== "start" && CC_TIMED.has(status) && Number.isFinite(clock) ? clock : null;
     return {
       bib: Number(bib),
       name: `${who[2] || ""} ${who[3] || ""}`.trim(),
@@ -273,7 +273,7 @@ export function ccLivePayload(xml, codex) {
   if (!athletes.length) return null;
 
   const finished = athletes
-    .filter((athlete) => athlete.status === "finish" && athlete.timeMs != null)
+    .filter((athlete) => athlete.timeMs != null && athlete.status !== "start" && !CC_OUT.has(athlete.status))
     .sort((a, b) => a.timeMs - b.timeMs || a.bib - b.bib);
   const best = finished[0]?.timeMs ?? 0;
   const ranked = finished.map((athlete, index) => ({
@@ -286,9 +286,8 @@ export function ccLivePayload(xml, codex) {
     .filter((athlete) => athlete.status === "start")
     .sort((a, b) => (a.startSec ?? 0) - (b.startSec ?? 0) || a.bib - b.bib);
   const out = athletes.filter((athlete) => CC_OUT.has(athlete.status));
-  const waiting = athletes.filter((athlete) => (
-    athlete.status !== "start" && athlete.status !== "finish" && !CC_OUT.has(athlete.status)
-  ));
+  const settled = new Set([...finished, ...on, ...out]);
+  const waiting = athletes.filter((athlete) => !settled.has(athlete));
   let status = "scheduled";
   if (!on.length && !waiting.length && (ranked.length || out.length)) status = "finished";
   else if (on.length || ranked.length || out.length) status = "live";
@@ -319,7 +318,7 @@ export function ccLivePayload(xml, codex) {
         nation: athlete.nation,
         time: athlete.time,
         diff: athlete.diff,
-        status: "finish",
+        status: athlete.status === "finish" ? "finish" : athlete.status,
         timeMs: athlete.timeMs,
       })),
       ...out.map((athlete) => ({
@@ -351,6 +350,27 @@ export function ccLivePayload(xml, codex) {
     },
     message: typeof root.message === "string" ? root.message : "",
   };
+}
+
+function ccHasTiming(payload) {
+  if (!payload) return false;
+  return (payload.onCourse?.length || 0) > 0 || (payload.counts?.finished || 0) > 0;
+}
+
+/**
+ * A sprint is one race in the list, but FIS times qualification and the heats
+ * on different codexes. Show the heats once anyone is on course or has a time.
+ * Until then, show qualification.
+ */
+export function chooseCcLive(finalPayload, qualPayload) {
+  if (!qualPayload) return finalPayload || null;
+  if (ccHasTiming(finalPayload) || finalPayload?.status === "live") {
+    return { ...finalPayload, phase: "Final" };
+  }
+  if (ccHasTiming(qualPayload) || qualPayload.status === "live" || qualPayload.status === "finished") {
+    return { ...qualPayload, phase: "Qualification" };
+  }
+  return finalPayload || qualPayload;
 }
 
 export function highlightNation(nation) {
@@ -410,6 +430,7 @@ export function statusModel(payload) {
   const remaining = Number(counts.remaining);
   const dnf = Number(counts.dnf) || 0;
   const parts = [];
+  if (payload?.phase) parts.push(payload.phase);
   if (payload?.status === "finished") parts.push("Finished");
   else if (payload?.status === "between_runs") parts.push("Between runs");
   if (run) parts.push(runs ? `Run ${run} of ${runs}` : `Run ${run}`);
@@ -469,14 +490,18 @@ export function finisherModel(payload) {
 
 export function resultRows(payload) {
   const rows = Array.isArray(payload?.results) ? payload.results : [];
-  return rows.map((row) => ({
-    rank: row.rank ?? "",
-    bib: row.bib ?? "",
-    name: displayName(row.name || ""),
-    nation: row.nation || "",
-    mark: row.status && row.status !== "finish" ? String(row.status).toUpperCase() : [row.time, row.rank === 1 ? "" : row.diff].filter(Boolean).join("  "),
-    dnf: row.status && row.status !== "finish",
-  }));
+  return rows.map((row) => {
+    const time = [row.time, row.rank === 1 ? "" : row.diff].filter(Boolean).join("  ");
+    const tag = row.status && row.status !== "finish" ? String(row.status).toUpperCase() : "";
+    return {
+      rank: row.rank ?? "",
+      bib: row.bib ?? "",
+      name: displayName(row.name || ""),
+      nation: row.nation || "",
+      mark: [time, tag].filter(Boolean).join("  "),
+      dnf: CC_OUT.has(String(row.status || "").toLowerCase()),
+    };
+  });
 }
 
 export function badgeText(payload) {

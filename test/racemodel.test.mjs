@@ -12,6 +12,7 @@ import {
   parseTimingXml,
   ccLivePayload,
   ccTimingUrl,
+  chooseCcLive,
   raceModel,
   raceSlug,
   stillToCome,
@@ -130,4 +131,15 @@ test("cross-country timing comes from the hyphenated main.xml, not the relay pat
   assert.equal(model.leader.name, "Cloe Pagnier");
   assert.equal(model.coming[0].name, "Frida Karlsson");
   assert.equal(ccLivePayload("<lt>a:0:{}</lt>", "cc0578"), null);
+  const qualXml = xml.replace('s:6:"finish"', 's:1:"q"');
+  const qual = ccLivePayload(qualXml, "cc0578");
+  assert.equal(qual.currentLeader.name, "PAGNIER Cloe");
+  assert.equal(qual.currentLeader.time, "28:24.83");
+  assert.equal(qual.results[0].status, "q");
+  const shell = { status: "scheduled", onCourse: [], counts: { finished: 0 } };
+  const heats = { status: "live", onCourse: [{ bib: 3 }], counts: { finished: 4 } };
+  assert.equal(chooseCcLive(shell, qual).phase, "Qualification");
+  assert.equal(chooseCcLive(heats, qual).phase, "Final");
+  assert.equal(chooseCcLive(heats, null), heats);
+  assert.equal(statusModel(chooseCcLive(shell, qual)).text.startsWith("Qualification"), true);
 });

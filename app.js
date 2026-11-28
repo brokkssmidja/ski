@@ -75,6 +75,7 @@ import {
   findRace,
   ccLivePayload,
   ccTimingUrl,
+  chooseCcLive,
   parseTimingXml,
   raceModel,
   raceSlug,
@@ -1094,7 +1095,7 @@ function paintRace(race) {
     waiting: !shown && race.sport !== "freeski",
   }, {
     onBack: () => { location.hash = ""; },
-    liveHref: liveTiming(race, clock)?.href || liveHref(race),
+    liveHref: ccLiveHref(session?.shown?.payload?.timingCodex) || liveTiming(race, clock)?.href || liveHref(race),
     canSync: (person) => {
       if (!session?.shown || session.viewAt == null) return false;
       return !!syncReady(session.starts, Number(session.shown.payload?.run) || 0, person, session.viewAt);
@@ -1130,19 +1131,46 @@ function armRace(race) {
   session.timer = setTimeout(() => { void pollRace(race); }, delay);
 }
 
+function ccLiveHref(codex) {
+  const match = /^cc(\d{4})$/i.exec(String(codex || ""));
+  if (!match) return "";
+  return `https://live.fis-ski.com/cc-${match[1]}/results-pda.htm`;
+}
+
+function within(work, ms) {
+  return Promise.race([
+    work,
+    new Promise((resolve) => setTimeout(() => resolve(""), ms)),
+  ]);
+}
+
+function ccXmlFromText(text) {
+  const trimmed = String(text || "").trim();
+  if (trimmed.startsWith("{")) {
+    try {
+      const json = JSON.parse(trimmed);
+      if (typeof json.body === "string" && json.body.includes("<lt>") && json.body.includes("</lt>")) {
+        return json.body;
+      }
+    } catch {
+      /* not a proxy envelope */
+    }
+  }
+  if (trimmed.includes("<lt>") && trimmed.includes("</lt>")) return trimmed;
+  return "";
+}
+
 async function fetchCcXml(direct, signal) {
-  const stamped = `${direct}${direct.includes("?") ? "&" : "?"}t=${Date.now()}`;
   const urls = [
-    stamped,
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(stamped)}`,
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(stamped)}`,
+    direct,
+    `https://cors.io/?u=${encodeURIComponent(direct)}`,
   ];
   for (const url of urls) {
     try {
       const response = await fetch(url, { cache: "no-store", signal });
       if (!response.ok) continue;
-      const text = await response.text();
-      if (text.includes("<lt>") && text.includes("</lt>")) return text;
+      const xml = ccXmlFromText(await response.text());
+      if (xml) return xml;
     } catch (err) {
       if (err?.name === "AbortError") throw err;
     }
@@ -1161,7 +1189,11 @@ async function pollRace(race) {
   try {
     const xmlUrl = timingXmlUrl(session.codex);
     const ccUrl = ccTimingUrl(session.codex);
-    const [relay, xmlText, ccXml] = await Promise.all([
+    const qualCode = Number.isInteger(race.qualCodex)
+      ? `cc${String(race.qualCodex).padStart(4, "0")}`
+      : "";
+    const qualUrl = qualCode ? ccTimingUrl(qualCode) : "";
+    const [relay, xmlText, ccXml, qualXml] = await Promise.all([
       fetch(relayUrl(session.codex, { top: 40, next: 40 }), { cache: "no-store", signal: abort.signal })
         .then(async (response) => {
           let data = null;
@@ -1175,12 +1207,19 @@ async function pollRace(race) {
       xmlUrl
         ? fetch(xmlUrl, { cache: "no-store", signal: abort.signal }).then((response) => (response.ok ? response.text() : "")).catch(() => "")
         : Promise.resolve(""),
-      ccUrl ? fetchCcXml(ccUrl, abort.signal) : Promise.resolve(""),
+      ccUrl ? within(fetchCcXml(ccUrl, abort.signal), 8000) : Promise.resolve(""),
+      qualUrl ? within(fetchCcXml(qualUrl, abort.signal), 8000) : Promise.resolve(""),
     ]);
     if (abort.signal.aborted || liveSessions.get(race.id) !== session) return;
     const at = Date.now();
     const relayOk = !!(relay.response?.ok && livePayloadOk(relay.data, session.codex));
-    const data = relayOk ? relay.data : (ccXml ? ccLivePayload(ccXml, session.codex) : null);
+    const qualPayload = qualXml ? ccLivePayload(qualXml, session.codex) : null;
+    if (qualPayload) qualPayload.timingCodex = qualCode;
+    const fromFile = relayOk ? null : chooseCcLive(
+      ccXml ? ccLivePayload(ccXml, session.codex) : null,
+      qualPayload,
+    );
+    const data = relayOk ? relay.data : fromFile;
     if (livePayloadOk(data, session.codex)) {
       session.error = null;
       session.status = data.status;
