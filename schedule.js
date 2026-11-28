@@ -233,6 +233,17 @@ export function hasPodium(race) {
   return Array.isArray(race.results?.podium) && race.results.podium.length > 0;
 }
 
+/** Official final result for this race: a stored podium or this race's own places. */
+export function hasOfficialResult(race) {
+  if (hasPodium(race)) return true;
+  return Array.isArray(race?.results?.places) && race.results.places.length > 0;
+}
+
+/** Qualification and the heats share one card. It is not over when the clock estimate is. */
+export function isSprint(race) {
+  return race?.sport === "xc" && /sprint/i.test(race?.discipline || "");
+}
+
 /** When a race is expected to be over, before a podium is posted. */
 export function estimatedFinish(race) {
   const times = instants(race);
@@ -245,15 +256,17 @@ export function estimatedFinish(race) {
 }
 
 /**
- * A podium finishes the race as soon as it is in the data and the start has passed.
- * Otherwise a two-run race ends 1h15m after run 2, a single alpine run ends 2h after the start,
- * a timed cross-country race ends 1h30m after the start, and a timed freeski final ends 4h after the start.
+ * A podium, or a sprint's own official places, finishes the race once the start has passed.
+ * A sprint without that result stays live through the heats. Otherwise a two-run race ends
+ * 1h15m after run 2, a single alpine run ends 2h after the start, a timed cross-country
+ * distance race ends 1h30m after the start, and a timed freeski final ends 4h after the start.
  * A TBA race ends at midnight in the venue zone.
  */
 export function isFinished(race, now) {
   const times = instants(race);
   const t = now.getTime();
   if (times.length) {
+    if (isSprint(race)) return t >= times[0].getTime() && hasOfficialResult(race);
     if (t >= times[0].getTime() && hasPodium(race)) return true;
     const end = estimatedFinish(race);
     return !!end && t >= end.getTime();

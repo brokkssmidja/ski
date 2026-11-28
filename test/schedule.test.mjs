@@ -8,7 +8,9 @@ import {
   groupUpcoming,
   googleCalendarUrl,
   icsFor,
+  hasOfficialResult,
   isFinished,
+  isSprint,
   liveCodex,
   liveHref,
   liveTiming,
@@ -582,6 +584,19 @@ test("live timing uses the FIS codex and the race window", () => {
   assert.equal(statusLine(ruka, at("2026-11-27T10:59:00Z")), "Underway");
   assert.equal(statusLine(ruka, at("2026-11-27T11:00:00Z")), "Finished");
   assert.equal(liveTiming(ruka, at("2026-11-27T11:00:00Z")), null);
+
+  const menSprint = find("Ruka", "men", "1.2 km Sprint Classic");
+  const womenSprint = find("Ruka", "women", "1.2 km Sprint Classic");
+  assert.equal(isSprint(menSprint), true);
+  assert.equal(hasOfficialResult(menSprint), false);
+  assert.equal(isFinished(menSprint, at("2026-11-28T11:55:00Z")), false);
+  assert.equal(phase(menSprint, at("2026-11-28T11:55:00Z")), "live");
+  assert.equal(statusLine(menSprint, at("2026-11-28T11:55:00Z")), "Underway");
+  assert.equal(liveTiming(menSprint, at("2026-11-28T11:55:00Z")).pulsing, true);
+  assert.equal(womenSprint.results.places[0].name, "SVAHN Linn");
+  assert.equal(isFinished(womenSprint, at("2026-11-28T12:00:00Z")), true);
+  assert.equal(statusLine(womenSprint, at("2026-11-28T12:00:00Z")), "Finished");
+  assert.equal(liveTiming(womenSprint, at("2026-11-28T12:00:00Z")), null);
   const les = find("Les Rousses", "women", "1.3 km Sprint Classic");
   assert.equal(liveTiming(les, at("2026-12-31T22:59:59Z")), null);
   assert.equal(liveTiming(les, at("2026-12-31T23:00:00Z")).pulsing, true);

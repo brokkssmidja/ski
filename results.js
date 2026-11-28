@@ -86,6 +86,38 @@ export function personFor(people, name) {
   return people[nameKey(name)] || null;
 }
 
+/**
+ * Points for a place in an individual World Cup race.
+ * 1st through 30th: 100, 80, 60, 50, 45, then down to 1.
+ */
+export const WORLD_CUP_POINTS = [
+  100, 80, 60, 50, 45, 40, 36, 32, 29, 26, 24, 22, 20, 18, 16, 15, 14, 13, 12, 11,
+  10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+];
+
+export function worldCupPoints(place) {
+  const n = Number(place);
+  if (!Number.isInteger(n) || n < 1 || n > WORLD_CUP_POINTS.length) return null;
+  return WORLD_CUP_POINTS[n - 1];
+}
+
+/** This race's own finishers, with the points for that place. Not the season cup. */
+export function ownResultRows(race) {
+  const rows = race?.results?.places;
+  if (!Array.isArray(rows)) return [];
+  return rows
+    .filter((row) => row && Number(row.place) >= 1)
+    .sort((a, b) => Number(a.place) - Number(b.place))
+    .slice(0, 5)
+    .map((row) => ({
+      place: Number(row.place),
+      name: row.name || "",
+      country: row.country || row.nation || "",
+      points: worldCupPoints(row.place),
+      id: row.id || null,
+    }));
+}
+
 /** Winner shows the total. The others show the gap when the feed has one. */
 export function markText(row) {
   if (!row) return "";

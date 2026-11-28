@@ -3,6 +3,8 @@ import test from "node:test";
 import {
   cupIds,
   displayName,
+  ownResultRows,
+  worldCupPoints,
   initials,
   markText,
   nameKey,
@@ -92,4 +94,29 @@ test("a women's slalom offers the discipline cup and the overall cup", () => {
   assert.equal(standingRows(choices[0], book.people)[0].name, "Emma Aicher");
   assert.equal(standingRows(choices[0], book.people)[0].points, 100);
   assert.equal(standingsChoices({ cups: {} }, race).length, 0);
+});
+
+test("a race result uses that race's finishers and the 100-80-60 points", () => {
+  assert.deepEqual([1, 2, 3, 4, 5, 30].map(worldCupPoints), [100, 80, 60, 50, 45, 1]);
+  assert.equal(worldCupPoints(31), null);
+  const sprint = {
+    sport: "xc",
+    results: {
+      places: [
+        { place: 1, name: "SVAHN Linn", country: "SWE" },
+        { place: 2, name: "DAHLQVIST Maja", country: "SWE" },
+        { place: 5, name: "AABREKK Ingrid Bergene", country: "NOR" },
+      ],
+    },
+  };
+  const rows = ownResultRows(sprint);
+  assert.deepEqual(rows.map((row) => row.name), ["SVAHN Linn", "DAHLQVIST Maja", "AABREKK Ingrid Bergene"]);
+  assert.deepEqual(rows.map((row) => row.points), [100, 80, 45]);
+  const distance = {
+    sport: "xc",
+    results: { places: [{ place: 1, name: "ANDERSSON Ebba", country: "SWE" }] },
+  };
+  assert.equal(ownResultRows(distance)[0].name, "ANDERSSON Ebba");
+  assert.notEqual(ownResultRows(distance)[0].name, ownResultRows(sprint)[0].name);
+  assert.equal(ownResultRows({ sport: "alpine", results: {} }).length, 0);
 });

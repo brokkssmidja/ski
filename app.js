@@ -62,6 +62,7 @@ import {
   initials,
   markText,
   photoUrl,
+  ownResultRows,
   podiumFromRelay,
   podiumFromStored,
   presentPodium,
@@ -1013,7 +1014,10 @@ async function ensureFinish() {
     if (slot.dataset.token !== token) return;
     const people = book?.people || {};
     const podium = presentPodium(relay, podiumFromStored(race), people);
-    const choices = standingsChoices(book, race);
+    const own = ownResultRows(race);
+    let choices = standingsChoices(book, race);
+    if (race.sport === "xc") choices = [];
+    if (own.length) choices = [{ id: "race", label: "This race", rows: own }, ...choices];
     if (!podium.length && !choices.length) {
       slot.replaceChildren();
       finishViews.delete(race.id);
