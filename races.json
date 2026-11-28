@@ -384,7 +384,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 2
     },
     {
       "id": "xc-52089",
@@ -402,7 +403,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 3
     },
     {
       "id": "alpine-131584",
@@ -657,7 +659,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 9
     },
     {
       "id": "freeski-19554",
@@ -693,7 +696,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 10
     },
     {
       "id": "alpine-131598",
@@ -875,7 +879,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 20
     },
     {
       "id": "xc-52109",
@@ -893,7 +898,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 21
     },
     {
       "id": "alpine-131706",
@@ -984,7 +990,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 16
     },
     {
       "id": "freeski-19702",
@@ -1038,7 +1045,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 17
     },
     {
       "id": "alpine-131707",
@@ -1446,7 +1454,8 @@
       "results": {
         "podium": []
       },
-      "note": "Tour de Ski"
+      "note": "Tour de Ski",
+      "qualCodex": 581
     },
     {
       "id": "xc-52112",
@@ -1465,7 +1474,8 @@
       "results": {
         "podium": []
       },
-      "note": "Tour de Ski"
+      "note": "Tour de Ski",
+      "qualCodex": 24
     },
     {
       "id": "alpine-131716",
@@ -1861,7 +1871,8 @@
       "results": {
         "podium": []
       },
-      "note": "Tour de Ski"
+      "note": "Tour de Ski",
+      "qualCodex": 35
     },
     {
       "id": "xc-52127",
@@ -1880,7 +1891,8 @@
       "results": {
         "podium": []
       },
-      "note": "Tour de Ski"
+      "note": "Tour de Ski",
+      "qualCodex": 36
     },
     {
       "id": "alpine-131719",
@@ -2318,7 +2330,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 42
     },
     {
       "id": "xc-52135",
@@ -2336,7 +2349,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 43
     },
     {
       "id": "alpine-131866",
@@ -2563,7 +2577,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 49
     },
     {
       "id": "xc-52143",
@@ -2581,7 +2596,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 50
     },
     {
       "id": "xc-52144",
@@ -2635,7 +2651,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 585
     },
     {
       "id": "xc-52148",
@@ -2653,7 +2670,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 55
     },
     {
       "id": "xc-52150",
@@ -3287,7 +3305,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 587
     },
     {
       "id": "xc-52158",
@@ -3305,7 +3324,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 63
     },
     {
       "id": "xc-52160",
@@ -3397,7 +3417,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 67
     },
     {
       "id": "xc-52165",
@@ -3415,7 +3436,8 @@
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
         "podium": []
-      }
+      },
+      "qualCodex": 68
     },
     {
       "id": "alpine-131691",
