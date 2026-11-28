@@ -310,7 +310,34 @@
       ],
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
-        "podium": []
+        "podium": [],
+        "places": [
+          {
+            "place": 1,
+            "name": "ANDERSSON Ebba",
+            "country": "SWE"
+          },
+          {
+            "place": 2,
+            "name": "SVAHN Linn",
+            "country": "SWE"
+          },
+          {
+            "place": 3,
+            "name": "KARLSSON Frida",
+            "country": "SWE"
+          },
+          {
+            "place": 4,
+            "name": "TERENTEVA Natalia",
+            "country": "AIN"
+          },
+          {
+            "place": 5,
+            "name": "WENG Heidi",
+            "country": "NOR"
+          }
+        ]
       }
     },
     {
@@ -328,7 +355,34 @@
       ],
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
-        "podium": []
+        "podium": [],
+        "places": [
+          {
+            "place": 1,
+            "name": "NYENGET Martin Loewstroem",
+            "country": "NOR"
+          },
+          {
+            "place": 2,
+            "name": "REE Andreas Fjorden",
+            "country": "NOR"
+          },
+          {
+            "place": 3,
+            "name": "KLAEBO Johannes Hoesflot",
+            "country": "NOR"
+          },
+          {
+            "place": 4,
+            "name": "HEGGEN Lars",
+            "country": "NOR"
+          },
+          {
+            "place": 5,
+            "name": "STENSHAGEN Mattis",
+            "country": "NOR"
+          }
+        ]
       }
     },
     {
@@ -383,7 +437,34 @@
       ],
       "watch": "US: YouTube & Ski & Snowboard World Cup (live).",
       "results": {
-        "podium": []
+        "podium": [],
+        "places": [
+          {
+            "place": 1,
+            "name": "SVAHN Linn",
+            "country": "SWE"
+          },
+          {
+            "place": 2,
+            "name": "DAHLQVIST Maja",
+            "country": "SWE"
+          },
+          {
+            "place": 3,
+            "name": "HAGSTROEM Johanna",
+            "country": "SWE"
+          },
+          {
+            "place": 4,
+            "name": "JOENSUU Jasmi",
+            "country": "FIN"
+          },
+          {
+            "place": 5,
+            "name": "AABREKK Ingrid Bergene",
+            "country": "NOR"
+          }
+        ]
       },
       "qualCodex": 2
     },
